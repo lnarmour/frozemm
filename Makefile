@@ -20,12 +20,14 @@ MM.check: $(OBJS) ss-wrapper.c
 ss-mkl.o: ss-mkl.c
 	$(CC) ss-mkl.c -c -o ss-mkl.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
-ss.o: ss.c ss.h
+ss.o: ss.c
 	$(CC) ss.c -c -o ss.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
 memory-layout.o: memory-layout.c
 	$(CC) memory-layout.c -c -o memory-layout.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
+ttf: ttf.c memory-layout.o
+	$(CC) ttf.c memory-layout.o -o ttf $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
 clean:
 	rm -f *.o MM MM.* ttf

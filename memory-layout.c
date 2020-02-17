@@ -42,3 +42,49 @@ void four2two(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long T
   }
 }
 
+// -------------------------------
+
+void two2four_single(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long TSM, long tl, long tm) {
+	// put the elements of tile at tl_start and tm_start in 4D layout in scratch
+	long l, m, i, j, u;
+	long i_start = tl*TSL;
+	long j_start = tm*TSM;
+
+	for (i=i_start; i<i_start+TSL; i++)
+		for (j=j_start; j<j_start+TSM; j++) {
+			u = tm*(TSL*TSM) + (i-i_start)*TSM + (j-j_start);
+			scratch[u] = I[i*M + j];
+		}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

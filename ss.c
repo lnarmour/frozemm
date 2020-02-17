@@ -9,6 +9,7 @@
 #define A(tl,tm,TSL,TSM,L,M) A[tl*(M*TSL) + tm*(TSL*TSM)]
 #define B(tl,tm,TSL,TSM,L,M) B[tl*(M*TSL) + tm*(TSL*TSM)]
 #define R(tl,tm,TSL,TSM,L,M) R[tl*(M*TSL) + tm*(TSL*TSM)]
+#define scratch(tl,tm,TSL,TSM) scratch[tm*(TSL*TSM)]
 
 void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECISION* R, double times[3]) {
 
@@ -17,19 +18,26 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 
 	PRECISION* scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*max(TSI,TSK));
 
+
 	start_timer(0);
 	// Execution time 0
 	for (ti=0; ti<N/TSI; ti++) two2four(A, scratch, N, N, TSI, TSK, ti);
-	for (tk=0; tk<N/TSK; tk++) two2four(B, scratch, N, N, TSK, TSJ, tk);
+	//for (tk=0; tk<N/TSK; tk++) two2four(B, scratch, N, N, TSK, TSJ, tk);
 	stop_timer(0);
 	
 	start_timer(1);
 	// Execution time 1
 	for (ti=0; ti<N/TSI; ti++) {
 		for (tk=0; tk<N/TSK; tk++) {
+
+			// two2four_single on A here next
+
 			for (tj=0; tj<N/TSJ; tj++) {
+
+				two2four_single(B, scratch, N, N, TSK, TSJ, tk, tj);
+
 				// can we ensure no page faults occur for tj+1 tile of B and R?
-				MM_MKL(TSI, TSK, TSJ, &A(ti,tk,TSI,TSK,N,N), &B(tk,tj,TSK,TSJ,N,N), &R(ti,tj,TSI,TSJ,N,N));
+				MM_MKL(TSI, TSK, TSJ, &A(ti,tk,TSI,TSK,N,N), &scratch(tk,tj,TSK,TSJ), &R(ti,tj,TSI,TSJ,N,N));
 			}
 		}
 	}

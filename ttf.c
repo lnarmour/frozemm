@@ -1,107 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include "ss.h"
 
-void two2four(double* I, double* O, long L, long M, long TSL, long TSM) {
-	long tl, tm, l, m, i, j, u;
-	for (i=0; i<L; i++)
-		for (j=0; j<M; j++) {
-			tl = i / TSL;
-			tm = j / TSM;
-			l = i % TSL;
-			m = j % TSM;
-			u = tl*(M*TSL) + tm*(TSL*TSM) + l*TSM + m;
-			O[i*M + j] = I[u];
-		}
-}
 
-void four2two(double* I, double* O, long L, long M, long TSL, long TSM) {
-	long tl, tm, l, m, i, j, u;
-	for (i=0; i<L; i++)
-		for (j=0; j<M; j++) {
-			tl = i / TSL;
-			tm = j / TSM;
-			l = i % TSL;
-			m = j % TSM;
-			u = tl*(M*TSL) + tm*(TSL*TSM) + l*TSM + m;
-			O[u] = I[i*M + j];
-		}
-}
 
-void printTile(PRECISION* X, long TS1, long TS2) {
-  for (int i=0; i< TS1; i++) {
-    for (int j=0; j<TS2; j++) {
-      printf("%3.0f ", X[i*TS2+j]);
-    }
-    printf("\n");
+int main(int argc, char** argv) {
+  if (argc <= 4) {
+    printf("Number of argument is smaller than expected.\n");
+    printf("Expecting N TSI TSJ TSK\n");
+    exit(1);
   }
-  printf("\n");
-}
 
+  long N = atoi(argv[1]);
+  long tts1 = atoi(argv[2]);
+  long tts2 = atoi(argv[3]);
+  long tts3 = atoi(argv[4]);
 
-void setZero(double* X, long TS1, long TS2) {
-	for (int i=0; i< TS1; i++) {
-		for (int j=0; j<TS2; j++) {
-			X[i*TS2+j] = 0;
-		}
+  if (N<tts1 || N<tts2 || N<tts3) { printf("TS1, TS2, and TS3 must be less than or equal to N\n"); exit(1); }
+  if (N%tts1!=0 || N%tts2!=0 || N%tts3!=0) { printf("TS1, TS2, and TS3 must divide N evenly\n"); exit(1); }
+
+	long TSI = tts1;
+	long TSJ = tts2;
+	long TSK = tts3;
+	long ti, tj, tk;
+
+  //Timing
+  struct timeval time;
+  double elapsed_time;
+  double times[3];
+
+	start_timer(0);
+  PRECISION *A = malloc(N * N * sizeof(PRECISION));
+  PRECISION *B = malloc(N * N * sizeof(PRECISION));
+  PRECISION *C = malloc(N * N * sizeof(PRECISION));
+	PRECISION* scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*max(TSI,TSK));
+  for (long i=0; i<N; i++) {
+    for (long j=0; j<N; j++) 
+      *(A+i*N+j) = i*N+j; //(PRECISION)rand() / (PRECISION)RAND_MAX;
+    for (long j=0; j<N; j++) 
+      *(B+i*N+j) = i*N+j; //(PRECISION)rand() / (PRECISION)RAND_MAX;
+    for (long j=0; j<N; j++) 
+      *(C+i*N+j) = 0;
 	}
-}
+	stop_timer(0);
+  printf("Allocation/initialization time : %lf sec.\n", times[0]);
 
-int main() {
+	start_timer(1);
+	for(ti=0; ti<N/TSI; ti++) two2four(A, scratch, N, N, TSI, TSK, ti);
+	for(tk=0; tk<N/TSK; tk++) two2four(B, scratch, N, N, TSK, TSJ, tk);
+	stop_timer(1);
+  printf("two2four time : %lf sec.\n", times[1]);
 
-	long N = 8;
-	long TSI = 4;
-	long TSJ = 4;
-	long TSK = 2;
-
-	double* X1 = (double*) malloc(sizeof(double)*N*N);
-	double* X2 = (double*) malloc(sizeof(double)*N*N);
-	double* T24 = (double*) malloc(sizeof(double)*N*N);
-	double* T42 = (double*) malloc(sizeof(double)*N*N);
-	double* R_scratch = (double*) malloc(sizeof(double)*N*N);
-	double* R = (double*) malloc(sizeof(double)*N*N);
-
-	for (int i=0; i<N; i++) 
-	for (int j=0; j<N; j++) {
-		R_scratch[i*N+j] = 0;	
-		X1[i*N+j] = 1; //i<4 && j<2 ? 1 : 0;
-		X2[i*N+j] = 1; //i<2 && j<4 ? 1 : 0;
-	}
-
-	two2four(X1,T42,N,N,4,2);
-	for (int i=0; i<N; i++) {
-		for (int j=0; j<N; j++) {
-			printf("%3.0f ", T42[i*N+j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-
-	two2four(X2,T24,N,N,2,4);
-	for (int i=0; i<N; i++) {
-		for (int j=0; j<N; j++) {
-			printf("%3.0f ", T24[i*N+j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-	
-	#define T42(tl,tm,TSL,TSM,L,M) T42[tl*(M*TSL) + tm*(TSL*TSM)]
-	#define T24(tl,tm,TSL,TSM,L,M) T24[tl*(M*TSL) + tm*(TSL*TSM)]
-	#define R_scratch(tl,tm,TSL,TSM,L,M) R_scratch[tl*(M*TSL) + tm*(TSL*TSM)]
-
-	int ti, tj, tk;
-	for (ti=0; ti<N/TSI; ti++)
-		for (tj=0; tj<N/TSJ; tj++) 
-			for (tk=0; tk<N/TSK; tk++) {
-				printf("%d,%d,%d\n", ti, tj, tk);
-				printTile(&T42(ti,tk,TSI,TSK,N,N), TSI, TSK);
-				printTile(&T24(tk,tj,TSK,TSJ,N,N), TSK, TSJ);
-				MM_MKL(TSI, TSK, TSJ, &T42(ti,tk,TSI,TSK,N,N), &T24(tk,tj,TSK,TSJ,N,N), &R_scratch(ti,tj,TSI,TSJ,N,N));
-			}
-
-	printTile(R_scratch, N, N);	
-	four2two(R_scratch,R,N,N,TSI,TSJ);
-	printTile(R, N, N);	
 
 }
