@@ -9,35 +9,30 @@
 #define A(tl,tm,TSL,TSM,L,M) A[tl*(M*TSL) + tm*(TSL*TSM)]
 #define B(tl,tm,TSL,TSM,L,M) B[tl*(M*TSL) + tm*(TSL*TSM)]
 #define R(tl,tm,TSL,TSM,L,M) R[tl*(M*TSL) + tm*(TSL*TSM)]
-#define scratch(tl,tm,TSL,TSM) scratch[tm*(TSL*TSM)]
+
+#define B_scratch(tl,tm,TSL,TSM) B_scratch[tm*(TSL*TSM)]
 
 void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECISION* R, double times[3]) {
 
 	struct timeval time;
 	long i,j,k,ti,tj,tk;
 
-	PRECISION* scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*max(TSI,TSK));
+	PRECISION* A_scratch = (PRECISION*)malloc(sizeof(PRECISION)*TSI*TSK);
+	PRECISION* B_scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*max(TSI,TSK));
 
-
-	start_timer(0);
-	// Execution time 0
-	for (ti=0; ti<N/TSI; ti++) two2four(A, scratch, N, N, TSI, TSK, ti);
-	//for (tk=0; tk<N/TSK; tk++) two2four(B, scratch, N, N, TSK, TSJ, tk);
-	stop_timer(0);
-	
 	start_timer(1);
 	// Execution time 1
 	for (ti=0; ti<N/TSI; ti++) {
 		for (tk=0; tk<N/TSK; tk++) {
 
-			// two2four_single on A here next
+			two2four_single(A, A_scratch, N, N, TSI, TSK, ti, tk);
 
 			for (tj=0; tj<N/TSJ; tj++) {
 
-				two2four_single(B, scratch, N, N, TSK, TSJ, tk, tj);
+				two2four_row(B, B_scratch, N, N, TSK, TSJ, tk, tj);
 
 				// can we ensure no page faults occur for tj+1 tile of B and R?
-				MM_MKL(TSI, TSK, TSJ, &A(ti,tk,TSI,TSK,N,N), &scratch(tk,tj,TSK,TSJ), &R(ti,tj,TSI,TSJ,N,N));
+				MM_MKL(TSI, TSK, TSJ, A_scratch, &B_scratch(tk,tj,TSK,TSJ), &R(ti,tj,TSI,TSJ,N,N));
 			}
 		}
 	}
@@ -46,9 +41,7 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	start_timer(2);
 	// Execution time 2
 	if (N!=TSI || N!=TSJ || N!=TSK) {
-		for (ti=0; ti<N/TSI; ti++) four2two(A, scratch, N, N, TSI, TSK, ti);
-		for (ti=0; ti<N/TSI; ti++) four2two(R, scratch, N, N, TSI, TSJ, ti);
-		for (tk=0; tk<N/TSK; tk++) four2two(B, scratch, N, N, TSK, TSJ, tk);
+		for (ti=0; ti<N/TSI; ti++) four2two(R, B_scratch, N, N, TSI, TSJ, ti);
 	}
 	stop_timer(2);
 }
