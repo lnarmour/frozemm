@@ -6,33 +6,28 @@
 #include <mkl.h>
 #include "ss.h"
 
-#define A(tl,tm,TSL,TSM,L,M) A[tl*(M*TSL) + tm*(TSL*TSM)]
-#define B(tl,tm,TSL,TSM,L,M) B[tl*(M*TSL) + tm*(TSL*TSM)]
+#define A_scratch(sel,TSL,TSM) A_scratch[((sel)%2)*(TSL)*(TSM)]
+#define B_scratch(sel,tl,tm,TSL,TSM) B_scratch[((sel)%2)*(N)*(TSL) + (tm)*(TSL)*(TSM)]
 #define R(tl,tm,TSL,TSM,L,M) R[tl*(M*TSL) + tm*(TSL*TSM)]
-
-#define B_scratch(tl,tm,TSL,TSM) B_scratch[tm*(TSL*TSM)]
 
 void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECISION* R, double times[3]) {
 
 	struct timeval time;
 	long i,j,k,ti,tj,tk;
 
-	PRECISION* A_scratch = (PRECISION*)malloc(sizeof(PRECISION)*TSI*TSK);
-	PRECISION* B_scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*max(TSI,TSK));
+	PRECISION* A_scratch = (PRECISION*)malloc(sizeof(PRECISION)*2*TSI*TSK);
+	PRECISION* B_scratch = (PRECISION*)malloc(sizeof(PRECISION)*2*N*TSK);
+	PRECISION* R_scratch = (PRECISION*)malloc(sizeof(PRECISION)*N*TSI);
 
 	start_timer(1);
 	// Execution time 1
 	for (ti=0; ti<N/TSI; ti++) {
+		two2four_single(A, &A_scratch(0,TSI,TSK), N, N, TSI, TSK, ti, 0);
 		for (tk=0; tk<N/TSK; tk++) {
-
-			two2four_single(A, A_scratch, N, N, TSI, TSK, ti, tk);
-
+			if ((tk-1)<(N/TSK)) two2four_single(A, &A_scratch((tk+1),TSI,TSK), N, N, TSI, TSK, ti, tk+1);
 			for (tj=0; tj<N/TSJ; tj++) {
-
-				two2four_row(B, B_scratch, N, N, TSK, TSJ, tk, tj);
-
-				// can we ensure no page faults occur for tj+1 tile of B and R?
-				MM_MKL(TSI, TSK, TSJ, A_scratch, &B_scratch(tk,tj,TSK,TSJ), &R(ti,tj,TSI,TSJ,N,N));
+				two2four_single(B, &B_scratch(tk,tk,tj,TSK,TSJ), N, N, TSK, TSJ, tk, tj); 
+				MM_MKL(TSI, TSK, TSJ, &A_scratch(tk,TSI,TSK), &B_scratch(tk,tk,tj,TSK,TSJ), &R(ti,tj,TSI,TSJ,N,N));
 			}
 		}
 	}
@@ -41,7 +36,7 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	start_timer(2);
 	// Execution time 2
 	if (N!=TSI || N!=TSJ || N!=TSK) {
-		for (ti=0; ti<N/TSI; ti++) four2two(R, B_scratch, N, N, TSI, TSJ, ti);
+		for (ti=0; ti<N/TSI; ti++) four2two(R, R_scratch, N, N, TSI, TSJ, ti);
 	}
 	stop_timer(2);
 }
