@@ -29,16 +29,22 @@ int main(int argc, char** argv) {
 	struct timeval time;
 	double elapsed_time;
 	double times[3];
+	times[0] = 0;
+	times[1] = 0;
+	times[2] = 0;
 
   gettimeofday(&time, NULL);
   elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000);
 	PRECISION *A = malloc(N * N * sizeof(PRECISION));
+	mallocCheck(A, N*N, PRECISION);
 	PRECISION *B = malloc(N * N * sizeof(PRECISION));
+	mallocCheck(B, N*N, PRECISION);
 	PRECISION *C = malloc(N * N * sizeof(PRECISION));
+	mallocCheck(C, N*N, PRECISION);
 	for (long i=0; i<N; i++)
 		for (long j=0; j<N; j++) {
-			*(A+i*N+j) = (PRECISION)rand() / (PRECISION)RAND_MAX;
-			*(B+i*N+j) = (PRECISION)rand() / (PRECISION)RAND_MAX;
+			*(A+i*N+j) = (PRECISION) ((i+j) % tts1 / tts1);
+			*(B+i*N+j) = (PRECISION) ((i+j+1) % tts3 / tts3);
 			*(C+i*N+j) = 0;
 		}
   gettimeofday(&time, NULL);
@@ -48,21 +54,19 @@ int main(int argc, char** argv) {
 
 
 #ifdef CHECK
-	#define C(i,j) C[i*N + j]
-	#define Check(i,j) Check[i*N + j]
+	#define C(i,j) C[(i)*N + (j)]
+	#define Check(i,j) Check[(i)*N + (j)]
 	PRECISION *Check = malloc(N * N * sizeof(PRECISION));
+	mallocCheck(Check, N*N, PRECISION);
 	MM_MKL(N, N, N, A, B, Check);
 #endif
 
 
   //Call the main computation
   MM(N, tts1, tts2, tts3, A, B, C, times);
-	//printTile(C, N, N);
-  printf("Execution time 0 : %lf sec.\n", times[0]);
   printf("Execution time 1 : %lf sec.\n", times[1]);
   printf("Execution time 2 : %lf sec.\n", times[2]);
-  printf("Total Performance :     %f gflops/sec.\n", gflops(N, times[0]+times[1]+times[2]));
-  printf("Effective Performance : %f gflops/sec.\n", gflops(N, times[1]));
+  printf("Total Performance : %f gflops/sec.\n", gflops(N, times[0]+times[1]+times[2]));
 
 
 #ifdef CHECK

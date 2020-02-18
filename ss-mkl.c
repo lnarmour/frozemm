@@ -3,18 +3,6 @@
 #include "ss.h"
 
 
-void MM_MKL_D(long l, long m, long n, PRECISION* A, PRECISION* B, PRECISION* R, long ti, long tj, long tk ){
-
-	for (int i=0; i<l; i++)
-		for (int j=0; j<m; j++)
-			if (A[i*m+j] == 0) {
-				printf("AHH --> (%ld,%ld,%ld)\n", ti, tj, tk);
-			}
-
-	MM_MKL(l,m,n,A,B,R);
-}
-
-
 void MM_MKL(long l, long m, long n, PRECISION* A, PRECISION* B, PRECISION* R){
 
 	//for (int i=0; i<l; i++)

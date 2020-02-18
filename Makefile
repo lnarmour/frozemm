@@ -6,7 +6,7 @@ MKL_FLAGS=-I${INTEL_HOME}/mkl/include/ -L${INTEL_HOME}/compilers_and_libraries/l
 PRECISION=SINGLE
 CFLAGS=  -std=c99  -I/usr/include/malloc/ $(MKL_FLAGS) -fopenmp -O3
 OBJS=ss.o ss-mkl.o memory-layout.o
-all: MM MM.check
+all: MM MM.check wtf.sequential wtf.parallel
 
 debug: CFLAGS =-DDEBUG -O0 -g -Wall -Wextra -std=c99 -I/usr/include/malloc/ ${MKL_FLAGS}
 debug: MM MM.check
@@ -26,8 +26,11 @@ ss.o: ss.c
 memory-layout.o: memory-layout.c
 	$(CC) memory-layout.c -c -o memory-layout.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
-ttf: ttf.c memory-layout.o
-	$(CC) ttf.c memory-layout.o -o ttf $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
+wtf.sequential: wtf.c memory-layout.o ss-mkl.o
+	$(CC) wtf.c memory-layout.o ss-mkl.o -o wtf.sequential $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1 -DSEQUENTIAL=1
+
+wtf.parallel: wtf.c memory-layout.o ss-mkl.o
+	$(CC) wtf.c memory-layout.o ss-mkl.o -o wtf.parallel $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
 clean:
-	rm -f *.o MM MM.* ttf
+	rm -f *.o MM MM.* wtf.sequential wtf.parallel

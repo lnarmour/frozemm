@@ -1,6 +1,5 @@
 #include "ss.h"
 
-
 // ASSUMING that L%TSI=0 and M%TSJ=0
 void two2four(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long TSM, long ti) {
   long tl, tm, l, m, i, j, u;
