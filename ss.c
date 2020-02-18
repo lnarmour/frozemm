@@ -28,12 +28,11 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	long i,j,k,ti,tj,tk;
 
 	PRECISION* scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
-	PRECISION* a_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
+	PRECISION* a_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
 	PRECISION* a_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
-	PRECISION* b_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
+	PRECISION* b_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
 	PRECISION* b_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
-	PRECISION* r_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSJ);
-	PRECISION* r_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSJ);
+	PRECISION* tmp;
 
 	start_timer(0);
 	two2four(A, scratch, N, N, TSI, TSK);
@@ -48,27 +47,34 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	#define B(tl,tm,TSL,TSM) B[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
 	#define R(tl,tm,TSL,TSM) R[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
 
-	for (ti=0; ti<N/TSI; ti++) 
-	for (tj=0; tj<N/TSJ; tj++) 
-	for (tk=0; tk<N/TSK; tk++) {
-		fetch_tile(&A(ti,tk,TSI,TSK), a_curr, TSI*TSK);
-		fetch_tile(&B(tk,tj,TSK,TSJ), b_curr, TSK*TSJ);
-		MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti,tj,TSI,TSJ));
+	long ti_max = N/TSI;
+	long tj_max = N/TSJ;
+	long tk_max = N/TSK;
+	for (ti=0; ti<ti_max; ti++) 
+	for (tj=0; tj<tj_max; tj++) {
+		fetch_tile(&A(ti,0,TSI,TSK), a_curr, TSI*TSK);
+		fetch_tile(&B(0,tj,TSK,TSJ), b_curr, TSK*TSJ);
+		for (tk=0; tk<tk_max; tk++) {
+			#pragma omp parallel num_threads(2) firstprivate(ti,tj,tk,tk_max)
+			{
+				if (omp_get_thread_num() == 0) {
+					if (tk+1<tk_max) {
+						fetch_tile(&A(ti,tk+1,TSI,TSK), a_next, TSI*TSK);
+						fetch_tile(&B(tk+1,tj,TSK,TSJ), b_next, TSK*TSJ);
+					}
+				} else {
+					MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti,tj,TSI,TSJ));
+				}
+			}
+			tmp = a_curr; a_curr = a_next; a_next = tmp;
+			tmp = b_curr; b_curr = b_next; b_next = tmp;
+		}
 	}
-
-//	#pragma omp parallel num_threads(2)
-//	{
-//		int tid = omp_get_thread_num();
-//		if (tid == 0) {
-//			
-//		} else {
-//			MM_MKL(TSI, TSK, TSJ, &A, &B_scratch[tj*TSK*TSJ], &R(ti,tj,TSI,TSJ,N,N));
-//		}
-//
-//	}
 	stop_timer(1);
 
 	start_timer(2);
+	four2two(A, scratch, N, N, TSI, TSK);
+	four2two(B, scratch, N, N, TSK, TSJ);
 	four2two(R, scratch, N, N, TSI, TSJ);
 	stop_timer(2);
 
