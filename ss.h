@@ -22,9 +22,7 @@
 
 void MM_MKL(long, long, long, PRECISION*, PRECISION*, PRECISION*);
 void MM(long, long, long, long, PRECISION*, PRECISION*, PRECISION*, double[3]);
-void two2four(PRECISION*, PRECISION*, long, long, long, long, long);
-void four2two(PRECISION*, PRECISION*, long, long, long, long, long);
-
-void two2four_row(PRECISION*, PRECISION*, long, long, long, long, long, long);
-void two2four_single(PRECISION*, PRECISION*, long, long, long, long, long, long);
+void two2four(PRECISION*, PRECISION*, long, long, long, long);
+void four2two(PRECISION*, PRECISION*, long, long, long, long);
+void fetch_tile(PRECISION*, PRECISION*, long);
 

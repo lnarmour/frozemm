@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
 
   //Call the main computation
   MM(N, tts1, tts2, tts3, A, B, C, times);
+  printf("MKL TS*TS time 0 : %lf sec (%f gflops/sec)\n", times[0], gflops(tts1, times[0]));
   printf("Execution time 1 : %lf sec.\n", times[1]);
   printf("Execution time 2 : %lf sec.\n", times[2]);
   printf("Total Performance : %f gflops/sec.\n", gflops(N, times[0]+times[1]+times[2]));

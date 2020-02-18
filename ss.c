@@ -7,9 +7,6 @@
 #include <omp.h>
 #include "ss.h"
 
-#define A_scratch(sel,TSL,TSM) A_scratch[((sel)%2)*(TSL)*(TSM)]
-#define B_scratch(sel,tl,tm,TSL,TSM) B_scratch[((sel)%2)*(N)*(TSL) + (tm)*(TSL)*(TSM)]
-#define R(tl,tm,TSL,TSM,L,M) R[tl*(M*TSL) + tm*(TSL*TSM)]
 
 int posix_memalign(void **memptr, size_t alignment, size_t size);
   
@@ -30,60 +27,51 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	struct timeval time;
 	long i,j,k,ti,tj,tk;
 
-#ifdef PARALLEL
-	PRECISION* A_scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*2*TSI*TSK);
-	PRECISION* B_scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*2*N*TSK);
-#else
-	PRECISION* A_scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
-	PRECISION* B_scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*TSK);
-#endif
-	PRECISION* R_scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*TSI);
+	PRECISION* scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
+	PRECISION* a_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
+	PRECISION* a_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
+	PRECISION* b_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
+	PRECISION* b_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
+	PRECISION* r_prev = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSJ);
+	PRECISION* r_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSJ);
+
+	start_timer(0);
+	two2four(A, scratch, N, N, TSI, TSK);
+	two2four(B, scratch, N, N, TSK, TSJ);
+	two2four(R, scratch, N, N, TSI, TSJ);
+	stop_timer(0);
 
 	start_timer(1);
-	// Execution time 1
-#ifdef PARALLEL
-	#pragma omp parallel
-	{
-		omp_set_max_active_levels(2);
-		#pragma omp single
-		{
-			for (ti=0; ti<N/TSI; ti++) {
-				two2four_single(A, &A_scratch(0,TSI,TSK), N, N, TSI, TSK, ti, 0);
-				for (tk=0; tk<N/TSK; tk++) {
-					if ((tk-1)<(N/TSK)) two2four_single(A, &A_scratch((tk+1),TSI,TSK), N, N, TSI, TSK, ti, tk+1);
-					two2four_single(B, &B_scratch[(tk%2)*N*TSK], N, N, TSK, TSJ, tk, 0);
-					for (tj=0; tj<N/TSJ; tj++) {
-						#pragma omp task
-						{	
-							if (tj-1<N/TSJ)
-								two2four_single(B, &B_scratch[(tk%2)*N*TSK + (tj+1)*TSK*TSJ], N, N, TSK, TSJ, tk, tj+1); 
-						}
-						MM_MKL(TSI, TSK, TSJ, &A_scratch(tk,TSI,TSK), &B_scratch[(tk%2)*N*TSK + tj*TSK*TSJ], &R(ti,tj,TSI,TSJ,N,N));
-						#pragma omp taskwait
-					}
-				}
-			}
-		}
+	// copy first blocks of A and B into a and b
+
+	#define A(tl,tm,TSL,TSM) A[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
+	#define B(tl,tm,TSL,TSM) B[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
+	#define R(tl,tm,TSL,TSM) R[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
+
+	for (ti=0; ti<N/TSI; ti++) 
+	for (tj=0; tj<N/TSJ; tj++) 
+	for (tk=0; tk<N/TSK; tk++) {
+		fetch_tile(&A(ti,tk,TSI,TSK), a_curr, TSI*TSK);
+		fetch_tile(&B(tk,tj,TSK,TSJ), b_curr, TSK*TSJ);
+		MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti,tj,TSI,TSJ));
 	}
-#else
-	for (ti=0; ti<N/TSI; ti++) {
-		for (tk=0; tk<N/TSK; tk++) {
-			two2four_single(A, &A_scratch(tk,TSI,TSK), N, N, TSI, TSK, ti, tk);
-			for (tj=0; tj<N/TSJ; tj++) {
-				two2four_single(B, &B_scratch[tj*TSK*TSJ], N, N, TSK, TSJ, tk, tj); 
-				MM_MKL(TSI, TSK, TSJ, &A_scratch(tk,TSI,TSK), &B_scratch[tj*TSK*TSJ], &R(ti,tj,TSI,TSJ,N,N));
-			}
-		}
-	}
-#endif
+
+//	#pragma omp parallel num_threads(2)
+//	{
+//		int tid = omp_get_thread_num();
+//		if (tid == 0) {
+//			
+//		} else {
+//			MM_MKL(TSI, TSK, TSJ, &A, &B_scratch[tj*TSK*TSJ], &R(ti,tj,TSI,TSJ,N,N));
+//		}
+//
+//	}
 	stop_timer(1);
 
 	start_timer(2);
-	// Execution time 2
-	if (N!=TSI || N!=TSJ || N!=TSK) {
-		for (ti=0; ti<N/TSI; ti++) four2two(R, R_scratch, N, N, TSI, TSJ, ti);
-	}
+	four2two(R, scratch, N, N, TSI, TSJ);
 	stop_timer(2);
+
 }
 
 
