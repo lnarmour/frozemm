@@ -25,7 +25,7 @@ static void * xmalloc (size_t num)
 void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECISION* R, double times[3]) {
 
 	struct timeval time;
-	long i,j,k,ti,tj,tk;
+	long i,j,k,ti,tj,tk,t;
 
 	PRECISION* scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
 	PRECISION* a_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
@@ -41,34 +41,32 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	stop_timer(0);
 
 	start_timer(1);
-	// copy first blocks of A and B into a and b
-
 	#define A(tl,tm,TSL,TSM) A[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
 	#define B(tl,tm,TSL,TSM) B[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
 	#define R(tl,tm,TSL,TSM) R[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
+	#define ti(t) ((t)/((N*N)/(TSJ*TSK)))
+	#define tj(t) (((t)%((N*N)/(TSJ*TSK)))/(N/TSK))
+	#define tk(t) (((t)%((N*N)/(TSJ*TSK)))%(N/TSK))
 
-	long ti_max = N/TSI;
-	long tj_max = N/TSJ;
-	long tk_max = N/TSK;
-	for (ti=0; ti<ti_max; ti++) 
-	for (tj=0; tj<tj_max; tj++) {
-		fetch_tile(&A(ti,0,TSI,TSK), a_curr, TSI*TSK);
-		fetch_tile(&B(0,tj,TSK,TSJ), b_curr, TSK*TSJ);
-		for (tk=0; tk<tk_max; tk++) {
-			#pragma omp parallel num_threads(2) firstprivate(ti,tj,tk,tk_max)
-			{
-				if (omp_get_thread_num() == 0) {
-					if (tk+1<tk_max) {
-						fetch_tile(&A(ti,tk+1,TSI,TSK), a_next, TSI*TSK);
-						fetch_tile(&B(tk+1,tj,TSK,TSJ), b_next, TSK*TSJ);
-					}
-				} else {
-					MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti,tj,TSI,TSJ));
+	long T = N*N*N/(TSI*TSJ*TSK);
+
+	fetch_tile(A, a_curr, TSI*TSK);
+	fetch_tile(B, b_curr, TSK*TSJ);
+	
+	for (t=0; t<T; t++) {
+		#pragma omp parallel num_threads(2) firstprivate(t,T)
+		{
+			if (omp_get_thread_num() == 0) {
+				if (t+1<T) {
+					fetch_tile(&A(ti(t+1),tk(t+1),TSI,TSK), a_next, TSI*TSK);
+					fetch_tile(&B(tk(t+1),tj(t+1),TSK,TSJ), b_next, TSK*TSJ);
 				}
+			} else {
+				MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti(t),tj(t),TSI,TSJ));
 			}
-			tmp = a_curr; a_curr = a_next; a_next = tmp;
-			tmp = b_curr; b_curr = b_next; b_next = tmp;
 		}
+		tmp = a_curr; a_curr = a_next; a_next = tmp;
+		tmp = b_curr; b_curr = b_next; b_next = tmp;
 	}
 	stop_timer(1);
 

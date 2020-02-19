@@ -43,8 +43,8 @@ int main(int argc, char** argv) {
 	mallocCheck(C, N*N, PRECISION);
 	for (long i=0; i<N; i++)
 		for (long j=0; j<N; j++) {
-			*(A+i*N+j) = (PRECISION) ((i+j) % tts1 / tts1);
-			*(B+i*N+j) = (PRECISION) ((i+j+1) % tts3 / tts3);
+			*(A+i*N+j) = (PRECISION) ((i+j) % tts1);
+			*(B+i*N+j) = (PRECISION) ((i+j+1) % tts3);
 			*(C+i*N+j) = 0;
 		}
   gettimeofday(&time, NULL);
