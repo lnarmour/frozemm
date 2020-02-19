@@ -55,9 +55,12 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	fetch_tile(A, a_curr, TSI*TSK);
 	fetch_tile(B, b_curr, TSK*TSJ);
 	
-	for (t=0; t<T; t++) {
-		#pragma omp parallel num_threads(2) firstprivate(t,T)
-		{
+	#pragma omp parallel num_threads(2) firstprivate(t,T)
+	{
+		mkl_set_dynamic(0);
+		omp_set_nested(1);
+		omp_set_max_active_levels(2);
+		for (t=0; t<T; t++) {
 			if (omp_get_thread_num() == 0) {
 				if (t+1<T) {
 					fetch_tile(&A(ti(t+1),tk(t+1),TSI,TSK), a_next, TSI*TSK);
@@ -66,9 +69,13 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 			} else {
 				MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti(t),tj(t),TSI,TSJ));
 			}
+			#pragma omp barrier
+			#pragma omp single
+			{
+				tmp = a_curr; a_curr = a_next; a_next = tmp;
+				tmp = b_curr; b_curr = b_next; b_next = tmp;
+			}
 		}
-		tmp = a_curr; a_curr = a_next; a_next = tmp;
-		tmp = b_curr; b_curr = b_next; b_next = tmp;
 	}
 	stop_timer(1);
 	printf("Time 1 : %lf sec (%f glfops/sec relative).\n", times[1], gflops(N, times[1]));
