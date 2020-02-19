@@ -64,9 +64,6 @@ int main(int argc, char** argv) {
 
   //Call the main computation
   MM(N, tts1, tts2, tts3, A, B, C, times);
-  printf("Time 0 : %lf sec.\n", times[0]);
-  printf("Time 1 : %lf sec.\n", times[1]);
-  printf("Time 2 : %lf sec.\n", times[2]);
   printf("Total Performance : %f gflops/sec.\n", gflops(N, times[0]+times[1]+times[2]));
 
 
