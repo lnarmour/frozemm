@@ -34,6 +34,7 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	PRECISION* b_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
 	PRECISION* b_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
 	PRECISION* tmp;
+	printf("Total memory footprint: %f Gb\n", ((3.0*N*N + N*max(TSI,TSK) + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
 
 	start_timer(0);
 	two2four(A, scratch, N, N, TSI, TSK);
@@ -55,26 +56,27 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	fetch_tile(A, a_curr, TSI*TSK);
 	fetch_tile(B, b_curr, TSK*TSJ);
 	
-	#pragma omp parallel num_threads(2) firstprivate(t,T)
+	#pragma omp parallel firstprivate(t,T)
 	{
 		mkl_set_dynamic(0);
 		omp_set_nested(1);
 		omp_set_max_active_levels(2);
+		int tid = omp_get_thread_num();
 		for (t=0; t<T; t++) {
-			if (omp_get_thread_num() == 0) {
+			if (tid == 0) {
 				if (t+1<T) {
 					fetch_tile(&A(ti(t+1),tk(t+1),TSI,TSK), a_next, TSI*TSK);
 					fetch_tile(&B(tk(t+1),tj(t+1),TSK,TSJ), b_next, TSK*TSJ);
 				}
-			} else {
+			} else if (tid == 1) {
 				MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti(t),tj(t),TSI,TSJ));
 			}
 			#pragma omp barrier
-			#pragma omp single
-			{
+			if (tid == 0) {
 				tmp = a_curr; a_curr = a_next; a_next = tmp;
 				tmp = b_curr; b_curr = b_next; b_next = tmp;
 			}
+			#pragma omp barrier
 		}
 	}
 	stop_timer(1);

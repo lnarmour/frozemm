@@ -1,14 +1,16 @@
 #include "ss.h"
 
-void fetch_tile(PRECISION* X4d, PRECISION* x, long NN) {
+void fetch_tile(PRECISION* restrict X4d, PRECISION* restrict x, long NN) {
+	#pragma omp parallel for
 	for (long i=0; i<NN; i++)
 		x[i] = X4d[i];
 }
 
 // ASSUMING that L%TSI=0 and M%TSJ=0
-void two2four(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long TSM) {
+void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
 
+	#pragma omp parallel for
 	for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
@@ -30,8 +32,10 @@ void two2four(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long T
 
 
 // ASSUMING that L%TSI=0 and M%TSJ=0
-void four2two(PRECISION* I, PRECISION* scratch, long L, long M, long TSL, long TSM) {
+void four2two(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
+
+	#pragma omp parallel for
 	for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
