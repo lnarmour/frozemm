@@ -10,6 +10,9 @@ void fetch_tile(PRECISION* restrict X4d, PRECISION* restrict x, long NN) {
 void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
 
+    if (L == TSL && M == TSM)
+        return;
+
 	#pragma omp parallel for
 	for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
@@ -18,6 +21,7 @@ void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M
 	    }
 	  }
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
+        #pragma vector always
 	    for (j=0; j<M; j++) {
 	      tl = i / TSL;
 	      tm = j / TSM;
@@ -35,6 +39,9 @@ void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M
 void four2two(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
 
+    if (L == TSL && M == TSM)
+        return;
+
 	#pragma omp parallel for
 	for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
@@ -43,6 +50,7 @@ void four2two(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M
 	    }
 	  }
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
+        #pragma vector always
 	    for (j=0; j<M; j++) {
 	      tm = j / TSM;
 	      l = i % TSL;

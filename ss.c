@@ -28,13 +28,20 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECIS
 	struct timeval time;
 	long i,j,k,ti,tj,tk,t;
 
-	PRECISION* scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
+    PRECISION* scratch;
+
+    if (N!=TSI || N!=TSJ || N!=TSJ) {
+        scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
+	    printf("Total memory footprint: %f Gb\n", ((3.0*N*N + N*max(TSI,TSK) + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
+    } else {
+	    printf("Total memory footprint: %f Gb\n", ((3.0*N*N + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
+    }
+
 	PRECISION* a_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
 	PRECISION* a_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
 	PRECISION* b_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
 	PRECISION* b_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
 	PRECISION* tmp;
-	printf("Total memory footprint: %f Gb\n", ((3.0*N*N + N*max(TSI,TSK) + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
 
 	start_timer(0);
 	two2four(A, scratch, N, N, TSI, TSK);
