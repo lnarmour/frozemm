@@ -24,7 +24,7 @@
 #define BETA 1.2
 
 void MM_MKL(PRECISION, PRECISION, long, long, long, PRECISION*, PRECISION*, PRECISION*);
-void MM(PRECISION, PRECISION, long, long, long, long, PRECISION*, PRECISION*, PRECISION*, double[3]);
+void MM(PRECISION, PRECISION, long, long, long, long, PRECISION*, PRECISION*, PRECISION*);
 void two2four(PRECISION*, PRECISION*, long, long, long, long);
 void four2two(PRECISION*, PRECISION*, long, long, long, long);
 void fetch_tile(PRECISION*, PRECISION*, long);

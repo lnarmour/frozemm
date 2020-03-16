@@ -1,4 +1,3 @@
-// perf stat -e page-faults:u,major-faults:u,minor-faults:u ./MM 10000 5000 5000 5000
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,14 +9,10 @@ void MM(PRECISION alpha, PRECISION beta,
      long N, long TSI, long TSJ, long TSK, 
      PRECISION* restrict A, 
      PRECISION* restrict B, 
-     PRECISION* restrict R, 
-     double times[3])
+     PRECISION* restrict R) 
 {
 
-	struct timeval time;
 	long i,j,k,ti,tj,tk;
-
-	start_timer(1);
 
   #pragma omp parallel for private(tj,i,j) 
   for (ti=0; ti<N; ti+=TSI)
@@ -26,13 +21,14 @@ void MM(PRECISION alpha, PRECISION beta,
     for (j=tj; j<min(N,tj+TSJ); j++)
         R[i*N+j] *= beta;
 
-  #pragma omp parallel for private(k,j)
-  for (i=0; i<N; i++)
-  for (k=0; k<N; k++)
-  for (j=0; j<N; j++)
-    R[i*N+j] += alpha * A[i*N+k] * B[k*N+j];
-
-	stop_timer(1);
+  #pragma omp parallel for private(tk,tj,i,k,j) 
+  for (ti=0; ti<N; ti+=TSI)
+  for (tk=0; tk<N; tk+=TSK)
+  for (tj=0; tj<N; tj+=TSJ)
+    for (i=ti; i<min(N,ti+TSI); i++)
+    for (k=tk; k<min(N,tk+TSK); k++)
+    for (j=tj; j<min(N,tj+TSJ); j++)
+      R[i*N+j] += alpha * A[i*N+k] * B[k*N+j];
 
 }
 

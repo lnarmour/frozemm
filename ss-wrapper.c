@@ -7,7 +7,6 @@
 #define gflops(N, elapsed_time) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
 #define abs(val) (val)>0.0 ? (val) : -1*(val)
 
-void printTile(PRECISION*, long, long);
 
 int main(int argc, char** argv) {
   if (argc <= 1) {
@@ -54,9 +53,6 @@ int main(int argc, char** argv) {
   gettimeofday(&time, NULL);
   elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time;
 
-  //printf("Allocation/initialization time : %lf sec.\n", elapsed_time);
-
-
 #ifdef CHECK
 	#define C(i,j) C[(i)*N + (j)]
 	#define Check(i,j) Check[(i)*N + (j)]
@@ -65,10 +61,14 @@ int main(int argc, char** argv) {
 	MM_MKL(ALPHA, BETA, N, N, N, A, B, Check);
 #endif
 
+  start_timer(0);
 
   //Call the main computation
-  MM(ALPHA, BETA, N, tts1, tts2, tts3, A, B, C, times);
-  printf("%f\n", times[0]+times[1]+times[2]);
+  MM(ALPHA, BETA, N, tts1, tts2, tts3, A, B, C);
+
+  stop_timer(0);
+
+  printf("%f\n", times[0]);
 
 
 #ifdef CHECK
