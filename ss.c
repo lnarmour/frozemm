@@ -37,8 +37,6 @@ void MM(long N, long TSI, long TSJ, long TSK, PRECISION* restrict A, PRECISION* 
         R[i*N+j] += A[i*N+k] * B[k*N+j];
 
 	stop_timer(1);
-	printf("Time 1 : %lf sec (%f glfops/sec relative).\n", times[1], gflops(N, times[1], STOP));
-
 
 }
 
