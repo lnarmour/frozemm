@@ -29,9 +29,6 @@ int main(int argc, char** argv) {
 	  tts3 = atoi(argv[4]);
   }
 
-	if (N<tts1 || N<tts2 || N<tts3) { printf("TS1, TS2, and TS3 must be less than or equal to N\n"); exit(1); }
-	if (N%tts1!=0 || N%tts2!=0 || N%tts3!=0) { printf("TS1, TS2, and TS3 must divide N evenly\n"); exit(1); }
-
 	//Timing
 	struct timeval time;
 	double elapsed_time;
