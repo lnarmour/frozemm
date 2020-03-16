@@ -3,11 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <mkl.h>
 #include <omp.h>
 #include "ss.h"
 
-#define gflops(N, elapsed_time) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
+#define gflops(N, elapsed_time, STOP) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
 
 int posix_memalign(void **memptr, size_t alignment, size_t size);
   
@@ -23,78 +22,23 @@ static void * xmalloc (size_t num)
   return new;
 }   
 
-void MM(long N, long TSI, long TSJ, long TSK, PRECISION* A, PRECISION* B, PRECISION* R, double times[3]) {
+void MM(long N, long TSI, long TSJ, long TSK, PRECISION* restrict A, PRECISION* restrict B, PRECISION* restrict R, double times[3]) {
 
 	struct timeval time;
-	long i,j,k,ti,tj,tk,t;
+	long i,j,k,ti,tj,tk;
 
-    PRECISION* scratch;
-
-    if (N!=TSI || N!=TSJ || N!=TSJ) {
-        scratch = (PRECISION*)xmalloc(sizeof(PRECISION)*N*max(TSI,TSK));
-	    printf("Total memory footprint: %f Gb\n", ((3.0*N*N + N*max(TSI,TSK) + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
-    } else {
-	    printf("Total memory footprint: %f Gb\n", ((3.0*N*N + 2*TSI*TSK + 2*TSK*TSJ)*sizeof(PRECISION))/1000000000);
-    }
-
-	PRECISION* a_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
-	PRECISION* a_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSI*TSK);
-	PRECISION* b_next = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
-	PRECISION* b_curr = (PRECISION*)xmalloc(sizeof(PRECISION)*TSK*TSJ);
-	PRECISION* tmp;
-
-	start_timer(0);
-	two2four(A, scratch, N, N, TSI, TSK);
-	two2four(B, scratch, N, N, TSK, TSJ);
-	two2four(R, scratch, N, N, TSI, TSJ);
-	stop_timer(0);
-	printf("Time 0 : %lf sec.\n", times[0]);
+  printf("Total memory footprint: %f Gb\n", ((3.0*N*N)*sizeof(PRECISION))/1000000000);
 
 	start_timer(1);
-	#define A(tl,tm,TSL,TSM) A[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
-	#define B(tl,tm,TSL,TSM) B[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
-	#define R(tl,tm,TSL,TSM) R[(tl)*(N)*(TSL) + (tm)*(TSL)*(TSM)]	
-	#define ti(t) ((t)/((N*N)/(TSJ*TSK)))
-	#define tj(t) (((t)%((N*N)/(TSJ*TSK)))/(N/TSK))
-	#define tk(t) (((t)%((N*N)/(TSJ*TSK)))%(N/TSK))
 
-	long T = N*N*N/(TSI*TSJ*TSK);
+  for (i=0; i<N; i++)
+    for (k=0; k<N; k++)
+      for (j=0; j<N; j++)
+        R[i*N+j] += A[i*N+k] * B[k*N+j];
 
-	fetch_tile(A, a_curr, TSI*TSK);
-	fetch_tile(B, b_curr, TSK*TSJ);
-	
-	#pragma omp parallel firstprivate(t,T)
-	{
-		mkl_set_dynamic(0);
-		omp_set_nested(1);
-		omp_set_max_active_levels(2);
-		int tid = omp_get_thread_num();
-		for (t=0; t<T; t++) {
-			if (tid == 0) {
-				if (t+1<T) {
-					fetch_tile(&A(ti(t+1),tk(t+1),TSI,TSK), a_next, TSI*TSK);
-					fetch_tile(&B(tk(t+1),tj(t+1),TSK,TSJ), b_next, TSK*TSJ);
-				}
-			} else if (tid == 1) {
-				MM_MKL(TSI, TSK, TSJ, a_curr, b_curr, &R(ti(t),tj(t),TSI,TSJ));
-			}
-			#pragma omp barrier
-			if (tid == 0) {
-				tmp = a_curr; a_curr = a_next; a_next = tmp;
-				tmp = b_curr; b_curr = b_next; b_next = tmp;
-			}
-			#pragma omp barrier
-		}
-	}
 	stop_timer(1);
-	printf("Time 1 : %lf sec (%f glfops/sec relative).\n", times[1], gflops(N, times[1]));
+	printf("Time 1 : %lf sec (%f glfops/sec relative).\n", times[1], gflops(N, times[1], STOP));
 
-	start_timer(2);
-	four2two(A, scratch, N, N, TSI, TSK);
-	four2two(B, scratch, N, N, TSK, TSJ);
-	four2two(R, scratch, N, N, TSI, TSJ);
-	stop_timer(2);
-	printf("Time 2 : %lf sec.\n", times[2]);
 
 }
 

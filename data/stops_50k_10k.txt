@@ -1,0 +1,92 @@
+
+STOP=25
+Allocation/initialization time : 43.436814 sec.
+Total memory footprint: 33.600000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 103.205439 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2422.352952 gflops/sec.
+
+ Performance counter stats for './MM 50000 10000 10000 10000':
+
+                 0      major-faults:u                                              
+
+     147.506582723 seconds time elapsed
+
+    1153.027688000 seconds user
+     109.130139000 seconds sys
+
+
+STOP=50
+Allocation/initialization time : 43.427764 sec.
+Total memory footprint: 33.600000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 204.580296 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1222.014069 gflops/sec.
+
+ Performance counter stats for './MM 50000 10000 10000 10000':
+
+                 0      major-faults:u                                              
+
+     248.870002796 seconds time elapsed
+
+    2264.249022000 seconds user
+     203.603691000 seconds sys
+
+
+STOP=75
+Allocation/initialization time : 43.451464 sec.
+Total memory footprint: 33.600000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 304.076426 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 822.161722 gflops/sec.
+
+ Performance counter stats for './MM 50000 10000 10000 10000':
+
+                 0      major-faults:u                                              
+
+     348.371056440 seconds time elapsed
+
+    3360.947375000 seconds user
+     286.737476000 seconds sys
+
+
+STOP=100
+Allocation/initialization time : 43.371575 sec.
+Total memory footprint: 33.600000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 407.996242 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 612.750742 gflops/sec.
+
+ Performance counter stats for './MM 50000 10000 10000 10000':
+
+                 1      major-faults:u                                              
+
+     452.231772935 seconds time elapsed
+
+    4475.831794000 seconds user
+     393.905757000 seconds sys
+
+
+STOP=125
+Allocation/initialization time : 43.382699 sec.
+Total memory footprint: 33.600000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 531.090277 sec (470.729763 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 470.729762 gflops/sec.
+
+ Performance counter stats for './MM 50000 10000 10000 10000':
+
+             3,670      major-faults:u                                              
+
+     575.487858156 seconds time elapsed
+
+    5640.560844000 seconds user
+     577.314131000 seconds sys
+
+
+

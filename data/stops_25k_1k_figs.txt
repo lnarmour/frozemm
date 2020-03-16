@@ -1,0 +1,80 @@
+Allocation/initialization time : 14.645469 sec.
+Total memory footprint: 7.616000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 0.140739 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 222042.276665 gflops/sec.
+Allocation/initialization time : 14.506693 sec.
+Total memory footprint: 7.616000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 0.095541 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 327084.705835 gflops/sec.
+Allocation/initialization time : 14.488731 sec.
+Total memory footprint: 7.616000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 0.132690 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 235511.425912 gflops/sec.
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+           15.0817 +- 0.0703 seconds time elapsed  ( +-  0.47% )
+
+Allocation/initialization time : 14.462700 sec.
+Total memory footprint: 7.616000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 0.239928 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 130246.885977 gflops/sec.
+./MM: Interrupt
+./MM: Interrupt
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+              6.07 +- 4.56 seconds time elapsed  ( +- 75.12% )
+
+./MM: Interrupt
+./MM: Interrupt
+./MM: Interrupt
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+             0.377 +- 0.192 seconds time elapsed  ( +- 51.02% )
+
+./MM: Interrupt
+./MM: Interrupt
+./MM: Interrupt
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+            0.2404 +- 0.0866 seconds time elapsed  ( +- 36.02% )
+
+./MM: Interrupt
+./MM: Interrupt
+./MM: Interrupt
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+            0.1685 +- 0.0337 seconds time elapsed  ( +- 20.02% )
+
+./MM: Interrupt
+./MM: Interrupt
+./MM: Interrupt
+
+ Performance counter stats for './MM 25000 1000 1000 1000' (3 runs):
+
+                 0      major-faults:u                                              
+
+             0.322 +- 0.111 seconds time elapsed  ( +- 34.50% )
+

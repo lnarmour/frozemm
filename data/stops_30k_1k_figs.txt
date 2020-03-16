@@ -1,0 +1,780 @@
+STOP=1
+Allocation/initialization time : 62.185957 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 15.827725 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3411.734802 gflops/sec.
+Allocation/initialization time : 61.230927 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 13.934151 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3875.370681 gflops/sec.
+Allocation/initialization time : 59.861099 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 16.264081 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3320.199893 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+             4,205      major-faults:u                                                ( +-  1.79% )
+
+            78.378 +- 0.751 seconds time elapsed  ( +-  0.96% )
+
+STOP=2
+Allocation/initialization time : 52.883510 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 20.290052 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2661.402749 gflops/sec.
+Allocation/initialization time : 49.040550 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 22.235250 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2428.576248 gflops/sec.
+Allocation/initialization time : 53.772322 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 23.275653 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2320.020850 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+             6,345      major-faults:u                                                ( +-  0.33% )
+
+             76.01 +- 2.10 seconds time elapsed  ( +-  2.76% )
+
+STOP=3
+Allocation/initialization time : 55.718832 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 28.088249 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1922.512153 gflops/sec.
+Allocation/initialization time : 51.525023 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 33.097230 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1631.556480 gflops/sec.
+Allocation/initialization time : 56.982192 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 29.597700 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1824.466024 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+             8,106      major-faults:u                                                ( +-  1.32% )
+
+            87.116 +- 0.945 seconds time elapsed  ( +-  1.08% )
+
+STOP=4
+Allocation/initialization time : 51.485107 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 41.602855 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1297.987814 gflops/sec.
+Allocation/initialization time : 55.035675 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 31.315848 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1724.366532 gflops/sec.
+Allocation/initialization time : 51.160625 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 36.554042 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1477.264818 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+             9,848      major-faults:u                                                ( +-  2.55% )
+
+             91.02 +- 1.92 seconds time elapsed  ( +-  2.11% )
+
+STOP=5
+Allocation/initialization time : 57.688218 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 42.552689 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1269.014983 gflops/sec.
+Allocation/initialization time : 56.791043 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 43.481923 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 1241.895366 gflops/sec.
+Allocation/initialization time : 50.957488 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 47.249751 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1142.863169 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            11,723      major-faults:u                                                ( +-  0.99% )
+
+           101.318 +- 0.855 seconds time elapsed  ( +-  0.84% )
+
+STOP=6
+Allocation/initialization time : 55.197153 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 53.902077 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1001.816684 gflops/sec.
+Allocation/initialization time : 56.508409 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 47.660565 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1133.012169 gflops/sec.
+Allocation/initialization time : 54.944101 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 48.387641 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1115.987422 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            13,462      major-faults:u                                                ( +-  1.05% )
+
+            107.45 +- 1.72 seconds time elapsed  ( +-  1.60% )
+
+STOP=7
+Allocation/initialization time : 53.268776 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 56.713171 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 952.159772 gflops/sec.
+Allocation/initialization time : 53.642055 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 54.791122 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 985.561129 gflops/sec.
+Allocation/initialization time : 52.345718 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 58.440958 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 924.009478 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            15,374      major-faults:u                                                ( +-  1.07% )
+
+           111.686 +- 0.535 seconds time elapsed  ( +-  0.48% )
+
+STOP=8
+Allocation/initialization time : 53.644960 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 62.763790 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 860.368692 gflops/sec.
+Allocation/initialization time : 53.861088 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 64.794500 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 833.404071 gflops/sec.
+Allocation/initialization time : 56.560875 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 65.452166 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 825.029991 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            17,205      major-faults:u                                                ( +-  0.64% )
+
+            120.96 +- 1.98 seconds time elapsed  ( +-  1.64% )
+
+STOP=9
+Allocation/initialization time : 57.320025 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 61.067642 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 884.265353 gflops/sec.
+Allocation/initialization time : 58.298699 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 66.153609 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 816.281996 gflops/sec.
+Allocation/initialization time : 54.945479 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 69.727691 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 774.441248 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            18,239      major-faults:u                                                ( +-  0.52% )
+
+            124.87 +- 2.46 seconds time elapsed  ( +-  1.97% )
+
+STOP=10
+Allocation/initialization time : 55.682211 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 71.230625 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 758.100888 gflops/sec.
+Allocation/initialization time : 57.220944 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 71.863733 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 751.422141 gflops/sec.
+Allocation/initialization time : 51.535632 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 74.115732 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 728.590254 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            19,237      major-faults:u                                                ( +-  1.24% )
+
+            128.71 +- 1.06 seconds time elapsed  ( +-  0.82% )
+
+STOP=11
+Allocation/initialization time : 52.739860 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 76.681122 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 704.215047 gflops/sec.
+Allocation/initialization time : 55.595848 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 74.100648 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 728.738567 gflops/sec.
+Allocation/initialization time : 56.979936 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 77.378322 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 697.869867 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            20,048      major-faults:u                                                ( +-  0.12% )
+
+            133.08 +- 1.53 seconds time elapsed  ( +-  1.15% )
+
+STOP=12
+Allocation/initialization time : 51.546670 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 84.076008 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 642.275976 gflops/sec.
+Allocation/initialization time : 50.822769 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 77.667582 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 695.270765 gflops/sec.
+Allocation/initialization time : 52.876415 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 75.874726 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 711.699439 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            21,184      major-faults:u                                                ( +-  0.56% )
+
+            132.82 +- 2.05 seconds time elapsed  ( +-  1.54% )
+
+STOP=13
+Allocation/initialization time : 54.616440 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 78.437446 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 688.446688 gflops/sec.
+Allocation/initialization time : 55.396884 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 84.224144 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 641.146320 gflops/sec.
+Allocation/initialization time : 51.577266 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 79.026493 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 683.315152 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            22,070      major-faults:u                                                ( +-  0.07% )
+
+            136.34 +- 2.62 seconds time elapsed  ( +-  1.92% )
+
+STOP=14
+Allocation/initialization time : 53.371467 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 87.469084 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 617.360986 gflops/sec.
+Allocation/initialization time : 56.115757 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 82.348197 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 655.752062 gflops/sec.
+Allocation/initialization time : 49.227308 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 87.136794 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 619.715250 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            22,975      major-faults:u                                                ( +-  0.41% )
+
+            140.23 +- 1.25 seconds time elapsed  ( +-  0.89% )
+
+STOP=15
+Allocation/initialization time : 55.468543 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 89.746848 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 601.692433 gflops/sec.
+Allocation/initialization time : 53.350215 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 93.172985 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 579.567135 gflops/sec.
+Allocation/initialization time : 52.809978 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 88.566520 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 609.711209 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            23,814      major-faults:u                                                ( +-  0.46% )
+
+            145.98 +- 1.55 seconds time elapsed  ( +-  1.06% )
+
+STOP=16
+Allocation/initialization time : 57.986279 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 88.046179 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 613.314519 gflops/sec.
+Allocation/initialization time : 52.740698 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 92.774788 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 582.054684 gflops/sec.
+Allocation/initialization time : 54.387335 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 92.259997 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 585.302426 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            24,705      major-faults:u                                                ( +-  0.18% )
+
+           148.044 +- 0.364 seconds time elapsed  ( +-  0.25% )
+
+STOP=17
+Allocation/initialization time : 52.519642 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 98.391517 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 548.827797 gflops/sec.
+Allocation/initialization time : 56.100501 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 94.551375 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 571.118083 gflops/sec.
+Allocation/initialization time : 51.392423 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 93.971012 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 574.645295 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            25,704      major-faults:u                                                ( +-  0.09% )
+
+            150.71 +- 1.98 seconds time elapsed  ( +-  1.31% )
+
+STOP=18
+Allocation/initialization time : 56.167573 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 99.378544 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 543.376849 gflops/sec.
+Allocation/initialization time : 52.869070 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 97.914708 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 551.500389 gflops/sec.
+Allocation/initialization time : 52.653175 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 104.817098 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 515.183123 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            26,778      major-faults:u                                                ( +-  0.18% )
+
+            156.61 +- 1.89 seconds time elapsed  ( +-  1.21% )
+
+STOP=19
+Allocation/initialization time : 55.324691 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 102.537837 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 526.634865 gflops/sec.
+Allocation/initialization time : 52.351373 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 103.206632 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 523.222186 gflops/sec.
+Allocation/initialization time : 51.449800 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 108.673659 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 496.900541 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            27,771      major-faults:u                                                ( +-  0.25% )
+
+            159.69 +- 1.11 seconds time elapsed  ( +-  0.70% )
+
+STOP=20
+Allocation/initialization time : 55.643362 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 104.369969 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 517.390208 gflops/sec.
+Allocation/initialization time : 54.143179 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 106.519456 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 506.949642 gflops/sec.
+Allocation/initialization time : 52.934086 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 107.298511 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 503.268866 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            28,701      major-faults:u                                                ( +-  0.38% )
+
+           162.258 +- 0.273 seconds time elapsed  ( +-  0.17% )
+
+STOP=21
+Allocation/initialization time : 53.748428 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 109.749844 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 492.028034 gflops/sec.
+Allocation/initialization time : 52.259310 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 113.688187 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 474.983385 gflops/sec.
+Allocation/initialization time : 54.019846 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 106.102826 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 508.940261 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            29,527      major-faults:u                                                ( +-  0.68% )
+
+            165.07 +- 1.74 seconds time elapsed  ( +-  1.05% )
+
+STOP=22
+Allocation/initialization time : 52.898263 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 112.343362 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 480.669249 gflops/sec.
+Allocation/initialization time : 51.801662 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 116.931095 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 461.810436 gflops/sec.
+Allocation/initialization time : 51.104756 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 117.819387 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 458.328645 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            30,872      major-faults:u                                                ( +-  0.37% )
+
+            169.18 +- 1.13 seconds time elapsed  ( +-  0.67% )
+
+STOP=23
+Allocation/initialization time : 54.908047 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 120.075982 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 449.715243 gflops/sec.
+Allocation/initialization time : 54.727595 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 120.418679 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 448.435412 gflops/sec.
+Allocation/initialization time : 54.573799 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 118.141047 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 457.080764 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            31,705      major-faults:u                                                ( +-  0.50% )
+
+           175.964 +- 0.819 seconds time elapsed  ( +-  0.47% )
+
+STOP=24
+Allocation/initialization time : 55.569692 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 120.089970 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 449.662866 gflops/sec.
+Allocation/initialization time : 54.707489 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 124.843119 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 432.542862 gflops/sec.
+Allocation/initialization time : 54.682620 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 120.389856 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 448.542775 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            32,502      major-faults:u                                                ( +-  0.13% )
+
+            178.62 +- 1.66 seconds time elapsed  ( +-  0.93% )
+
+STOP=25
+Allocation/initialization time : 54.930341 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 123.472842 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 437.343132 gflops/sec.
+Allocation/initialization time : 55.565151 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 119.650737 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 451.313560 gflops/sec.
+Allocation/initialization time : 54.708621 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 127.797761 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 422.542614 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            33,353      major-faults:u                                                ( +-  0.17% )
+
+            180.43 +- 2.14 seconds time elapsed  ( +-  1.19% )
+
+STOP=26
+Allocation/initialization time : 55.529479 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 126.785016 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 425.917836 gflops/sec.
+Allocation/initialization time : 55.599548 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 128.983448 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 418.658363 gflops/sec.
+Allocation/initialization time : 54.959679 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 132.144482 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 408.643623 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            34,353      major-faults:u                                                ( +-  0.72% )
+
+            186.48 +- 1.20 seconds time elapsed  ( +-  0.64% )
+
+STOP=27
+Allocation/initialization time : 51.238345 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 130.361269 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 414.233464 gflops/sec.
+Allocation/initialization time : 57.176175 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 129.306435 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 417.612627 gflops/sec.
+Allocation/initialization time : 50.170058 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 131.770303 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 409.804021 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            35,423      major-faults:u                                                ( +-  0.50% )
+
+            185.06 +- 1.65 seconds time elapsed  ( +-  0.89% )
+
+STOP=28
+Allocation/initialization time : 51.126967 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 135.391359 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 398.843770 gflops/sec.
+Allocation/initialization time : 49.212883 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 138.010782 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 391.273777 gflops/sec.
+Allocation/initialization time : 53.418141 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 139.324713 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 387.583788 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            36,334      major-faults:u                                                ( +-  0.22% )
+
+            190.34 +- 2.00 seconds time elapsed  ( +-  1.05% )
+
+STOP=29
+Allocation/initialization time : 56.055184 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 136.430337 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 395.806393 gflops/sec.
+Allocation/initialization time : 52.604526 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 136.913302 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 394.410180 gflops/sec.
+Allocation/initialization time : 52.794481 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 143.545660 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 376.186922 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            37,493      major-faults:u                                                ( +-  0.17% )
+
+            194.43 +- 2.02 seconds time elapsed  ( +-  1.04% )
+
+STOP=30
+Allocation/initialization time : 51.921791 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 138.479791 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 389.948596 gflops/sec.
+Allocation/initialization time : 54.416802 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 144.777793 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 372.985379 gflops/sec.
+Allocation/initialization time : 50.960442 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 147.817994 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 365.314117 gflops/sec.
+
+ Performance counter stats for './MM 30000 1000 1000 1000' (3 runs):
+
+            38,394      major-faults:u                                                ( +-  0.14% )
+
+            197.92 +- 2.96 seconds time elapsed  ( +-  1.50% )
+

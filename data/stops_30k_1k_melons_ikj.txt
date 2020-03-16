@@ -1,0 +1,780 @@
+STOP=1
+Allocation/initialization time : 53.718672 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 11.487815 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 4700.632841 gflops/sec.
+Allocation/initialization time : 54.471342 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 12.170162 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 4437.081459 gflops/sec.
+Allocation/initialization time : 56.357819 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 12.954922 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 4168.299907 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             3,330      major-faults:u                                                ( +-  1.35% )
+
+            69.156 +- 0.995 seconds time elapsed  ( +-  1.44% )
+
+STOP=2
+Allocation/initialization time : 55.149787 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 15.408284 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3504.608258 gflops/sec.
+Allocation/initialization time : 54.540271 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 15.839259 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3409.250414 gflops/sec.
+Allocation/initialization time : 52.504875 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 15.057434 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3586.268398 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             4,491      major-faults:u                                                ( +-  1.94% )
+
+            71.459 +- 0.875 seconds time elapsed  ( +-  1.22% )
+
+STOP=3
+Allocation/initialization time : 58.449908 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 16.791811 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3215.853253 gflops/sec.
+Allocation/initialization time : 54.447213 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 18.956647 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2848.604899 gflops/sec.
+Allocation/initialization time : 51.923639 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 15.579723 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 3466.043466 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             5,389      major-faults:u                                                ( +-  2.13% )
+
+             74.09 +- 2.31 seconds time elapsed  ( +-  3.11% )
+
+STOP=4
+Allocation/initialization time : 52.253115 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 18.191711 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2968.384895 gflops/sec.
+Allocation/initialization time : 54.600492 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 18.402983 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2934.306756 gflops/sec.
+Allocation/initialization time : 51.327333 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 19.236487 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2807.165375 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             6,374      major-faults:u                                                ( +-  0.65% )
+
+            73.645 +- 0.947 seconds time elapsed  ( +-  1.29% )
+
+STOP=5
+Allocation/initialization time : 50.765220 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 23.037151 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2344.039744 gflops/sec.
+Allocation/initialization time : 51.828237 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 18.822185 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2868.954900 gflops/sec.
+Allocation/initialization time : 57.910180 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 19.654071 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2747.522404 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             7,007      major-faults:u                                                ( +-  1.45% )
+
+             75.92 +- 2.18 seconds time elapsed  ( +-  2.87% )
+
+STOP=6
+Allocation/initialization time : 55.231361 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 21.406483 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2522.600147 gflops/sec.
+Allocation/initialization time : 52.128608 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 21.014677 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2569.632666 gflops/sec.
+Allocation/initialization time : 50.879282 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 20.490991 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2635.304446 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             8,213      major-faults:u                                                ( +-  1.36% )
+
+             75.57 +- 1.46 seconds time elapsed  ( +-  1.94% )
+
+STOP=7
+Allocation/initialization time : 51.902285 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 25.566405 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2112.146775 gflops/sec.
+Allocation/initialization time : 53.527375 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 22.287351 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2422.898991 gflops/sec.
+Allocation/initialization time : 53.818183 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 24.986537 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2161.163832 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             9,111      major-faults:u                                                ( +-  0.29% )
+
+            78.895 +- 0.909 seconds time elapsed  ( +-  1.15% )
+
+STOP=8
+Allocation/initialization time : 53.329117 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 28.476260 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1896.316444 gflops/sec.
+Allocation/initialization time : 52.676725 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 25.465312 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2120.531647 gflops/sec.
+Allocation/initialization time : 52.368353 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 24.649281 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2190.733184 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+             9,932      major-faults:u                                                ( +-  1.06% )
+
+             80.65 +- 1.38 seconds time elapsed  ( +-  1.71% )
+
+STOP=9
+Allocation/initialization time : 53.614812 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 25.498406 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2117.779446 gflops/sec.
+Allocation/initialization time : 55.699666 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 29.637078 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1822.041968 gflops/sec.
+Allocation/initialization time : 51.722388 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 29.492678 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1830.962916 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            10,815      major-faults:u                                                ( +-  2.06% )
+
+             83.82 +- 1.78 seconds time elapsed  ( +-  2.12% )
+
+STOP=10
+Allocation/initialization time : 53.354841 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 25.920877 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 2083.262848 gflops/sec.
+Allocation/initialization time : 51.967670 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 27.290787 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1978.689646 gflops/sec.
+Allocation/initialization time : 55.606127 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 27.785288 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1943.474540 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            11,547      major-faults:u                                                ( +-  1.49% )
+
+             82.50 +- 1.49 seconds time elapsed  ( +-  1.80% )
+
+STOP=11
+Allocation/initialization time : 54.575368 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 30.681757 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1760.003511 gflops/sec.
+Allocation/initialization time : 54.277540 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 32.965969 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1638.052814 gflops/sec.
+Allocation/initialization time : 53.903893 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 33.582572 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1607.976900 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            12,514      major-faults:u                                                ( +-  0.93% )
+
+            88.754 +- 0.981 seconds time elapsed  ( +-  1.11% )
+
+STOP=12
+Allocation/initialization time : 54.500535 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 30.428912 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1774.628015 gflops/sec.
+Allocation/initialization time : 57.460895 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 34.340545 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1572.485239 gflops/sec.
+Allocation/initialization time : 54.719596 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 31.811435 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1697.502801 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            13,330      major-faults:u                                                ( +-  0.32% )
+
+             89.77 +- 2.33 seconds time elapsed  ( +-  2.60% )
+
+STOP=13
+Allocation/initialization time : 57.982802 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 32.365516 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 1668.442305 gflops/sec.
+Allocation/initialization time : 55.189500 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 29.498399 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1830.607823 gflops/sec.
+Allocation/initialization time : 50.053885 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 28.952547 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1865.120877 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            14,364      major-faults:u                                                ( +-  0.34% )
+
+             86.66 +- 3.10 seconds time elapsed  ( +-  3.58% )
+
+STOP=14
+Allocation/initialization time : 52.805788 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 35.396656 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 1525.567796 gflops/sec.
+Allocation/initialization time : 55.081285 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 32.630335 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1654.901791 gflops/sec.
+Allocation/initialization time : 52.583515 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 34.172683 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1580.209549 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            15,179      major-faults:u                                                ( +-  1.38% )
+
+            89.552 +- 0.257 seconds time elapsed  ( +-  0.29% )
+
+STOP=15
+Allocation/initialization time : 55.688707 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 37.372713 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1444.904474 gflops/sec.
+Allocation/initialization time : 55.199654 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 36.267427 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1488.939374 gflops/sec.
+Allocation/initialization time : 51.226773 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 33.274288 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1622.874698 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            16,219      major-faults:u                                                ( +-  0.96% )
+
+             91.65 +- 2.59 seconds time elapsed  ( +-  2.83% )
+
+STOP=16
+Allocation/initialization time : 55.230062 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 38.841195 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1390.276488 gflops/sec.
+Allocation/initialization time : 51.592154 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 37.729626 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1431.236029 gflops/sec.
+Allocation/initialization time : 54.783910 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 33.759647 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1599.542797 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            16,708      major-faults:u                                                ( +-  0.23% )
+
+             92.55 +- 1.55 seconds time elapsed  ( +-  1.68% )
+
+STOP=17
+Allocation/initialization time : 48.531474 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 42.574639 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1268.360694 gflops/sec.
+Allocation/initialization time : 56.197075 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 38.691595 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1395.651921 gflops/sec.
+Allocation/initialization time : 54.630378 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 38.877074 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1388.993421 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            17,835      major-faults:u                                                ( +-  0.03% )
+
+             95.43 +- 1.61 seconds time elapsed  ( +-  1.69% )
+
+STOP=18
+Allocation/initialization time : 50.049565 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 45.100581 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1197.323823 gflops/sec.
+Allocation/initialization time : 53.669863 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 41.483183 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1301.732322 gflops/sec.
+Allocation/initialization time : 52.769793 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 42.812396 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1261.316931 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            18,917      major-faults:u                                                ( +-  1.39% )
+
+            97.091 +- 0.366 seconds time elapsed  ( +-  0.38% )
+
+STOP=19
+Allocation/initialization time : 50.677297 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 45.516583 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1186.380798 gflops/sec.
+Allocation/initialization time : 54.344671 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 40.936154 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1319.127345 gflops/sec.
+Allocation/initialization time : 51.229018 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 42.546556 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1269.197883 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            19,745      major-faults:u                                                ( +-  0.47% )
+
+            97.253 +- 0.447 seconds time elapsed  ( +-  0.46% )
+
+STOP=20
+Allocation/initialization time : 51.642928 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 42.933091 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1257.771042 gflops/sec.
+Allocation/initialization time : 53.824135 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 44.826785 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1204.636919 gflops/sec.
+Allocation/initialization time : 51.696493 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 44.930755 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1201.849382 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            20,645      major-faults:u                                                ( +-  0.56% )
+
+             98.67 +- 1.21 seconds time elapsed  ( +-  1.23% )
+
+STOP=21
+Allocation/initialization time : 53.173198 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 44.413995 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1215.832982 gflops/sec.
+Allocation/initialization time : 55.675266 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 45.780154 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 1179.550398 gflops/sec.
+Allocation/initialization time : 51.802013 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 44.152660 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1223.029341 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            21,104      major-faults:u                                                ( +-  0.71% )
+
+            100.46 +- 1.54 seconds time elapsed  ( +-  1.53% )
+
+STOP=22
+Allocation/initialization time : 52.660804 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 45.931580 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1175.661717 gflops/sec.
+Allocation/initialization time : 55.869789 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 48.914820 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1103.959905 gflops/sec.
+Allocation/initialization time : 54.827161 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 48.713998 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1108.510944 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            22,544      major-faults:u                                                ( +-  0.44% )
+
+            104.42 +- 1.87 seconds time elapsed  ( +-  1.79% )
+
+STOP=23
+Allocation/initialization time : 51.436905 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 48.136813 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1121.802555 gflops/sec.
+Allocation/initialization time : 52.735094 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 49.017274 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1101.652452 gflops/sec.
+Allocation/initialization time : 55.578351 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 49.859685 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1083.039334 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            23,340      major-faults:u                                                ( +-  0.96% )
+
+            104.61 +- 1.78 seconds time elapsed  ( +-  1.70% )
+
+STOP=24
+Allocation/initialization time : 54.835589 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 51.219403 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1054.287961 gflops/sec.
+Allocation/initialization time : 50.974578 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 47.512844 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1136.534784 gflops/sec.
+Allocation/initialization time : 53.777362 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 47.806436 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1129.555023 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            23,953      major-faults:u                                                ( +-  0.58% )
+
+            104.21 +- 2.07 seconds time elapsed  ( +-  1.99% )
+
+STOP=25
+Allocation/initialization time : 52.889827 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 52.217116 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1034.143654 gflops/sec.
+Allocation/initialization time : 53.701190 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000001 sec.
+Time 1 : 52.643970 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1025.758487 gflops/sec.
+Allocation/initialization time : 52.087159 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 55.364899 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 975.347216 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            25,236      major-faults:u                                                ( +-  0.62% )
+
+           108.284 +- 0.677 seconds time elapsed  ( +-  0.63% )
+
+STOP=26
+Allocation/initialization time : 51.464360 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 53.072859 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1017.469211 gflops/sec.
+Allocation/initialization time : 54.526771 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 54.003191 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 999.940911 gflops/sec.
+Allocation/initialization time : 52.783272 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 52.577719 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1027.051022 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            25,707      major-faults:u                                                ( +-  0.40% )
+
+            108.28 +- 1.31 seconds time elapsed  ( +-  1.21% )
+
+STOP=27
+Allocation/initialization time : 53.831353 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 53.269051 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1013.721831 gflops/sec.
+Allocation/initialization time : 54.097804 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 51.960479 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1039.251389 gflops/sec.
+Allocation/initialization time : 55.340119 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 54.719642 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 986.848563 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            26,553      major-faults:u                                                ( +-  0.71% )
+
+            110.12 +- 1.17 seconds time elapsed  ( +-  1.06% )
+
+STOP=28
+Allocation/initialization time : 55.463476 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 57.789519 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 934.425499 gflops/sec.
+Allocation/initialization time : 55.523729 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 51.700639 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 1044.474518 gflops/sec.
+Allocation/initialization time : 56.141128 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 58.665975 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 920.465381 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            27,788      major-faults:u                                                ( +-  1.46% )
+
+            114.20 +- 2.25 seconds time elapsed  ( +-  1.97% )
+
+STOP=29
+Allocation/initialization time : 51.515632 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 62.833437 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 859.415028 gflops/sec.
+Allocation/initialization time : 49.356893 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 59.649557 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 905.287526 gflops/sec.
+Allocation/initialization time : 50.152390 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 58.442657 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 923.982631 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            28,619      major-faults:u                                                ( +-  0.55% )
+
+            112.73 +- 1.81 seconds time elapsed  ( +-  1.60% )
+
+STOP=30
+Allocation/initialization time : 54.334037 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 64.872274 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 832.404917 gflops/sec.
+Allocation/initialization time : 56.847315 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 62.359249 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000001 sec.
+Total Performance : 865.950119 gflops/sec.
+Allocation/initialization time : 52.639353 sec.
+Total memory footprint: 10.936000 Gb
+Time 0 : 0.000000 sec.
+Time 1 : 61.348775 sec (0.000000 glfops/sec relative).
+Time 2 : 0.000000 sec.
+Total Performance : 880.213176 gflops/sec.
+
+ Performance counter stats for './ikj/MM 30000 1000 1000 1000' (3 runs):
+
+            30,618      major-faults:u                                                ( +-  1.04% )
+
+            119.70 +- 1.55 seconds time elapsed  ( +-  1.29% )
+

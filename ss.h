@@ -25,4 +25,5 @@ void MM(long, long, long, long, PRECISION*, PRECISION*, PRECISION*, double[3]);
 void two2four(PRECISION*, PRECISION*, long, long, long, long);
 void four2two(PRECISION*, PRECISION*, long, long, long, long);
 void fetch_tile(PRECISION*, PRECISION*, long);
+void update_tile(PRECISION*, long);
 

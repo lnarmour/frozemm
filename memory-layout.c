@@ -6,6 +6,13 @@ void fetch_tile(PRECISION* restrict X4d, PRECISION* restrict x, long NN) {
 		x[i] = X4d[i];
 }
 
+void update_tile(PRECISION* restrict x, long NN) {
+	#pragma omp parallel for
+	for (long i=0; i<NN; i++)
+		x[i]++;
+}
+
+
 // ASSUMING that L%TSI=0 and M%TSJ=0
 void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;

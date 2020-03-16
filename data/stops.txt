@@ -1,0 +1,40 @@
+
+STOP=9
+./MM: Bus error
+
+ Performance counter stats for './MM 60000 20000 20000 20000':
+
+         1,829,121      major-faults:u                                              
+
+    4482.737077939 seconds time elapsed
+
+     905.869594000 seconds user
+     718.966666000 seconds sys
+
+
+STOP=18
+./MM: Killed
+
+ Performance counter stats for './MM 60000 20000 20000 20000':
+
+         5,792,047      major-faults:u                                              
+
+   28286.645938370 seconds time elapsed
+
+   35447.285254000 seconds user
+   38696.151472000 seconds sys
+
+
+STOP=27
+./MM: Bus error
+
+ Performance counter stats for './MM 60000 20000 20000 20000':
+
+         1,891,280      major-faults:u                                              
+
+   11383.163026300 seconds time elapsed
+
+     841.878146000 seconds user
+     647.942597000 seconds sys
+
+
