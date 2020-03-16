@@ -6,35 +6,30 @@
 #include <omp.h>
 #include "ss.h"
 
-#define gflops(N, elapsed_time, STOP) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
 
-int posix_memalign(void **memptr, size_t alignment, size_t size);
-  
-static void * xmalloc (size_t num)
-{ 
-  void* new = NULL;
-  int ret = posix_memalign (&new, 32, num);
-  if (! new || ret)
-    {
-      fprintf (stderr, "[PolyBench] posix_memalign: cannot allocate memory");
-      exit (1);
-    }
-  return new;
-}   
-
-void MM(long N, long TSI, long TSJ, long TSK, PRECISION* restrict A, PRECISION* restrict B, PRECISION* restrict R, double times[3]) {
+void MM(PRECISION alpha, PRECISION beta, 
+     long N, long TSI, long TSJ, long TSK, 
+     PRECISION* restrict A, 
+     PRECISION* restrict B, 
+     PRECISION* restrict R, 
+     double times[3])
+{
 
 	struct timeval time;
 	long i,j,k,ti,tj,tk;
 
-  printf("Total memory footprint: %f Gb\n", ((3.0*N*N)*sizeof(PRECISION))/1000000000);
-
 	start_timer(1);
 
+  #pragma omp parallel for private(j) 
+  for (i=0; i<N; i++)
+    for (j=0; j<N; j++)
+      R[i*N+j] *= beta;
+
+  #pragma omp parallel for private(k,j)
   for (i=0; i<N; i++)
     for (k=0; k<N; k++)
       for (j=0; j<N; j++)
-        R[i*N+j] += A[i*N+k] * B[k*N+j];
+        R[i*N+j] += alpha * A[i*N+k] * B[k*N+j];
 
 	stop_timer(1);
 

@@ -10,16 +10,24 @@
 void printTile(PRECISION*, long, long);
 
 int main(int argc, char** argv) {
-  if (argc <= 4) {
+  if (argc <= 1) {
     printf("Number of argument is smaller than expected.\n");
-    printf("Expecting N TSI TSJ TSK\n");
+    printf("Expecting N\n");
     exit(1);
   }
 
+  long tts1, tts2, tts3;
+
   long N = atoi(argv[1]);
-	long tts1 = atoi(argv[2]);
-	long tts2 = atoi(argv[3]);
-	long tts3 = atoi(argv[4]);
+  if (argc == 2) {
+    tts1 = N;
+    tts2 = N;
+    tts3 = N;
+  } else {
+  	tts1 = atoi(argv[2]);
+	  tts2 = atoi(argv[3]);
+	  tts3 = atoi(argv[4]);
+  }
 
 	if (N<tts1 || N<tts2 || N<tts3) { printf("TS1, TS2, and TS3 must be less than or equal to N\n"); exit(1); }
 	if (N%tts1!=0 || N%tts2!=0 || N%tts3!=0) { printf("TS1, TS2, and TS3 must divide N evenly\n"); exit(1); }
@@ -49,7 +57,7 @@ int main(int argc, char** argv) {
   gettimeofday(&time, NULL);
   elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time;
 
-  printf("Allocation/initialization time : %lf sec.\n", elapsed_time);
+  //printf("Allocation/initialization time : %lf sec.\n", elapsed_time);
 
 
 #ifdef CHECK
@@ -57,13 +65,13 @@ int main(int argc, char** argv) {
 	#define Check(i,j) Check[(i)*N + (j)]
 	PRECISION *Check = malloc(N * N * sizeof(PRECISION));
 	mallocCheck(Check, N*N, PRECISION);
-	MM_MKL(N, N, N, A, B, Check);
+	MM_MKL(ALPHA, BETA, N, N, N, A, B, Check);
 #endif
 
 
   //Call the main computation
-  MM(N, tts1, tts2, tts3, A, B, C, times);
-  printf("Total Performance : %f gflops/sec.\n", gflops(N, times[0]+times[1]+times[2]));
+  MM(ALPHA, BETA, N, tts1, tts2, tts3, A, B, C, times);
+  printf("%f\n", times[0]+times[1]+times[2]);
 
 
 #ifdef CHECK
