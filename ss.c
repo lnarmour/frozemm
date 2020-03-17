@@ -14,11 +14,6 @@
 // perf stat -e r5301d1,r5302d1,r5304d1,r5308d1,r5310d1,r5320d1,r5340d1,r5308f0,r53f824,r533824,r53d824,r53e124 ...
 //
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <omp.h>
 #include "ss.h"
 
 void MM(PRECISION alpha, PRECISION beta, 
@@ -30,14 +25,12 @@ void MM(PRECISION alpha, PRECISION beta,
 
 	long i,j,k,ti,tj,tk;
 
-  // #pragma omp parallel for private(tj,i,j) 
   for (ti=0; ti<N; ti+=TSI)
   for (tj=0; tj<N; tj+=TSJ)
     for (i=ti; i<min(N,ti+TSI); i++)
     for (j=tj; j<min(N,tj+TSJ); j++)
         R[i*N+j] *= beta;
 
-  // #pragma omp parallel for private(tk,tj,i,k,j) 
   for (ti=0; ti<N; ti+=TSI)
   for (tk=0; tk<N; tk+=TSK)
   for (tj=0; tj<N; tj+=TSJ)
