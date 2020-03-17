@@ -33,7 +33,7 @@ void MM(PRECISION alpha, PRECISION beta,
     for (j=tj; j<min(N,tj+TSJ); j++)
         R[i*N+j] *= beta;
 
-  #pragma omp parallel for private(tk,tj,i,k,j)
+  #pragma omp parallel for private(ti,tj,tk,i,j,k)
   for (ti=0; ti<N; ti+=TSI)
   for (tk=0; tk<N; tk+=TSK)
   for (tj=0; tj<N; tj+=TSJ)
@@ -41,7 +41,6 @@ void MM(PRECISION alpha, PRECISION beta,
     for (k=tk; k<min(N,tk+TSK); k++)
     for (j=tj; j<min(N,tj+TSJ); j++)
       R[i*N+j] += alpha * A[i*N+k] * B[k*N+j];
-
 }
 
 
