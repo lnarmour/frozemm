@@ -1,0 +1,87 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+
+Begin optimization report for: MM(float, float, long, long, long, long, float *, float *, float *)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at ss.c(12,3)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at ss.c(13,5)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at ss.c(13,5)
+      remark #15300: LOOP WAS VECTORIZED
+   LOOP END
+
+   LOOP BEGIN at ss.c(13,5)
+   <Remainder loop for vectorization>
+      remark #15301: REMAINDER LOOP WAS VECTORIZED
+   LOOP END
+
+   LOOP BEGIN at ss.c(13,5)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at ss.c(16,3)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at ss.c(17,5)
+      remark #25460: No loop optimizations reported
+
+      LOOP BEGIN at ss.c(18,7)
+      <Peeled loop for vectorization>
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+         remark #15300: LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+      <Remainder loop for vectorization>
+      LOOP END
+   LOOP END
+
+   LOOP BEGIN at ss.c(17,5)
+   <Remainder>
+
+      LOOP BEGIN at ss.c(18,7)
+      <Peeled loop for vectorization>
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+         remark #15300: LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+      <Remainder loop for vectorization>
+      LOOP END
+   LOOP END
+LOOP END
+
+LOOP BEGIN at ss.c(16,3)
+<Remainder>
+
+   LOOP BEGIN at ss.c(17,5)
+      remark #25460: No loop optimizations reported
+
+      LOOP BEGIN at ss.c(18,7)
+      <Peeled loop for vectorization>
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+         remark #15300: LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at ss.c(18,7)
+      <Remainder loop for vectorization>
+      LOOP END
+   LOOP END
+LOOP END
+===========================================================================
