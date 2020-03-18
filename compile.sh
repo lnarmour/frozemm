@@ -7,7 +7,7 @@ for flag in ${flags[@]};
 do
   desc="$(echo $flag | sed 's~-march=~~' | sed 's~-xcore~~' | sed 's~-~~g')"
   make -B OPTS="-O3 ${flag}"
-  mv MM "GEMM.$(hostname).${desc}.unaligned.${commit}"
-  mv ss.optrpt "GEMM.optrpt.$(hostname).${desc}.unaligned.${commit}"
+  mv MM "GEMM.$(hostname).${desc}.aligned.${commit}"
+  mv ss.optrpt "GEMM.optrpt.$(hostname).${desc}.aligned.${commit}"
 done;
 

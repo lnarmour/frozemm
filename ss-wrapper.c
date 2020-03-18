@@ -12,7 +12,7 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 static void * xmalloc (size_t num)
 { 
   void* new = NULL;
-  int ret = posix_memalign (&new, 64, num);
+  int ret = posix_memalign (&new, 32, num);
   if (! new || ret)
     {
       fprintf (stderr, "[PolyBench] posix_memalign: cannot allocate memory");
@@ -52,11 +52,11 @@ int main(int argc, char** argv) {
 
   gettimeofday(&time, NULL);
   elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000);
-	PRECISION *A = malloc(N * N * sizeof(PRECISION));
+	PRECISION *A = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(A, N*N, PRECISION);
-	PRECISION *B = malloc(N * N * sizeof(PRECISION));
+	PRECISION *B = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(B, N*N, PRECISION);
-	PRECISION *C = malloc(N * N * sizeof(PRECISION));
+	PRECISION *C = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(C, N*N, PRECISION);
 	for (long i=0; i<N; i++)
 		for (long j=0; j<N; j++) {
