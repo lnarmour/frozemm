@@ -11,13 +11,14 @@ void MM(PRECISION alpha, PRECISION beta,
 
   for (i=0; i<N; i++)
     for (j=0; j<N; j++)
-       R[i*N+j] *= beta;
+      R[i*N+j] *= beta;
 
   for (i=0; i<N; i++)
-    for (k=0; k<N; k++)
+    for (k=0; k<N; k++) {
+//      #pragma vector aligned
       for (j=0; j<N; j++)
         R[i*N+j] += alpha * A[i*N+k] * B[k*N+j];
-
+    }
 }
 
 

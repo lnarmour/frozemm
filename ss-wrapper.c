@@ -7,6 +7,20 @@
 #define gflops(N, elapsed_time) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
 #define abs(val) (val)>0.0 ? (val) : -1*(val)
 
+int posix_memalign(void **memptr, size_t alignment, size_t size);
+  
+static void * xmalloc (size_t num)
+{ 
+  void* new = NULL;
+  int ret = posix_memalign (&new, 64, num);
+  if (! new || ret)
+    {
+      fprintf (stderr, "[PolyBench] posix_memalign: cannot allocate memory");
+      exit (1);
+    }
+  return new;
+}   
+
 
 int main(int argc, char** argv) {
   if (argc <= 1) {
@@ -56,7 +70,7 @@ int main(int argc, char** argv) {
 #ifdef CHECK
 	#define C(i,j) C[(i)*N + (j)]
 	#define Check(i,j) Check[(i)*N + (j)]
-	PRECISION *Check = malloc(N * N * sizeof(PRECISION));
+	PRECISION *Check = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(Check, N*N, PRECISION);
 	MM_MKL(ALPHA, BETA, N, N, N, A, B, Check);
 #endif
