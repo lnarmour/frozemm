@@ -11,7 +11,7 @@ void MM(PRECISION alpha, PRECISION beta,
 
   for (i=0; i<N; i++)
     for (k=0; k<N; k++) {
-//      #pragma vector aligned
+      #pragma vector aligned
       for (j=0; j<N; j++)
         R[i*N+j] += A[i*N+k] * B[k*N+j];
     }
