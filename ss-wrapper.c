@@ -52,11 +52,11 @@ int main(int argc, char** argv) {
 
   gettimeofday(&time, NULL);
   elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000);
-	PRECISION *A = xmalloc(N * N * sizeof(PRECISION));
+	PRECISION *A = malloc(N * N * sizeof(PRECISION));
 	mallocCheck(A, N*N, PRECISION);
-	PRECISION *B = xmalloc(N * N * sizeof(PRECISION));
+	PRECISION *B = malloc(N * N * sizeof(PRECISION));
 	mallocCheck(B, N*N, PRECISION);
-	PRECISION *C = xmalloc(N * N * sizeof(PRECISION));
+	PRECISION *C = malloc(N * N * sizeof(PRECISION));
 	mallocCheck(C, N*N, PRECISION);
 	for (long i=0; i<N; i++)
 		for (long j=0; j<N; j++) {
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 #ifdef CHECK
 	#define C(i,j) C[(i)*N + (j)]
 	#define Check(i,j) Check[(i)*N + (j)]
-	PRECISION *Check = xmalloc(N * N * sizeof(PRECISION));
+	PRECISION *Check = malloc(N * N * sizeof(PRECISION));
 	mallocCheck(Check, N*N, PRECISION);
 	MM_MKL(ALPHA, BETA, N, N, N, A, B, Check);
 #endif
