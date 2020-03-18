@@ -72,13 +72,13 @@ int main(int argc, char** argv) {
 	#define Check(i,j) Check[(i)*N + (j)]
 	PRECISION *Check = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(Check, N*N, PRECISION);
-	MM_MKL(ALPHA, BETA, N, N, N, A, B, Check);
+	MM_MKL(1.0, 1.0, N, N, N, A, B, Check);
 #endif
 
   start_timer(0);
 
   //Call the main computation
-  MM(ALPHA, BETA, N, tts1, tts2, tts3, A, B, C);
+  MM(N, A, B, C);
 
   stop_timer(0);
 

@@ -1,7 +1,6 @@
 #include "ss.h"
 
-void MM(PRECISION alpha, PRECISION beta, 
-     long N, long TSI, long TSJ, long TSK, 
+void MM(long N,
      PRECISION* restrict A, 
      PRECISION* restrict B, 
      PRECISION* restrict R) 
