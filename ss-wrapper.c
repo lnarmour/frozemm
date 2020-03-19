@@ -7,6 +7,15 @@
 #define gflops(N, elapsed_time) 2*(N)*(N)*(N)/(elapsed_time)/1000000000
 #define abs(val) (val)>0.0 ? (val) : -1*(val)
 
+void printM(PRECISION *M, int N) {
+  for (int i=0; i<N; i++) {
+    for (int j=0; j<N; j++) {
+      printf("%.3f ", M[i*N+j]);
+    }
+    printf("\n");
+  }
+}
+
 int posix_memalign(void **memptr, size_t alignment, size_t size);
   
 static void * xmalloc (size_t num)
@@ -86,6 +95,14 @@ int main(int argc, char** argv) {
 
 
 #ifdef CHECK
+  printf("\nA\n");
+  printM(A, N);
+  printf("\nB\n");
+  printM(B, N);
+  printf("\nC\n");
+  printM(C, N);
+  printf("\nCheck\n");
+  printM(Check, N);
 	for (long i=0; i<N; i++) {
 		for (long j=0; j<N; j++) {
 			PRECISION delta = abs(C(i,j)-Check(i,j));
