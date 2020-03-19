@@ -1,0 +1,27 @@
+#!/bin/bash 
+
+declare -A COUNTER
+COUNTER[5301d1]='MEM_LOAD_UOPS_RETIRED.L1_HIT '
+COUNTER[5302d1]='MEM_LOAD_UOPS_RETIRED.L2_HIT '
+COUNTER[5304d1]='MEM_LOAD_UOPS_RETIRED.L3_HIT '
+COUNTER[5308d1]='MEM_LOAD_UOPS_RETIRED.L1_MISS'
+COUNTER[5310d1]='MEM_LOAD_UOPS_RETIRED.L2_MISS'
+COUNTER[5320d1]='MEM_LOAD_UOPS_RETIRED.L3_MISS'
+COUNTER[5340d1]='MEM_LOAD_UOPS_RETIRED.HIT_LFB'
+COUNTER[5308f0]='L2_TRANS.ALL_PF              '
+COUNTER[53f824]='L2_RQSTS.ALL_PF              '
+COUNTER[533824]='L2_RQSTS.PF_MISS             '
+COUNTER[53d824]='L2_RQSTS.PF_HIT              '
+COUNTER[53e124]='L2_RQSTS.ALL_DEMAND_DATA_RD  '
+
+opts=(-xcore-avx2 -no-vec)
+
+for opt in ${opts[@]};
+do
+  echo "-------------------------"
+  make -B OPTS="-O3 ${opt}";
+  echo "./FMA"
+  cmd="perf stat -r 1 -e r5301d1,r5302d1,r5340d1,r53d824,r53f824,r53e124,r5308d1,r5310d1,r533824 ./FMA"
+  lines="$(${cmd} 2>&1 | sed "s~\(.*r\)\(.*\):u[ ]\+\(.*\)~\1\2 - \${COUNTER[\2]}  \3~")"
+  eval "echo \"$lines\""
+done;
