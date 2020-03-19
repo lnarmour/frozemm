@@ -11,7 +11,7 @@ void MM(long N,
 
   long i,j,k,ti,tj,tk, tjj;
 
-  #pragma omp parallel for private(ti,tj,tk,i,j,k)
+//  #pragma omp parallel for private(ti,tj,tk,i,j,k)
   for (ti=0; ti<N; ti+=TI)
     for (tk=0; tk<N; tk+=TK)
       for (tj=0; tj<N; tj+=TJ) {
