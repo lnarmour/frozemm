@@ -9,13 +9,16 @@ OBJS=ss-mkl.o ss.o
 all: MM
 
 MM: ss.o ss-wrapper.c
-	$(CC) ss-wrapper.c ss.o -o MM $(CFLAGS) -D$(PRECISION)=1
+	$(CC) ss-wrapper.c ss.o -o MM $(CFLAGS) -D$(PRECISION)=1 -g
 
 MM.check: $(OBJS) ss-wrapper.c 
-	$(CC) ss-wrapper.c $(OBJS) -o MM.check $(CFLAGS) $(MKL_FLAGS)  -D$(PRECISION)=1 -DCHECK
+	$(CC) ss-wrapper.c $(OBJS) -o MM.check $(CFLAGS) $(MKL_FLAGS)  -D$(PRECISION)=1 -DCHECK -g
+
+MM.mkl: ss-mkl.o ss-wrapper.c
+	$(CC) ss-wrapper.c ss-mkl.o -o MM.mkl $(CFLAGS) $(MKL_FLAGS)  -D$(PRECISION)=1 -DMKL -g
 
 ss-mkl.o: ss-mkl.c
-	$(CC) ss-mkl.c -c -o ss-mkl.o $(CFLAGS) $(OPTS) $(MKL_FLAGS) -D$(PRECISION)=1
+	$(CC) ss-mkl.c -c -o ss-mkl.o $(CFLAGS) $(OPTS) $(MKL_FLAGS) -D$(PRECISION)=1 -g
 
 ss.o: ss.c
 	$(CC) ss.c -c -o ss.o $(CFLAGS) $(DEFS) -D$(PRECISION)=1 -qopt-report-phase=vec -qopt-report=5

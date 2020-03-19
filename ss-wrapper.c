@@ -87,7 +87,11 @@ int main(int argc, char** argv) {
   start_timer(0);
 
   //Call the main computation
+#ifdef MKL
+	MM_MKL(N, N, N, A, B, C);
+#else
   MM(N, A, B, C);
+#endif
 
   stop_timer(0);
 
@@ -95,14 +99,16 @@ int main(int argc, char** argv) {
 
 
 #ifdef CHECK
-  printf("\nA\n");
-  printM(A, N);
-  printf("\nB\n");
-  printM(B, N);
-  printf("\nC\n");
-  printM(C, N);
-  printf("\nCheck\n");
-  printM(Check, N);
+  if (getenv("VERBOSE")) {
+    printf("\nA\n");
+    printM(A, N);
+    printf("\nB\n");
+    printM(B, N);
+    printf("\nC\n");
+    printM(C, N);
+    printf("\nCheck\n");
+    printM(Check, N);
+  }
 	for (long i=0; i<N; i++) {
 		for (long j=0; j<N; j++) {
 			PRECISION delta = abs(C(i,j)-Check(i,j));

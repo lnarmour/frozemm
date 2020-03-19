@@ -21,7 +21,7 @@ fi
 
 make -B DEFS="-DTI=$2 -DTJ=$3 -DTK=$4" > /dev/null 2>&1;
 
-cmd="perf stat -e r5301d1,r5302d1,r5304d1,r5308d1,r5310d1,r5320d1,r5340d1,r5308f0,r53f824,r533824,r53d824,r53e124 ./MM $1"
+cmd="perf stat -e r5301d1,r5302d1,r5304d1,r5340d1,r53d824,r5308f0,r53f824,r53e124,r5308d1,r5310d1,r5320d1,r533824 ./MM $1"
 echo "$cmd (TI=$2 TJ=$3 TK=$4)"
 
 lines="$(${cmd} 2>&1 | sed "s~\(.*r\)\(.*\):u[ ]\+\(.*\)~\1\2 - \${COUNTER[\2]}       \3~")"
