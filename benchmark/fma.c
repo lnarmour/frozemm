@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <immintrin.h>
 
 struct timeval time;
 double elapsed_time;
@@ -25,17 +24,10 @@ static void * xmalloc (size_t num)
 void kernel(float *restrict x, float *restrict y, float *restrict z)
 {
   int i,j,k;
-  __m256 p_x, p_y, p_z, p_result;
   for (i=0; i<8*N; i++) 
     for (j=0; j<8*N; j++) 
-      for (k=0; k<8*N; k+=8) {
-        // z[k] += x[k] * y[k];
-        p_x = _mm256_load_ps(&x[k]);
-        p_y = _mm256_load_ps(&y[k]);
-        p_z = _mm256_load_ps(&z[k]);
-        p_result = _mm256_fmadd_ps(p_x, p_y, p_z);
-        _mm256_store_ps(&z[k], p_result);
-      }
+      for (k=0; k<8*N; k++) 
+        z[k] += x[k] * y[k];
 }
 
 void main(int argc, char *argv[])

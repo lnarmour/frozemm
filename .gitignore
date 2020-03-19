@@ -3,3 +3,4 @@ GEMM*
 MM*
 *.log*
 *.optrpt
+*FMA
