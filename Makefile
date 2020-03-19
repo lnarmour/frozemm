@@ -3,7 +3,7 @@ PRECISION=SINGLE
 MKL_FLAGS=-I${INTEL_HOME}/mkl/include/ -L${INTEL_HOME}/compilers_and_libraries/linux/mkl/lib/intel64  -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core  -L${INTEL_HOME}/compilers_and_libraries/linux/lib/intel64 -liomp5 -lm
 DEFS= 
 OPTS= -O3 -xcore-avx2
-CFLAGS=  -std=c99  -I/usr/include/malloc/ ${OPTS}
+CFLAGS=  -std=c99  -I/usr/include/malloc/ ${OPTS} -qopenmp
 OBJS=ss-mkl.o ss.o
 
 all: MM

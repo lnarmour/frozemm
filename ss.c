@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <omp.h>
 #include "ss.h"
 
 
@@ -8,9 +9,9 @@ void MM(long N,
      PRECISION* restrict R) 
 {
 
-  long i,j,k,ti,tj,tk;
+  long i,j,k,ti,tj,tk, tjj;
 
-  // case 1 of 8: ti,tj,tk = full,full,full
+  #pragma omp parallel for private(ti,tj,tk,i,j,k)
   for (ti=0; ti<N; ti+=TI)
     for (tk=0; tk<N; tk+=TK)
       for (tj=0; tj<N; tj+=TJ) {
