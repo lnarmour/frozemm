@@ -20,10 +20,18 @@
 #define max(x, y)   ((x)>(y) ? (x) : (y))
 #define mallocCheck(v,s,d) if ((v) == NULL) { printf("Failed to allocate memory for %s : size=%lu\n", "sizeof(d)*(s)", sizeof(d)*(s)); exit(-1); }
 
-#define ALPHA 1.5
-#define BETA 1.2
+#ifndef TI
+#define TI 500
+#endif
+#ifndef TJ
+#define TJ 512
+#endif
+#ifndef TK
+#define TK 500
+#endif
 
-void MM_MKL(PRECISION, PRECISION, long, long, long, PRECISION*, PRECISION*, PRECISION*);
+
+void MM_MKL(long, long, long, PRECISION*, PRECISION*, PRECISION*);
 void MM(long, PRECISION*, PRECISION*, PRECISION*);
 void two2four(PRECISION*, PRECISION*, long, long, long, long);
 void four2two(PRECISION*, PRECISION*, long, long, long, long);

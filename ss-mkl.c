@@ -3,7 +3,7 @@
 #include "ss.h"
 
 
-void MM_MKL(PRECISION alpha, PRECISION beta, long l, long m, long n, PRECISION* A, PRECISION* B, PRECISION* R){
+void MM_MKL(long l, long m, long n, PRECISION* A, PRECISION* B, PRECISION* R){
 
 	//for (int i=0; i<l; i++)
 	//for (int k=0; k<m; k++)
@@ -19,12 +19,12 @@ void MM_MKL(PRECISION alpha, PRECISION beta, long l, long m, long n, PRECISION* 
     l, //rows in A
     n, //columns in B
     m, //columns in A/rows in B
-    alpha, //multiply A by 1
+    1, //multiply A by 1
     A, 
     m, //leading dimension of A
     B, 
     n, //leading dimension of B
-    beta, //multiply C by this before adding AB
+    1, //multiply C by this before adding AB
     R, 
     n);//leading dimension of C
 	//#endif

@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 	#define Check(i,j) Check[(i)*N + (j)]
 	PRECISION *Check = xmalloc(N * N * sizeof(PRECISION));
 	mallocCheck(Check, N*N, PRECISION);
-	MM_MKL(1.0, 1.0, N, N, N, A, B, Check);
+	MM_MKL(N, N, N, A, B, Check);
 #endif
 
   start_timer(0);
