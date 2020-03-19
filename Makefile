@@ -6,10 +6,10 @@ OPTS= -O3 -xcore-avx2
 CFLAGS=  -std=c99  -I/usr/include/malloc/ ${OPTS}
 OBJS=ss-mkl.o ss.o
 
-all: MM MM.check
+all: MM
 
-MM: $(OBJS) ss-wrapper.c
-	$(CC) ss-wrapper.c $(OBJS) -o MM $(CFLAGS) $(MKL_FLAGS) -D$(PRECISION)=1
+MM: ss.o ss-wrapper.c
+	$(CC) ss-wrapper.c ss.o -o MM $(CFLAGS) -D$(PRECISION)=1
 
 MM.check: $(OBJS) ss-wrapper.c 
 	$(CC) ss-wrapper.c $(OBJS) -o MM.check $(CFLAGS) $(MKL_FLAGS)  -D$(PRECISION)=1 -DCHECK

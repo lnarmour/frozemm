@@ -2,3 +2,4 @@
 GEMM*
 MM*
 *.log*
+*.optrpt
