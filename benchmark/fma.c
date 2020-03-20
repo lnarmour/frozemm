@@ -9,6 +9,10 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 #define start_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000)
 #define stop_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time
 
+#ifndef N
+#define N 1000
+#endif
+
 static void * xmalloc (size_t num)
 {
   void* new = NULL;
@@ -21,34 +25,40 @@ static void * xmalloc (size_t num)
   return new;
 }
 
-void kernel(float *restrict x, float *restrict y, float *restrict z)
+void kernel(float *restrict x0, float *restrict y0, float *restrict z0,
+            float *restrict x1, float *restrict y1, float *restrict z1)
 {
   int i,j,k;
-  for (i=0; i<8*N; i++) 
-    for (j=0; j<8*N; j++) 
-      for (k=0; k<8*N; k++) 
-        z[k] += x[k] * y[k];
+  for (i=0; i<N; i++) 
+    for (j=0; j<N; j++) {
+      // #pragma vector aligned
+      for (k=0; k<N; k++) {
+        z0[k] += x0[k] * y0[k];
+        z1[k] += x1[k] * y1[k];
+      }
+    }
 }
 
 void main(int argc, char *argv[])
 {
-  // x, y, & z should all fit in maxline L1d cache (32K bytes) if N < 312
-  float *x = (float*)xmalloc(sizeof(float) * 8*N); // 32N KB
-  float *y = (float*)xmalloc(sizeof(float) * 8*N); // 32N KB 
-  float *z = (float*)xmalloc(sizeof(float) * 8*N); // 32N KB 
+  // x, y, & z should all fit in maxline L1d cache (32K bytes) if N < 1250
+  float *x0 = (float*)xmalloc(sizeof(float) * N); // 4N KB
+  float *y0 = (float*)xmalloc(sizeof(float) * N); // 4N KB
+  float *z0 = (float*)xmalloc(sizeof(float) * N); // 4N KB
+  float *x1 = (float*)xmalloc(sizeof(float) * N); // 4N KB
+  float *y1 = (float*)xmalloc(sizeof(float) * N); // 4N KB
+  float *z1 = (float*)xmalloc(sizeof(float) * N); // 4N KB
 
   start_timer();
-
-  kernel(x, y, z);
-
+  kernel(x0,y0,z0,x1,y1,z1);
   stop_timer();
   
-  // prevent dead code elimination
-  if (atoi(argv[0]) == 9999999) {
-    for (int i=0; i<8*N; i++) 
-      printf("%f,%f,%f\n",x[i],y[i],z[i]);
-  }
-
   printf("%f\n", elapsed_time);
 
+
+
+  if (atoi(argv[0]) == 9999999) {
+    for (int i=0; i<N; i++) 
+      printf("%f,%f,%f%f,%f,%f\n",x0[i],y0[i],z0[i],x1[i],y1[i],z1[i]);
+  }
 }
