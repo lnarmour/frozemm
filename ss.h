@@ -21,13 +21,13 @@
 #define mallocCheck(v,s,d) if ((v) == NULL) { printf("Failed to allocate memory for %s : size=%lu\n", "sizeof(d)*(s)", sizeof(d)*(s)); exit(-1); }
 
 #ifndef TI
-#define TI 500
+#define TI 128
 #endif
 #ifndef TJ
-#define TJ 512
+#define TJ 128
 #endif
 #ifndef TK
-#define TK 500
+#define TK 128
 #endif
 
 
