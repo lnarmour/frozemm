@@ -1,0 +1,159 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C Intel(R) 64 Compiler for applications running on Intel(R) 64, Version 19.0.3.199 Build 20190206
+
+Compiler options: -I/usr/include/malloc/ -c -o ss.o -std=c99 -O3 -xcore-avx2 -DSINGLE=1 -qopt-report-phase=vec -qopt-report=5
+
+Begin optimization report for: MM(long, float *, float *, float *)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at ss.c(16,3)
+   remark #15542: loop was not vectorized: inner loop was already vectorized
+
+   LOOP BEGIN at ss.c(17,5)
+      remark #15542: loop was not vectorized: inner loop was already vectorized
+
+      LOOP BEGIN at ss.c(18,7)
+         remark #15542: loop was not vectorized: inner loop was already vectorized
+
+         LOOP BEGIN at ss.c(23,11)
+         <Distributed chunk1>
+            remark #15305: vectorization support: vector length 8
+            remark #15309: vectorization support: normalized vectorization overhead 0.286
+            remark #15301: PARTIAL LOOP WAS VECTORIZED
+            remark #15475: --- begin vector cost summary ---
+            remark #15476: scalar cost: 1 
+            remark #15477: vector cost: 0.870 
+            remark #15478: estimated potential speedup: 1.100 
+            remark #15488: --- end vector cost summary ---
+
+            LOOP BEGIN at ss.c(24,13)
+            <Distributed chunk2>
+               remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
+               remark #15305: vectorization support: vector length 2
+               remark #15399: vectorization support: unroll factor set to 2
+               remark #15309: vectorization support: normalized vectorization overhead 1.300
+               remark #15475: --- begin vector cost summary ---
+               remark #15476: scalar cost: 1 
+               remark #15477: vector cost: 2.500 
+               remark #15478: estimated potential speedup: 0.380 
+               remark #15488: --- end vector cost summary ---
+            LOOP END
+         LOOP END
+
+         LOOP BEGIN at ss.c(23,11)
+         <Distributed chunk2>
+            remark #15542: loop was not vectorized: inner loop was already vectorized
+
+            LOOP BEGIN at ss.c(24,13)
+            <Distributed chunk1>
+               remark #15542: loop was not vectorized: inner loop was already vectorized
+
+               LOOP BEGIN at ss.c(26,15)
+               <Multiversioned v1>
+                  remark #15388: vectorization support: reference R[i*N+j] has aligned access   [ ss.c(27,17) ]
+                  remark #15388: vectorization support: reference R[i*N+j] has aligned access   [ ss.c(27,17) ]
+                  remark #15388: vectorization support: reference B[k*N+j] has aligned access   [ ss.c(27,48) ]
+                  remark #15388: vectorization support: reference R[(i+1)*N+j] has aligned access   [ ss.c(28,17) ]
+                  remark #15388: vectorization support: reference R[(i+1)*N+j] has aligned access   [ ss.c(28,17) ]
+                  remark #15388: vectorization support: reference B[k*N+j] has aligned access   [ ss.c(28,48) ]
+                  remark #15305: vectorization support: vector length 8
+                  remark #15399: vectorization support: unroll factor set to 2
+                  remark #15309: vectorization support: normalized vectorization overhead 0.071
+                  remark #15300: LOOP WAS VECTORIZED
+                  remark #15448: unmasked aligned unit stride loads: 4 
+                  remark #15449: unmasked aligned unit stride stores: 2 
+                  remark #15475: --- begin vector cost summary ---
+                  remark #15476: scalar cost: 19 
+                  remark #15477: vector cost: 1.750 
+                  remark #15478: estimated potential speedup: 10.760 
+                  remark #15488: --- end vector cost summary ---
+               LOOP END
+
+               LOOP BEGIN at ss.c(26,15)
+               <Multiversioned v2>
+                  remark #15304: loop was not vectorized: non-vectorizable loop instance from multiversioning
+               LOOP END
+            LOOP END
+         LOOP END
+
+         LOOP BEGIN at ss.c(23,11)
+         <Distributed chunk3>
+            remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
+            remark #15305: vectorization support: vector length 2
+            remark #15399: vectorization support: unroll factor set to 8
+            remark #15309: vectorization support: normalized vectorization overhead 0.325
+            remark #15475: --- begin vector cost summary ---
+            remark #15476: scalar cost: 1 
+            remark #15477: vector cost: 2.500 
+            remark #15478: estimated potential speedup: 0.360 
+            remark #15488: --- end vector cost summary ---
+         LOOP END
+
+         LOOP BEGIN at ss.c(46,13)
+            remark #15344: loop was not vectorized: vector dependence prevents vectorization
+            remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (50:19) and R[(i+1)*N+j] (51:19)
+            remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (51:19) and R[i*N+j] (50:19)
+
+            LOOP BEGIN at ss.c(47,15)
+               remark #15344: loop was not vectorized: vector dependence prevents vectorization
+               remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (50:19) and R[(i+1)*N+j] (51:19)
+               remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (51:19) and R[i*N+j] (50:19)
+
+               LOOP BEGIN at ss.c(49,17)
+                  remark #15344: loop was not vectorized: vector dependence prevents vectorization
+                  remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (50:19) and R[(i+1)*N+j] (51:19)
+                  remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (51:19) and R[i*N+j] (50:19)
+               LOOP END
+            LOOP END
+         LOOP END
+
+         LOOP BEGIN at ss.c(66,13)
+            remark #15344: loop was not vectorized: vector dependence prevents vectorization
+            remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (70:19) and R[(i+1)*N+j] (71:19)
+            remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (71:19) and R[i*N+j] (70:19)
+
+            LOOP BEGIN at ss.c(67,15)
+               remark #15344: loop was not vectorized: vector dependence prevents vectorization
+               remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (70:19) and R[(i+1)*N+j] (71:19)
+               remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (71:19) and R[i*N+j] (70:19)
+
+               LOOP BEGIN at ss.c(69,17)
+                  remark #15344: loop was not vectorized: vector dependence prevents vectorization
+                  remark #15346: vector dependence: assumed OUTPUT dependence between R[i*N+j] (70:19) and R[(i+1)*N+j] (71:19)
+                  remark #15346: vector dependence: assumed OUTPUT dependence between R[(i+1)*N+j] (71:19) and R[i*N+j] (70:19)
+               LOOP END
+            LOOP END
+         LOOP END
+
+         LOOP BEGIN at ss.c(75,15)
+            remark #15542: loop was not vectorized: inner loop was already vectorized
+
+            LOOP BEGIN at ss.c(77,17)
+               remark #15388: vectorization support: reference R[(N-1)*N+j] has aligned access   [ ss.c(78,19) ]
+               remark #15388: vectorization support: reference R[(N-1)*N+j] has aligned access   [ ss.c(78,19) ]
+               remark #15388: vectorization support: reference B[k*N+j] has aligned access   [ ss.c(78,50) ]
+               remark #15305: vectorization support: vector length 8
+               remark #15309: vectorization support: normalized vectorization overhead 0.143
+               remark #15300: LOOP WAS VECTORIZED
+               remark #15448: unmasked aligned unit stride loads: 2 
+               remark #15449: unmasked aligned unit stride stores: 1 
+               remark #15475: --- begin vector cost summary ---
+               remark #15476: scalar cost: 10 
+               remark #15477: vector cost: 0.870 
+               remark #15478: estimated potential speedup: 10.000 
+               remark #15488: --- end vector cost summary ---
+            LOOP END
+
+            LOOP BEGIN at ss.c(77,17)
+            <Remainder loop for vectorization>
+            LOOP END
+         LOOP END
+      LOOP END
+   LOOP END
+LOOP END
+===========================================================================
