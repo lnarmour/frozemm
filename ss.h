@@ -20,14 +20,15 @@
 #define max(x, y)   ((x)>(y) ? (x) : (y))
 #define mallocCheck(v,s,d) if ((v) == NULL) { printf("Failed to allocate memory for %s : size=%lu\n", "sizeof(d)*(s)", sizeof(d)*(s)); exit(-1); }
 
+
 #ifndef TI
-#define TI 128
+#define TI 4
 #endif
 #ifndef TJ
-#define TJ 128
+#define TJ 4
 #endif
 #ifndef TK
-#define TK 128
+#define TK 4
 #endif
 
 

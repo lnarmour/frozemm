@@ -6,7 +6,7 @@ def main():
     j_loop = '    for (j=0; j<N; j+={}) {{'
     k_loop = '      for (k=0; k<N; k+={}) {{'
 
-    UNROLL = {'i': [1,2], 'j': [1,2], 'k': [1,2]}
+    UNROLL = {'i': [1,2,4], 'j': [1,2,4], 'k': [1,2,4]}
     idxs = [['i.i', 'i.j', 'i.k', 'j.i', 'j.j', 'j.k', 'k.i', 'k.j', 'k.k']]*3
     PERMS = ['.'.join(list(e)) for e in itertools.product(*idxs)]
 
@@ -15,6 +15,8 @@ def main():
     for shared_writes in [False, True]:
         for shared_reads in [False, True]:
             for perm in PERMS:
+                if perm != 'i.k.i.j.j.k' and perm != 'i.j.i.k.k.j':  # C=AB and C=AB_transpose
+                    continue
                 for unroll_i in UNROLL['i']:
                     for unroll_j in UNROLL['j']:
                         for unroll_k in UNROLL['k']:
@@ -56,39 +58,8 @@ def gen_body(shared_reads, shared_writes, unroll_i, unroll_j, unroll_k, perm):
                 S1_RHS1 = '{}[({}+{})*N+({}+{})]'.format(y1, l4, c[4], l5, c[5])
 
                 print('        {} += {} * {};'.format(S0_LHS, S0_RHS0, S0_RHS1))
-                print('        {} += {} * {};'.format(S1_LHS, S1_RHS0, S1_RHS1))
+                #print('        {} += {} * {};'.format(S1_LHS, S1_RHS0, S1_RHS1))
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1,87 +1,27 @@
 #include <stdio.h>
-#include <omp.h>
 #include "ss.h"
 
+#define N 2000
 
-void MM(long N,
-     PRECISION* restrict A, 
-     PRECISION* restrict B, 
-     PRECISION* restrict R) 
+void MM(long M,
+     PRECISION* restrict x0, 
+     PRECISION* restrict y0, 
+     PRECISION* restrict z0) 
 {
 
-  long i,j,k,ti,tj,tk;
-  long G;
+  long i,j,k;
 
-//  #pragma omp parallel for private(ti,tj,tk,i,j,k)
-  for (ti=0; ti<N; ti+=TI)
-    for (tk=0; tk<N; tk+=TK)
-      for (tj=0; tj<N; tj+=TJ) 
-      {
-        if (ti+TI<N && tj+TJ<N && tk+TK<N)
-        {
-          G = TI%2;
-          for (i=ti; i<ti+TI-1; i+=2)
-            for (k=tk; k<tk+TK; k++) {
-              #pragma vector aligned
-              for (j=tj; j<tj+TJ; j++) {
-                R[(i+0)*N+j] += A[(i+0)*N+k] * B[k*N+j];
-                R[(i+1)*N+j] += A[(i+1)*N+k] * B[k*N+j];
-              }
-            }
-          if (G)
-            for (k=tk; k<tk+TK; k++) {
-              #pragma vector aligned
-              for (j=tj; j<tj+TJ; j++) {
-                R[(ti+TI-1)*N+j] += A[(ti+TI-1)*N+k] * B[k*N+j];
-              }
-            }
-
-
-        } 
-        else 
-        {
-          if (ti+TI<N)
-          {
-            G = TI%2;
-            for (i=ti; i<ti+TI-1; i+=2)
-              for (k=tk; k<min(N,tk+TK); k++) {
-                #pragma vector aligned
-                for (j=tj; j<min(N,tj+TJ); j++) {
-                  R[(i+0)*N+j] += A[(i+0)*N+k] * B[k*N+j];
-                  R[(i+1)*N+j] += A[(i+1)*N+k] * B[k*N+j];
-                }
-              }
-            if (G)
-              for (k=tk; k<min(N,tk+TK); k++) {
-                #pragma vector aligned
-                for (j=tj; j<min(N,tj+TJ); j++) {
-                  R[(ti+TI-1)*N+j] += A[(ti+TI-1)*N+k] * B[k*N+j];
-                }
-              }
-
-          }
-          else
-          {
-            G = (N-ti)%2;
-            for (i=ti; i<N-1; i+=2)
-              for (k=tk; k<min(N,tk+TK); k++) {
-                #pragma vector aligned
-                for (j=tj; j<min(N,tj+TJ); j++) {
-                  R[(i+0)*N+j] += A[(i+0)*N+k] * B[k*N+j];
-                  R[(i+1)*N+j] += A[(i+1)*N+k] * B[k*N+j];
-                }
-              }
-            if (G)
-              for (k=tk; k<min(N,tk+TK); k++) {
-                #pragma vector aligned
-                for (j=tj; j<min(N,tj+TJ); j++) {
-                  R[(N-1)*N+j] += A[(N-1)*N+k] * B[k*N+j];
-                }
-              }
-
-          }
-
-        }
+  // fma.MM2.c version30   B_transpose (y0)
+  // shared_writes(False) shared_reads(False) unroll(1,2,1) perm(i.k.i.j.j.k)
+  for (i=0; i<N; i+=1) {
+    for (j=0; j<N; j+=2) {
+      for (k=0; k<N; k+=1) {
+        z0[(i+0)*N+(k+0)] += x0[(i+0)*N+(j+0)] * y0[(j+0)*N+(k+0)];
+        z0[(i+0)*N+(k+0)] += x0[(i+0)*N+(j+1)] * y0[(j+1)*N+(k+0)];
       }
-}
+    }
+  }
 
+
+
+}
