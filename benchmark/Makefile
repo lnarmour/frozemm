@@ -5,8 +5,8 @@ DEFS=
 
 all: FMA
 
-FMA: fma.c
-	$(CC) fma.c -o FMA $(CFLAGS) $(DEFS)
+FMA: fma.scratch.c
+	$(CC) fma.scratch.c -o FMA $(CFLAGS) $(DEFS)
 
 clean:
 	rm -f *.o FMA
