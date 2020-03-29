@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define abs(val) (val)>0.0 ? (val) : -1*(val)
-
 void* xmalloc(size_t);
 
-void printM(float *M, int N) {
+#define abs(val) (val)>0.0 ? (val) : -1*(val)
+
+extern void printM(float *M, int N) {
   for (int xi=0; xi<N; xi++) {
     for (int xj=0; xj<N; xj++) {
       printf("%3.2f ", M[xi*N+xj]);
@@ -23,7 +23,7 @@ int check(long N, float *A, float *B, float *C)
   O = xmalloc(N * N * sizeof(float));
   for (i=0; i<N; i++)
     for (j=0; j<N; j++) 
-      O[i*N+j] = 0;
+      O[i*N+j] = (float) ((i*j+1) % N) / N;
 
   for (i=0; i<N; i++)
     for (k=0; k<N; k++)
