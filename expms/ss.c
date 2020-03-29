@@ -54,24 +54,24 @@ int main(int argc, char** argv)
 {
   if (argc <= 4) exit(1);
   long N = atoi(argv[1]);
-  long TI = atoi(argv[2]);
-  long TJ = atoi(argv[3]);
+  long PI = atoi(argv[2]);
+  long PJ = atoi(argv[3]);
   long TK = atoi(argv[4]);
 
-	float *A = xmalloc(N * N * sizeof(float));
-	float *B = xmalloc(N * N * sizeof(float));
-	float *C = xmalloc(N * N * sizeof(float));
-
-	for (long i=0; i<N; i++)
-		for (long j=0; j<N; j++) {
+  float *A = xmalloc(N * N * sizeof(float));
+  float *B = xmalloc(N * N * sizeof(float));
+  float *C = xmalloc(N * N * sizeof(float));
+  
+  for (long i=0; i<N; i++)
+    for (long j=0; j<N; j++) {
       // took from PolyBench
-			C[i*N+j] = (float) ((i*j+1) % N) / N;
-			A[i*N+j] = (float) (i*(j+1) % N) / N;
-			B[i*N+j] = (float) (i*(j+2) % N) / N;
-		}
+      C[i*N+j] = (float) ((i*j+1) % N) / N;
+      A[i*N+j] = (float) (i*(j+1) % N) / N;
+      B[i*N+j] = (float) (i*(j+2) % N) / N;
+   }
 
   start_timer();
-  kernel(N,TI,TJ,TK,A,B,C);
+  kernel(N,PI,PJ,TK,A,B,C);
   stop_timer();
 
   printf("%f\n", elapsed_time);
