@@ -5,7 +5,6 @@
 
 struct timeval time;
 double elapsed_time;
-
 int check(long, float*, float*, float*);
 int posix_memalign(void**, size_t, size_t);
 
@@ -14,6 +13,7 @@ int posix_memalign(void**, size_t, size_t);
 #define stop_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time
 
 
+// took from PolyBench
 extern void* xmalloc (size_t num)
 { 
   void* new = NULL;
@@ -29,21 +29,22 @@ extern void* xmalloc (size_t num)
 
 void kernel(long N, long PI, long PJ, long TK, float *A, float *B, float*C)
 {
-  long pi,pj,tk;
+  long pi,pj,tk,m,n,k;
   float *a, *b, *c;
-
-  // https://software.intel.com/en-us/forums/intel-math-kernel-library/topic/514595
-  cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,3,3,3,1,A,6,B,6,0,C,6);
-  return;
 
   // outer two loops to iterate over (square) patches of C
   for (pi=0; pi<N; pi+=PI)
     for (pj=0; pj<N; pj+=PJ) {
       c = &(C[pi*N+pj]);
+
+      // for a given patch of C, make a series of MKL call with tall thin, short stout tiles of A & B
       for (tk=0; tk<N; tk+=TK) {
         a = &(A[pi*N+tk]);
         b = &(B[tk*N+pj]);
-        cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,PI,PJ,TK,1,a,N,b,N,0,c,N);
+        m = pi+PI<N ? PI : N-pi;
+        n = pj+PJ<N ? PJ : N-pj;
+        k = tk+TK<N ? TK : N-tk;
+        cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,a,N,b,N,1.0,c,N);
       }
     }
 }
@@ -60,19 +61,14 @@ int main(int argc, char** argv)
 	float *A = xmalloc(N * N * sizeof(float));
 	float *B = xmalloc(N * N * sizeof(float));
 	float *C = xmalloc(N * N * sizeof(float));
-	// float *Binv = xmalloc(N * N * sizeof(float));
 
 	for (long i=0; i<N; i++)
 		for (long j=0; j<N; j++) {
+      // took from PolyBench
 			C[i*N+j] = (float) ((i*j+1) % N) / N;
 			A[i*N+j] = (float) (i*(j+1) % N) / N;
 			B[i*N+j] = (float) (i*(j+2) % N) / N;
 		}
-
-  // long i,j;
-  // for (i=0; i<N; i++)
-  //   for (j=0; j<N; j++)  
-  //     Binv[j*N+i] = B[i*N+j];
 
   start_timer();
   kernel(N,TI,TJ,TK,A,B,C);
