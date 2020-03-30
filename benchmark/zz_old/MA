@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  export N=2000;
+else
+  export N=$1
+fi
+
+
+make -B DEFS="-DN=${N}" scratch > /dev/null 2>&1;
+export time="$(./scratch)"
+echo "$time ($(python utils/gflops.py)%)"
