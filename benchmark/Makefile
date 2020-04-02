@@ -1,15 +1,15 @@
 CC=icc
 OPTS=-O3 -xcore-avx2
-CFLAGS=-std=c99 -I/usr/include/malloc/ $(OPTS)
+CFLAGS=-std=c99 -I/usr/include/malloc/ $(OPTS) -g
 DEFS=
 
-all: FMA.parametric FMA.constant
+all: FMA
 
 FMA.parametric: fma.c
-	$(CC) fma.c -o FMA.parametric $(CFLAGS) $(DEFS)
+	$(CC) fma.c -o FMA.parametric $(CFLAGS) $(DEFS) -qopt-report-phase=vec -qopt-report=5
 
-FMA.constant: fma.c
-	$(CC) fma.c -o FMA.constant $(CFLAGS) $(DEFS) -DCONSTANT=1
+FMA: fma.c
+	$(CC) fma.c -o FMA $(CFLAGS) $(DEFS) -DCONSTANT=1 -qopt-report-phase=vec -qopt-report=5
 
 clean:
-	rm -f *.o FMA.parametric FMA.constant
+	rm -f *.o FMA.parametric FMA.constant FMA

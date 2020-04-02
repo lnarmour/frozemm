@@ -6,12 +6,16 @@ struct timeval time;
 double elapsed_time;
 int posix_memalign(void **memptr, size_t alignment, size_t size);
 
+#define min(x, y)   ((x)>(y) ? (y) : (x))
 #define start_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000)
 #define stop_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time
 
 #ifdef CONSTANT
 #ifndef N
 #define N 2000
+#endif
+#ifndef TK
+#define TK 64
 #endif
 #endif
 
@@ -36,14 +40,13 @@ void kernel(long N,
             float *restrict x1, float *restrict y1, float *restrict z1)
 #endif
 {
-  int i,j,k;
+  int i,j,k,tk;
 
-  int q1,q2,q3;
   for (i=0; i<N; i+=1) {
     for (j=0; j<N; j+=1) {
       for (k=0; k<N; k+=1) {
-        z0[i] += x0[j] * y0[k];
-        z1[i] += x1[j] * y1[k];
+        z0[k] += x0[k] * y0[k];
+        z1[k] += x1[k] * y1[k];
       }
     }
   }
