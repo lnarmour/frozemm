@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 declare -A COUNTER
-COUNTER[5308b0]='OFFCORE_REQUESTS.ALL_DATA_RD  '
-COUNTER[5320d1]='MEM_LOAD_UOPS_RETIRED.L3_MISS '
+#COUNTER[5308b0]='OFFCORE_REQUESTS.ALL_DATA_RD  '
+#COUNTER[5320d1]='MEM_LOAD_UOPS_RETIRED.L3_MISS '
 
 if [[ -z "$1" || -z "$2" || -z "$3" || -z "$4" ]]; then
   echo 'Usage: count N PI PJ TK'
@@ -13,7 +13,7 @@ echo "./MM $1 (PI=$2 PJ=$3 TK=$4)"
 
 export MKL_NUM_THREADS=6
 
-cmd="perf stat -r 5 -e  cpu/config=0x5301b7,config1=0x3fb8408fff,name=ANY_REQ-L3_MISS/,cpu/config=0x5301bb,config1=0x18fff,name=ANY_REQ-ANY_RESPONSE/ ./MM $1 $2 $3 $4"
+cmd="perf stat -r 3 -e  cpu/config=0x5301b7,config1=0x3fb8408fff,name=ANY_REQ-L3_MISS/ ./MM $1 $2 $3 $4"
 lines="$(${cmd} 2>&1 | sed "s~\(.*r\)\(.*\):u[ ]\+\(.*\)~\1\2 - \${COUNTER[\2]}  \3~")"
 eval "echo \"$lines\""
 
