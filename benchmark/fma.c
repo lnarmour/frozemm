@@ -14,9 +14,6 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 #ifndef N
 #define N 2000
 #endif
-#ifndef TK
-#define TK 64
-#endif
 #endif
 
 static void * xmalloc (size_t num)
@@ -40,13 +37,13 @@ void kernel(long N,
             float *restrict x1, float *restrict y1, float *restrict z1)
 #endif
 {
-  int i,j,k,tk;
+  int i,j,k;
 
   for (i=0; i<N; i+=1) {
-    for (j=0; j<N; j+=1) {
-      for (k=0; k<N; k+=1) {
-        z0[k] += x0[k] * y0[k];
-        z1[k] += x1[k] * y1[k];
+    for (k=0; k<N; k+=1) {
+      for (j=0; j<N; j+=1) {
+        z0[i*N+j] += x0[i*N+k] * y0[k*N+j];
+        z0[i*N+j] += x0[i*N+k] * y1[k*N+j];
       }
     }
   }
