@@ -9,15 +9,19 @@ if [ -z "$1" ]; then
 fi
 
 N=5000
-P=({1000..2500..250})
-TK=({1000..100..-100})
+P=({100..2500..100})
+TK=({1000..25..-25})
 
 tk_header=','
 for tk in ${TK[@]};
 do
   tk_header="$tk_header,$tk"
 done;
-echo "${tk_header}${tk_header}"
+echo "${tk_header},${tk_header}"
+
+tmp=.tmp123
+tmp_times=.tmp456
+rm -rf $tmp $tmp_times
 
 for p in ${P[@]};
 do
@@ -25,14 +29,15 @@ do
   time='';
   for tk in ${TK[@]}; 
   do
-    if [ -z "$(cat $FILE | grep -A11 "PI=$p" | grep -A5 "TK=$tk)" | grep '^.\+\.')" ]; then
+    cat $FILE | grep -A9 "PI=$p " > $tmp
+    cat $tmp | grep -A3 "TK=$tk)" | grep '^.\+\.' > $tmp_times
+    if [ -z "$(cat $tmp_times)" ]; then
       continue
     fi
-
-    t="$(cat $FILE | grep -A11 "PI=$p" | grep -A5 "TK=$tk)" | grep '^.\+\.' | python utils/mean.py)";
-    std="$(cat $FILE | grep -A11 "PI=$p" | grep -A5 "TK=$tk)" | grep '^.\+\.' | python utils/std.py)";
-    L3_miss="$(cat $FILE | grep -A11 "PI=$p" | grep -A18 "TK=$tk)" | grep 'L3_MISS' | sed 's~^[ ]\+\([0-9]\+,.*\)      ANY.*~\1~' | sed 's~,~~g' )";
-    cmd="$(cat $FILE | grep -A11 "PI=$p" | grep "TK=$tk)")"
+    t="$(cat $tmp_times | python utils/mean.py)";
+    std="$(cat $tmp_times | python utils/std.py)";
+    L3_miss="$(cat $tmp | grep -A15 "TK=$tk)" | grep 'L3_MISS' | sed 's~^[ ]\+\([0-9]\+,.*\)      ANY.*~\1~' | sed 's~,~~g' )";
+    cmd="$(cat $tmp | grep "TK=$tk)")"
     N="$(echo $cmd | sed 's~./MM \([0-9]\+\) .*~\1~')"
     PI="$(echo $cmd | sed 's~./MM.*PI=\([0-9]\+\) .*~\1~')"
     PJ="$(echo $cmd | sed 's~./MM.*PJ=\([0-9]\+\) .*~\1~')"
@@ -44,5 +49,7 @@ do
     miss="$miss,$L3_miss"
     time="$time,$t"
   done;
-  echo "$p,$time,$miss"
+  echo "$p,$time,,$miss"
 done
+
+rm -rf $tmp $tmp_times
