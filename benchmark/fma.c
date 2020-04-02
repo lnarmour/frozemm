@@ -29,12 +29,9 @@ static void * xmalloc (size_t num)
 }
 
 #ifdef CONSTANT
-void kernel(float *restrict x0, float *restrict y0, float *restrict z0,
-            float *restrict x1, float *restrict y1, float *restrict z1)
+void kernel(float *restrict x0, float *restrict y0, float *restrict z0)
 #else
-void kernel(long N,
-            float *restrict x0, float *restrict y0, float *restrict z0,
-            float *restrict x1, float *restrict y1, float *restrict z1)
+void kernel(long N, float *restrict x0, float *restrict y0, float *restrict z0)
 #endif
 {
   int i,j,k;
@@ -43,7 +40,6 @@ void kernel(long N,
     for (k=0; k<N; k+=1) {
       for (j=0; j<N; j+=1) {
         z0[i*N+j] += x0[i*N+k] * y0[k*N+j];
-        z0[i*N+j] += x0[i*N+k] * y1[k*N+j];
       }
     }
   }
@@ -66,15 +62,12 @@ void main(int argc, char *argv[])
   float *x0 = (float*)xmalloc(sizeof(float) * N * N); 
   float *y0 = (float*)xmalloc(sizeof(float) * N * N); 
   float *z0 = (float*)xmalloc(sizeof(float) * N * N); 
-  float *x1 = (float*)xmalloc(sizeof(float) * N * N); 
-  float *y1 = (float*)xmalloc(sizeof(float) * N * N); 
-  float *z1 = (float*)xmalloc(sizeof(float) * N * N); 
 
   start_timer();
   #ifdef CONSTANT
-  kernel(x0,y0,z0,x1,y1,z1);
+  kernel(x0,y0,z0);
   #else
-  kernel(N,x0,y0,z0,x1,y1,z1);
+  kernel(N,x0,y0,z0);
   #endif
   stop_timer();
   
@@ -84,6 +77,6 @@ void main(int argc, char *argv[])
 
   if (atoi(argv[0]) == 9999999) {
     for (int i=0; i<N*N; i++) 
-      printf("%f,%f,%f%f,%f,%f\n",x0[i],y0[i],z0[i],x1[i],y1[i],z1[i]);
+      printf("%f,%f,%f\n",x0[i],y0[i],z0[i]);
   }
 }
