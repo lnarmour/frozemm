@@ -1,5 +1,5 @@
 CC=icc
-OPTS=-O1 -xcore-avx2
+OPTS=-O3 -xcore-avx2
 CFLAGS=-std=c99 -I/usr/include/malloc/ $(OPTS) -g
 DEFS=
 

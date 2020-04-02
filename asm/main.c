@@ -11,7 +11,7 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 #define stop_timer() gettimeofday(&time, NULL); elapsed_time = (((double) time.tv_sec) + ((double) time.tv_usec)/1000000) - elapsed_time
 
 #ifndef N
-#define N 32
+#define N 8
 #endif
 
 #ifndef v
@@ -32,29 +32,35 @@ static void * xmalloc (size_t num)
 
 void kernel(float *x0, float *y0, float *z0, float *x1, float *y1, float *z1, long T)
 {
+  long t0,t1,k;
+  #ifdef SIMD
   __m256 vx0, vy0, vz0, vr0;
   __m256 vx1, vy1, vz1, vr1;
-  long t0,t1,k;
+  __m256 tmp0, tmp1;
+  vx0 = _mm256_load_ps(x0);
+  vy0 = _mm256_load_ps(y0);
+  vz0 = _mm256_load_ps(z0);
+  vx1 = _mm256_load_ps(x1);
+  vy1 = _mm256_load_ps(y1);
+  vz1 = _mm256_load_ps(z1);
+  for (t0=0; t0<T; t0++)
+  for (t1=0; t1<T; t1+=2) {
+    tmp0 = _mm256_fmadd_ps(vx0, vy0, vz0);
+    tmp1 = _mm256_fmadd_ps(vx1, vy1, vz1);
+    vz0 = _mm256_fmadd_ps(vx0, vy0, tmp0);
+    vz1 = _mm256_fmadd_ps(vx1, vy1, tmp1);
+  }
+  _mm256_store_ps(z0, vz0);
+  _mm256_store_ps(z1, vz1);
+
+  #else 
   for (t0=0; t0<T; t0++)
   for (t1=0; t1<T; t1++)
-    #ifdef SIMD
-    for (k=0; k<N; k+=8) {
-      vx0 = _mm256_load_ps(&(x0[k]));
-      vy0 = _mm256_load_ps(&(y0[k]));
-      vz0 = _mm256_load_ps(&(z0[k]));
-      vx1 = _mm256_load_ps(&(x1[k]));
-      vy1 = _mm256_load_ps(&(y1[k]));
-      vz1 = _mm256_load_ps(&(z1[k]));
-      vr0 = _mm256_fmadd_ps(vx0, vy0, vz0);
-      vr1 = _mm256_fmadd_ps(vx1, vy1, vz1);
-      _mm256_store_ps(&(z0[k]), vr0);
-      _mm256_store_ps(&(z1[k]), vr1);
-    #else 
     for (k=0; k<N; k++) {
       z0[k]+=x0[k]*y0[k];
       z1[k]+=x1[k]*y1[k];
-    #endif
     }
+  #endif
 }
 
 void main(int argc, char *argv[])
