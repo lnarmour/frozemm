@@ -23,33 +23,37 @@ tmp=.tmp123
 tmp_times=.tmp456
 rm -rf $tmp $tmp_times
 
-for p in ${P[@]};
+for pi in ${P[@]};
 do
-  miss='';
-  time='';
-  for tk in ${TK[@]}; 
+  for pj in ${P[@]};
   do
-    cat $FILE | grep -A9 "PI=$p " > $tmp
-    cat $tmp | grep -A3 "TK=$tk)" | grep '^.\+\.' > $tmp_times
-    if [ -z "$(cat $tmp_times)" ]; then
-      continue
-    fi
-    t="$(cat $tmp_times | python utils/mean.py)";
-    std="$(cat $tmp_times | python utils/std.py)";
-    L3_miss="$(cat $tmp | grep -A15 "TK=$tk)" | grep 'L3_MISS' | sed 's~^[ ]\+\([0-9]\+,.*\)      ANY.*~\1~' | sed 's~,~~g' )";
-    cmd="$(cat $tmp | grep "TK=$tk)")"
-    N="$(echo $cmd | sed 's~./MM \([0-9]\+\) .*~\1~')"
-    PI="$(echo $cmd | sed 's~./MM.*PI=\([0-9]\+\) .*~\1~')"
-    PJ="$(echo $cmd | sed 's~./MM.*PJ=\([0-9]\+\) .*~\1~')"
-     
-    #echo $cmd
-    #echo "$N,$PI,$PJ,$tk,$L3_miss,$t,$std"
-    #echo ""
-    
-    miss="$miss,$L3_miss"
-    time="$time,$t"
-  done;
-  echo "$p,$time,,$miss"
+    miss='';
+    time='';
+    for tk in ${TK[@]}; 
+    do
+      cat $FILE | grep -A9 "PI=$pi PJ=$pj " > $tmp
+      cat $tmp | grep -A3 "TK=$tk)" | grep '^.\+\.' > $tmp_times
+      if [ -z "$(cat $tmp_times)" ]; then
+        continue
+      fi
+      t="$(cat $tmp_times | python utils/mean.py)";
+      std="$(cat $tmp_times | python utils/std.py)";
+      L3_miss="$(cat $tmp | grep -A15 "TK=$tk)" | grep 'L3_MISS' | sed 's~^[ ]\+\([0-9]\+,.*\)      ANY.*~\1~' | sed 's~,~~g' )";
+      cmd="$(cat $tmp | grep "TK=$tk)")"
+      N="$(echo $cmd | sed 's~./MM \([0-9]\+\) .*~\1~')"
+      PI="$(echo $cmd | sed 's~./MM.*PI=\([0-9]\+\) .*~\1~')"
+      PJ="$(echo $cmd | sed 's~./MM.*PJ=\([0-9]\+\) .*~\1~')"
+       
+      #echo $cmd
+      #echo "$N,$PI,$PJ,$tk,$L3_miss,$t,$std"
+      #echo ""
+      
+      miss="$miss,$L3_miss"
+      time="$time,$t"
+    done;
+    echo "$pi,$pj,$time,,$miss"
+  done
+  echo ""
 done
 
 rm -rf $tmp $tmp_times

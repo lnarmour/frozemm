@@ -3,15 +3,19 @@
 rm -rf results.log;
 
 N=5000
-Ps=({100..2500..100})
+Ps=({100..3000..100})
 TKs=({1000..25..-25})
 
 count $N $N $N $N >> results.log; 
 
-for P in ${Ps[@]}; 
+for PI in ${Ps[@]}; 
 do 
-  for TK in ${TKs[@]}; 
+  for PJ in ${Ps[@]}; 
   do
-    count $N $P $P $TK >> results.log;
+    for TK in ${TKs[@]}; 
+    do
+      count $N $PI $PJ $TK >> results.log;
+    done;
+
   done;
 done;
