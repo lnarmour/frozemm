@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-RESULTS_FILE = os.getenv('RESULTS')
+RESULTS_FILE = os.getenv('RESULTS') if os.getenv('RESULTS') else 'results.log'
 
 def main():
     if not RESULTS_FILE:
@@ -24,26 +24,35 @@ def main():
             OCA = line.split('ANY_REQ')[0].replace(' ', '').replace(',', '')
             data_pts[-1]['OCA'] = int(OCA)
 
+    N = data_pts[0]['N']
     for pt in data_pts:
+        if pt['PI']==N and pt['PJ']==N and pt['TK']==N and pt['N']==N:
+            base = pt
         pt['avg_time'] = np.mean(pt['times'])
-        #print(pt)
-
-    PIs = sorted(list(set([d['PI'] for d in data_pts])))
-    PJs = sorted(list(set([d['PJ'] for d in data_pts])))
-    TKs = sorted(list(set([d['TK'] for d in data_pts])))
+    base_time = base['avg_time']
+    base_OCA = base['OCA']
+    for pt in data_pts:
+        pt['norm_time'] = pt['avg_time'] / base_time
+        pt['norm_OCA'] = pt['OCA'] / base_OCA
 
     if not data_pts:
         return
 
-    N = data_pts[0]['N']
+    PIs = [p for p in sorted(list(set([d['PI'] for d in data_pts]))) if p != N] 
+    PJs = [p for p in sorted(list(set([d['PJ'] for d in data_pts]))) if p != N] 
+    TKs = [p for p in sorted(list(set([d['TK'] for d in data_pts]))) if p != N] 
 
-    print(',,{}'.format(','.join([str(tk) for tk in TKs])))
+    print('base')
+    print('N,{}'.format(N))
+    print('time,{:.6f}'.format(base_time))
+    print('OCA,{}'.format(base_OCA))
+    print()
+
+    tks_str = ',,,{}'.format(','.join([str(tk) for tk in TKs]))
+    print('{}{}{}{}'.format(tks_str, tks_str, tks_str, tks_str))
+    print()
     for pi in PIs:
-        if pi == N:
-            continue
         for pj in PJs:
-            if pj == N:
-                continue
             pts = [p for p in data_pts if p['PI']==pi and p['PJ']==pj]    
             print('{},{},,'.format(pi, pj), end='')
             for p in pts:
@@ -51,6 +60,12 @@ def main():
             print(',,', end='')
             for p in pts:
                 print('{},'.format(p['OCA']), end='')
+            print(',,', end='')
+            for p in pts:
+                print('{:.6f},'.format(p['norm_time']), end='')
+            print(',,', end='')
+            for p in pts:
+                print('{:.6f},'.format(p['norm_OCA']), end='')
             print()
         print()
 
