@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <mkl.h>
+#include <omp.h>
 
 struct timeval time;
 double elapsed_time;
@@ -29,21 +29,22 @@ extern void* xmalloc (size_t num)
 
 void kernel(long N, long PI, long PJ, long TK, float *A, float *B, float *C)
 {
-  long pi,pj,tk,m,n,k,i,j;
+  long pi,pj,tk,m,n,kk,k,i,j;
   float *a, *b, *c;
 
   // outer two loops to iterate over (square) patches of C
   for (pi=0; pi<N; pi+=PI)
     for (pj=0; pj<N; pj+=PJ) {
-      c = &(C[pi*N+pj]);
       // for a given patch of C, make a series of MKL call with tall thin, short stout tiles of A & B
       for (tk=0; tk<N; tk+=TK) {
-        a = &(A[pi*N+tk]);
-        b = &(B[tk*N+pj]);
-        m = pi+PI<N ? PI : N-pi;
-        n = pj+PJ<N ? PJ : N-pj;     
-        k = tk+TK<N ? TK : N-tk;
-        cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,a,N,b,N,1.0,c,N);
+        #pragma omp parallel for private(k,j)
+        for (i=pi; i<min(N,pi+PI); i++)
+          for (k=tk; k<min(N,tk+TK); k++)
+            #pragma ivdep
+            #pragma vector aligned
+            for (j=pj; j<min(N,pj+PJ); j++)
+              C[i*N+j] += A[i*N+k] * B[k*N+j];
+
       }
     }
 }
