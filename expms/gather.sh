@@ -6,16 +6,15 @@ N=5000
 Ps=({100..3000..100})
 TKs=({1000..25..-25})
 
-count $N $N $N $N >> results.log; 
+count-energy-pkg $N $N $N $N >> results.log; 
+count-energy-ram $N $N $N $N >> results.log; 
 
-for PI in ${Ps[@]}; 
-do 
-  for PJ in ${Ps[@]}; 
+for P in ${Ps[@]}; 
+do
+  for TK in ${TKs[@]}; 
   do
-    for TK in ${TKs[@]}; 
-    do
-      count $N $PI $PJ $TK >> results.log;
-    done;
-
+    count-energy-pkg $N $P $P $TK >> results.log;
+    count-energy-ram $N $P $P $TK >> results.log;
   done;
+
 done;

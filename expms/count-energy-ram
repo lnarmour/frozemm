@@ -1,0 +1,19 @@
+#!/bin/bash 
+
+declare -A COUNTER
+#COUNTER[5308b0]='OFFCORE_REQUESTS.ALL_DATA_RD  '
+#COUNTER[5320d1]='MEM_LOAD_UOPS_RETIRED.L3_MISS '
+
+if [[ -z "$1" || -z "$2" || -z "$3" || -z "$4" ]]; then
+  echo 'Usage: count N PI PJ TK'
+  exit 1;
+fi
+
+echo "./MM $1 (PI=$2 PJ=$3 TK=$4)"
+
+export MKL_NUM_THREADS=6
+
+cmd="perf stat -a -r 3 -e power/energy-ram/ ./MM $1 $2 $3 $4"
+lines="$(${cmd} 2>&1 | sed "s~\(.*r\)\(.*\):u[ ]\+\(.*\)~\1\2 - \${COUNTER[\2]}  \3~")"
+eval "echo \"$lines\""
+
