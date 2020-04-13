@@ -11,7 +11,8 @@ fi
 
 echo "./MM $1 (PI=$2 PJ=$3 TK=$4)"
 
-export MKL_NUM_THREADS=6
+export KMP_AFFINITY="explicit,proclist=[0,1,2,3,4,5,6,7,8,9,10,11]";
+export OMP_NUM_THREADS=12;
 
 cmd="perf stat -a -r 3 -e power/energy-pkg/ ./MM $1 $2 $3 $4"
 lines="$(${cmd} 2>&1 | sed "s~\(.*r\)\(.*\):u[ ]\+\(.*\)~\1\2 - \${COUNTER[\2]}  \3~")"
