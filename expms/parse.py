@@ -59,7 +59,7 @@ def main():
     print()
 
     tks_str = ',,{},'.format(','.join([str(tk) for tk in TKs]))
-    print('{}{}{}}'.format(tks_str, tks_str, tks_str))
+    print('{}{}{}'.format(tks_str, tks_str, tks_str))
     print()
     print()
     for pi in PIs:
