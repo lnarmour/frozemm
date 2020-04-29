@@ -80,8 +80,11 @@ double kernel(long N, long B, double *X, long *order, long num_chunks)
   for (o=0; o<num_chunks; o++) {
     ti = order[o] * B;
     for (i=ti; i<min(N,ti+B); i++) {
+#if defined (READS)
+      ret += X[i]; // version 2 - READS
+#else
       X[i] = 0.0; // version 1 - WRITES
-//      ret += X[i]; // version 2 - READS
+#endif
     }
   }
   return ret;
@@ -117,7 +120,10 @@ int main(int argc, char** argv)
 
 
   long *order = xmalloc(num_chunks * sizeof(long));
-  //init_arr(N,X,1.0);
+#if defined (READS)
+  init_arr(N,X,1.0);
+#endif
+
   init_rand_chunk_order(order, num_chunks);  
 
   double *hog = hog_memory(hog_GBs);
