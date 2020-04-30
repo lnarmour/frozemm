@@ -1,10 +1,7 @@
 CC=icc
 CFLAGS=-std=c99 -I/usr/include/malloc
 
-all: exp1 exp2
-
-exp1: exp1.c
-	$(CC) -o $@ $< $(CFLAGS)
+all: exp2
 
 exp2: exp2.c
 	$(CC) -o $@ $< $(CFLAGS) -g

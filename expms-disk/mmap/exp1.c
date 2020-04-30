@@ -111,10 +111,10 @@ int main(int argc, char** argv)
   double *X = xmalloc(size_array);
 #endif
 
-
   long N = size_array / sizeof(double);
   long B = size_chunks / sizeof(double);
   long num_chunks = (N/B)+1;
+  //printf("--> %ld %ld %ld\n", N, B, num_chunks);
 
   srand(time(0));
 
@@ -125,6 +125,10 @@ int main(int argc, char** argv)
 #endif
 
   init_rand_chunk_order(order, num_chunks);  
+
+  //for (long i=0; i<num_chunks; i++)
+  //  printf("%ld -> %ld\n", i, order[i]);
+
 
   double *hog = hog_memory(hog_GBs);
   double ret;

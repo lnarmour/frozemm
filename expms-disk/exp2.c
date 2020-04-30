@@ -49,13 +49,14 @@ int main(int argc, char** argv)
   long num_chunks = (long)(N/B);
   long *order = xmalloc(num_chunks * sizeof(long));
 
-  //printf("N %ld, B %ld, num_chunks %ld\n", N, B, num_chunks);
+  printf("N %ld, B %ld, num_chunks %ld\n", N, B, num_chunks);
 
   init_rand_chunk_order(order, num_chunks);  
 
 
-  // init 16 GB worth of memory a touch it first to push everything else to swap initially
+  // init ~20 GB worth of memory a touch it first to push everything else to swap initially
   long _N = 2500000000;
+       //_N = 2415919104; // 2^34 + 2^31
   double *Hog = xmalloc(_N * sizeof(double));
   init_zero(Hog, _N);
   if (size_array == 9999)
