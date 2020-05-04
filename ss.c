@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <sys/mman.h>
 #include <mkl.h>
 #include <omp.h>
 #include "ss.h"
@@ -14,10 +15,16 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 static void * xmalloc (size_t num)
 { 
   void* new = NULL;
-  int ret = posix_memalign (&new, 32, num);
+  int ret = posix_memalign (&new, 2097152, num);
   if (! new || ret)
     {
       fprintf (stderr, "[PolyBench] posix_memalign: cannot allocate memory");
+      exit (1);
+    }
+  ret = madvise(new, num, MADV_HUGEPAGE);
+  if (! new || ret)
+    {
+      fprintf (stderr, "madvise: failed");
       exit (1);
     }
   return new;
