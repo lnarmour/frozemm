@@ -12,7 +12,7 @@ debug: CFLAGS =-DDEBUG -O0 -g -Wall -Wextra -std=c99 -I/usr/include/malloc/ ${MK
 debug: MM MM.check
 
 MM: $(OBJS) ss-wrapper.c
-	$(CC) ss-wrapper.c $(OBJS) -o MM $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
+	$(CC) ss-wrapper.c $(OBJS) -o MM $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1 -DHUGE_2MB
 
 MM.check: $(OBJS) ss-wrapper.c 
 	$(CC) ss-wrapper.c $(OBJS) -o MM.check $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1 -DCHECK
@@ -21,7 +21,7 @@ ss-mkl.o: ss-mkl.c
 	$(CC) ss-mkl.c -c -o ss-mkl.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
 
 ss.o: ss.c
-	$(CC) ss.c -c -o ss.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1
+	$(CC) ss.c -c -o ss.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1 -DHUGE_2MB
 
 memory-layout.o: memory-layout.c
 	$(CC) memory-layout.c -c -o memory-layout.o $(CFLAGS) $(LIBRARIES) -D$(PRECISION)=1

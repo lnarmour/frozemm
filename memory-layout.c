@@ -7,27 +7,31 @@ void fetch_tile(PRECISION* restrict X4d, PRECISION* restrict x, long NN) {
 }
 
 // ASSUMING that L%TSI=0 and M%TSJ=0
-void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
+void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM, long* order) {
   long ti, tl, tm, l, m, i, j, u;
 
-	#pragma omp parallel for
-	for (ti=0; ti<L/TSL; ti++) {
+  long o;
+  long num_chunks = L / TSL;
+  for (o=0; o<num_chunks; o++) {
+    ti = order[o];
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
 	      scratch[(i%TSL)*M + j] = I[i*M + j];
-	    }
+      }
 	  }
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
-	      tl = i / TSL;
-	      tm = j / TSM;
-	      l = i % TSL;
-	      m = j % TSM;
-	      u = tl*(M*TSL) + tm*(TSL*TSM) + l*TSM + m;
-	      I[u] = scratch[(i%TSL)*M + j];
-	    }
+        tl = i / TSL;
+        tm = j / TSM;
+        l = i % TSL;
+        m = j % TSM;
+        u = tl*(M*TSL) + tm*(TSL*TSM) + l*TSM + m;
+        I[u] = scratch[(i%TSL)*M + j];
+      }
 	  }
-	}
+  }
+
+
 }
 
 
@@ -35,7 +39,6 @@ void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M
 void four2two(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
 
-	#pragma omp parallel for
 	for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
