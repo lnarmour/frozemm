@@ -1,7 +1,15 @@
-CC=gcc
+CC=gcc -O0
 
-all: thru_4KB_1 thru_2MB_1 thru_1GB_1 thru_4KB_2 thru_2MB_2 thru_1GB_2 thru_4KB_3 thru_2MB_3 thru_1GB_3
+all: two2four_4KB two2four_2MB two2four_1GB
 
+two2four_4KB: two2four.c
+	$(CC) -o $@ $<
+
+two2four_2MB: two2four.c
+	$(CC) -o $@ $< -DHUGE_2MB
+
+two2four_1GB: two2four.c
+	$(CC) -o $@ $< -DHUGE_1GB
 
 thru_4KB_1: exp1.c
 	$(CC) -o $@ $<
@@ -33,4 +41,4 @@ thru_1GB_3: exp3.c
 
 
 clean:
-	rm -f *.o thru_*
+	rm -f *.o thru_* two2four_*
