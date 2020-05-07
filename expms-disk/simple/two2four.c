@@ -81,38 +81,49 @@ void init_arr(double *X, long L, long M, long TS, char *lbl)
       }
     }
   }
+  printf("\n");
 }
 
-void two2four(double* restrict X, double* restrict scratch, long L, long M, long TSL, long TSM, char* lbl) {
+void two2four(double* restrict X, long L, long M, long TSL, long TSM, char* lbl) {
   long ti, tl, tm, l, m, i, j, u;
+  FILE *fp;
+  fp = fopen("/s/chopin/l/grad/lnarmour/tmp/slab/A.txt", "wb");
 
-  // struct rlimit *rlim;
-  // getrlimit(RLIMIT_MEMLOCK, rlim);
-  // printf("--> %d\n", rlim->rlim_cur);
-  // printf("--> %d\n", rlim->rlim_max);
-
-  for (ti=0; ti<L/TSL; ti++) {
-    printf("%s two2four %s ti %ld (X->scratch)\n", gltime(), lbl, ti);
-    for (i=ti*TSL; i<(ti+1)*TSL; i++) {
-      for (j=0; j<M; j++) {
-        scratch[(i%TSL)*M + j] = X[i*M + j];
+  for (tl=0; tl<L/TSL; tl++) {
+    printf("%s two2four %s ti %ld\n", gltime(), lbl, tl);
+    for (tm=0; tm<M/TSM; tm++) {
+      for (i=tl*TSL; i<(tl+1)*TSL; i++) {
+        fwrite(&X[i*M + tm*TSM], sizeof(double), TSM, fp);
+        //for (j=tm*TSM; j<(tm+1)*TSM; j++) {
+        //  printf("write %.2f\n", X[i*M + j]);
+        //}
       }
     }
-    printf("%s two2four %s ti %ld (scratch->X)\n", gltime(), lbl, ti);
-    for (i=ti*TSL; i<(ti+1)*TSL; i++) {
-      for (j=0; j<M; j++) {
-        tl = i / TSL;
-        tm = j / TSM;
-        l = i % TSL;
-        m = j % TSM;
-        u = tl*(M*TSL) + tm*(TSL*TSM) + l*TSM + m;
-        X[u] = scratch[(i%TSL)*M + j];
+  }      
+
+  fclose(fp);
+}
+
+void readX(long L, long M, long TSL, long TSM, char* lbl) 
+{
+  long tl,tm,i,j;
+  FILE *fp;
+  fp = fopen("/s/chopin/l/grad/lnarmour/tmp/slab/A.txt", "rb");
+
+  double *TR = xmalloc(TSM*sizeof(double));
+
+  for (tl=0; tl<L/TSL; tl++) {
+    for (i=tl*TSL; i<(tl+1)*TSL; i++) {
+      for (tm=0; tm<M/TSM; tm++) {
+        fread(TR, sizeof(double), TSM, fp);
+        //for (j=0; j<TSM; j++) {
+        //  printf("read %.2f\n", tl, tm, i, TR[j]);
+        //}
       }
     }
   }
-
+  fclose(fp);
 }
-
 
 
 int main(int argc, char** argv)
@@ -125,7 +136,7 @@ int main(int argc, char** argv)
   double *A = xmalloc(N*N*sizeof(double));    // N=30k -> 7.2 GiB
   //double *B = xmalloc(N*N*sizeof(double));    // N=30k -> 7.2 GiB
   //double *C = xmalloc(N*N*sizeof(double));    // N=30k -> 7.2 GiB
-  double *scratch = xmalloc(N*TS*sizeof(double));    // N=30k, TS=6K -> 1.44 GiB
+  //double *scratch = xmalloc(N*TS*sizeof(double));    // N=30k, TS=6K -> 1.44 GiB
 
   printf("A       -> %d GiB\n", (int)(N*N*sizeof(double)/1.0e9));
   //printf("B       -> %d GiB\n", (int)(N*N*sizeof(double)/1.0e9));
@@ -137,15 +148,18 @@ int main(int argc, char** argv)
   //init_arr(C,N,N,TS, "C");
 
   start_timer();
-  two2four(A, scratch, N, N, TS, TS, "A");
+  two2four(A, N, N, TS, TS, "A");
   //two2four(B, scratch, N, N, TS, TS, "B");
   //two2four(C, scratch, N, N, TS, TS, "C");
   stop_timer();
+
+  
+  readX(N, N, TS, TS, "A");
 
   printf("%f\n", elapsed_time);
 
   free(A);
 //  free(B);
 //  free(C);
-  free(scratch);
+//  free(scratch);
 }

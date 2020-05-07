@@ -66,9 +66,12 @@ void init_arr(long N, double *X, double v)
 void kernel(long N, long B, double *X, long *order, long num_chunks)
 {
   long o,ti,i;
-  for (o=0; o<num_chunks; o++) {
-    ti = order[o] * B;
-    for (i=ti; i<min(N,ti+B); i++) {
+//  for (o=0; o<num_chunks; o++) { // 1
+//  for (ti=num_chunks-1; ti>=0; ti--) { // 2
+  for (ti=0; ti<num_chunks; ti++) { // 3
+//  for (o=0; o<num_chunks; o++) {
+//    ti = order[o];
+    for (i=ti*B; i<min(N,(ti+1)*B); i++) {
       X[i] = 2.0;
       printf("%ld %ld %ld : %ld\n", o, order[o], ti, i);
     }
