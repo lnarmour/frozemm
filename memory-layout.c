@@ -7,13 +7,10 @@ void fetch_tile(PRECISION* restrict X4d, PRECISION* restrict x, long NN) {
 }
 
 // ASSUMING that L%TSI=0 and M%TSJ=0
-void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM, long* order) {
+void two2four(PRECISION* restrict I, PRECISION* restrict scratch, long L, long M, long TSL, long TSM) {
   long ti, tl, tm, l, m, i, j, u;
 
-  long o;
-  long num_chunks = L / TSL;
-  for (o=0; o<num_chunks; o++) {
-    ti = order[o];
+  for (ti=0; ti<L/TSL; ti++) {
 	  for (i=ti*TSL; i<(ti+1)*TSL; i++) {
 	    for (j=0; j<M; j++) {
 	      scratch[(i%TSL)*M + j] = I[i*M + j];
