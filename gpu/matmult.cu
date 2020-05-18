@@ -28,7 +28,7 @@ int main (int argc, char** argv) {
   cublasStatus_t stat;
   cublasHandle_t handle;
 
-  int i,j; 
+  long i,j; 
   float* A;
   float* B;
   float* C;
@@ -65,10 +65,27 @@ int main (int argc, char** argv) {
   initialize_timer();
   start_timer();
 
-  // cblasSgemm -> C[i,j] += alpha*A[i,k]*B[k,j] + beta*C[i,j]
-  stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, M, N, K, &alpha, d_A, M, d_B, K, &beta, d_C, M);
+  long pi,pj,tk,m,n,k;
+  float *d_a, *d_b, *d_c;
 
-  //cudaThreadSynchronize();
+  // outer two loops to iterate over (square) patches of C on device
+  for (pi=0; pi<M; pi+=PI)
+    for (pj=0; pj<N; pj+=PJ) {
+      d_c = &(d_C[IDX(pi,pj,M)]);
+      // for a given patch of C, make a series of gemm calls with tall thin, short stout tiles of A & B
+      for (tk=0; tk<K; tk+=TK) {
+        d_a = &(d_A[IDX(pi,tk,M)]);
+        d_b = &(d_B[IDX(tk,pj,K)]);
+        m = pi+PI<N ? PI : N-pi;
+        n = pj+PJ<N ? PJ : N-pj;
+        k = tk+TK<N ? TK : N-tk;
+        stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha, d_a, M, d_b, K, &beta, d_c, M);
+      }
+    }
+
+
+
+  cudaDeviceSynchronize();
 
   stop_timer();
   double time = elapsed_time();
