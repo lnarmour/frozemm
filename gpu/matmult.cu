@@ -1,218 +1,95 @@
-///
-/// matmult.cu
-/// For CSU CS575 Spring 2011
-/// Instructor: Wim Bohm
-/// Based on code from the CUDA Programming Guide
-/// Modified by Wim Bohm and David Newman
-/// Created: 2011-01-27
-/// Last Modified: 2011-02-19 DVN
-///
-/// Do not modify this file. The GTA will grade your
-/// code using the master copy of this file, not your
-/// copy, so any modifications you make will not play
-/// a role in the grading.
-///
+// taken from:
+// https://developer.nvidia.com/sites/default/files/akamai/cuda/files/Misc/mygpu.pdf
 
-// Includes
+// nvcc 036 sgemm .c -lcublas
 #include <stdio.h>
+#include <stdlib.h>
+#include <cuda_runtime.h>
+#include "cublas_v2.h"
 #include "timer.h"
-#include "matmultKernel.h"
 
-// Defines
-#define epsilon (float)1e-4
-#define verbose 0
+#define IDX(i,j,ld) (((j)*(ld))+(i))
 
-Matrix MakeDeviceMatrix(Matrix M, bool copy){
-  // Create a new matrix in device memory.
-  Matrix newDeviceMatrix;
-  newDeviceMatrix.width = M.width;
-  newDeviceMatrix.stride = M.width;
-  newDeviceMatrix.height = M.height;
-  size_t size = M.width * M.height * sizeof(float);
-  cudaMalloc((void**) &newDeviceMatrix.elements, size);
-  if (copy)
-    cudaMemcpy(newDeviceMatrix.elements, M.elements, size, cudaMemcpyHostToDevice);
-  return newDeviceMatrix;
-}
+int check(long, long, long, float*, float*, float*);
 
-// Host code for matrix multiplication.
-// Matrix dimensions must be multiples of size 
-// This code assumes that the matrix is square.
-void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension){
+int main (int argc, char** argv) {
+  long M,N,K,PI,PJ,TK;
+  if (argc>4) {
+    M = N = K = atol(argv[1]);
+    PI = atol(argv[2]);
+    PJ = atol(argv[3]);
+    TK = atol(argv[4]);
+  } else {
+    printf("Usage: ./MM N PI PJ TK\n");
+    return 1;
+  }
 
-  // Create device data structures.
-  Matrix device_A = MakeDeviceMatrix(A, true);
-  Matrix device_B = MakeDeviceMatrix(B, true);
-  Matrix device_C = MakeDeviceMatrix(C, false);
+  cudaError_t cudaStat;
+  cublasStatus_t stat;
+  cublasHandle_t handle;
 
-  // Define grid topology
-  dim3 dimBlock(BLOCK_SIZE,BLOCK_SIZE);
-  dim3 dimGrid(B.width/dimension, A.height/dimension);
+  int i,j; 
+  float* A;
+  float* B;
+  float* C;
+  A = (float*)malloc(M*K*sizeof(float)); 
+  B = (float*)malloc(K*N*sizeof(float)); 
+  C = (float*)malloc(M*N*sizeof(float)); 
 
-  // Invoke kernel for warm up
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
+  for(j=0; j<K; j++) 
+    for(i=0; i<M; i++) 
+      A[IDX(i,j,M)] = (float) ((i*j+1) % K) / K;
+  for(j=0; j<N; j++)
+    for(i=0; i<K; i++) 
+      B[IDX(i,j,K)] = (float) ((i*j+1) % N) / N;
+  for(j=0; j<N; j++) 
+    for(i=0; i<M; i++) 
+      C[IDX(i,j,M)] = (float) ((i*j+1) % M) / M;
 
-  // Synchronize to make sure everyone is done in the warmup.
-  cudaThreadSynchronize();
+  // on the device
+  float * d_A;
+  float * d_B;
+  float * d_C;
+  cudaStat = cudaMalloc((void**)&d_A, M*K*sizeof(*A));
+  cudaStat = cudaMalloc((void**)&d_B, K*N*sizeof(*B));
+  cudaStat = cudaMalloc((void**)&d_C, M*N*sizeof(*C));
+  stat = cublasCreate(&handle); // initialize CUBLAS context
 
-  // Set up timer
+  // copy matrices from the host to the device
+  stat = cublasSetMatrix(M, K, sizeof(*A), A, M, d_A, M); //A -> d_A
+  stat = cublasSetMatrix(K, N, sizeof(*B), B, K, d_B, K); //B -> d_B
+  stat = cublasSetMatrix(M, N, sizeof(*C), C, M, d_C, M); //C -> d_C
+  float alpha = 1.0;
+  float beta = 1.0;
+  
   initialize_timer();
   start_timer();
 
+  // cblasSgemm -> C[i,j] += alpha*A[i,k]*B[k,j] + beta*C[i,j]
+  stat = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, M, N, K, &alpha, d_A, M, d_B, K, &beta, d_C, M);
 
-  // Invoke kernel for real
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
- 
-  // Synchronize to make sure everyone is done.
-  cudaThreadSynchronize() ;
-
-  // Compute and report the timing results
+  //cudaThreadSynchronize();
 
   stop_timer();
   double time = elapsed_time();
 
-  double nFlops = (double)A.width*A.height*B.width*2;
+  double nFlops = (double)M*K*N*2;
   double nFlopsPerSec = nFlops/time;
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
-  printf( "Data dimensions: %dx%d \n", C.height, C.width);
-  printf( "Grid Dimensions: %dx%d \n",dimGrid.x,dimGrid.y);
-  printf( "Block Dimensions: %dx%d \n",dimBlock.x,dimBlock.y);
-  printf( "Footprint Dimensions: %dx%d \n",FOOTPRINT_SIZE,FOOTPRINT_SIZE);
-  
-  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n",
-            time, nFlops, nGFlopsPerSec);
+  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
 
-  // Copy the result to the host memory from device memory
-  size_t size = C.width * C.height * sizeof(float);
-  cudaMemcpy(C.elements, device_C.elements, size, cudaMemcpyDeviceToHost);
+  stat = cublasGetMatrix(M, N, sizeof(*C), d_C, M, C, M); //d_C -> C
+  cudaFree(d_A);
+  cudaFree(d_B);
+  cudaFree(d_C);
+  cublasDestroy(handle);
 
-  // Free device memory
-  cudaFree(device_A.elements);
-  cudaFree(device_B.elements);
-  cudaFree(device_C.elements);
-   
+  #ifdef CHECK
+  int ret = check(M,N,K,A,B,C);
+  #endif
+
+  free (A);
+  free (B);
+  free (C);
+  return EXIT_SUCCESS ;
 }
-
-
-// Create a matrix in host memory.
-Matrix MakeHostMatrix(int width, int height){
-  Matrix newHostMatrix;
-  newHostMatrix.width = width;
-  newHostMatrix.height = height;
-  size_t size = newHostMatrix.width * newHostMatrix.height * sizeof(float);
-  newHostMatrix.elements = (float*)malloc(size);
-  return newHostMatrix;
-}
-
-// Print a matrix stored in host memory.
-void printMatrix(Matrix M, const char* name) {
-  printf("\n%s \n",name);
-  for(int y=0; y<M.height; y++){
-   for(int x=0; x<M.width; x++) {
-      printf("%f ", M.elements[y * M.width + x]);
-   }
-   printf("\n");
-  }
-}
-
-// Initialize dummy data in a matrix stored in host memory.
-void initMatrix(Matrix M, bool horizontal) {
-  for(int y=0; y<M.height; y++) {
-    for(int x=0; x<M.width; x++) {
-      M.elements[y*M.width+x] = (float)(horizontal?x:y);
-    }
-  }
-}
-
-// Check the specified matrix to be sure it is correct.
-// That is, make sure it is the result of multiplying the
-// dummy data we created earlier.
-void checkResult(Matrix M) {
-
-  Matrix correct = MakeHostMatrix(M.width, M.height);
-
-  for(int y=0; y<M.height; y++) {
-    for(int x=0; x<M.width; x++) {
-       correct.elements[y*correct.width+x] = (float)M.width*(float)x*y;
-    }
-  }
-
-  if(verbose){
-   // print correct
-   printMatrix(correct, "correct");
-
-   // print host_C
-   printMatrix(M, "result");
-  }
-
-
-  double maxerror = 0.0;
-  int errCnt = 0;
-  for(int y=0; y<correct.height; y++) {
-    for(int x=0; x<correct.width; x++) {
-      float it = correct.elements[y*correct.width+x];
-      if(fabs(it - M.elements[y*M.width+x])> epsilon*it) {
-        errCnt++;
-        double error = fabs(it - M.elements[y*M.width+x])/it;
-        if (error > maxerror) maxerror = error;
-      }      
-    }
-  }
-
-  if(errCnt>0){
-    printf("\n\nTEST FAILED: number of errors:  %d, max rel error: %f\n", errCnt, maxerror);
-  }
-  
-  free(correct.elements);
-}
-
-//
-// main
-//
-int main(int argc, char** argv) {
-
-  // Grid dimension
-  int num_blocks;
-  // Matrix dimensions in multiples of FOOTPRINT_SIZE
-  // Matrices will be of size data_size * data_size
-  int data_size;
-
-  // Read command line argument
-  if(argc == 2){
-    sscanf(argv[1], "%d", &num_blocks);
-    data_size = num_blocks * FOOTPRINT_SIZE;
-  } else {
-     printf("Usage: %s NumBlocks\n", argv[0]);
-     exit(0);
-  }     
-
-  // Create matrices in host.
-  Matrix host_A = MakeHostMatrix(data_size, data_size);
-  Matrix host_B = MakeHostMatrix(data_size, data_size);
-  Matrix host_C = MakeHostMatrix(data_size, data_size);
-
-  // Initialize values in host A and B
-  initMatrix(host_A,false);
-  initMatrix(host_B,true);
- 
-  // debugging
-  if(verbose){
-    printMatrix(host_A, "host_A");
-    printMatrix(host_B, "host_B");
-  }
-
-  // Perform CUDA matrix Multiplication
-  // MatMul is a host function that calls
-  // the device kernel MatMulKernel and
-  // times its performance.
-  MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE);
-
-  // Verify that the result is correct.
-  checkResult(host_C);
-  
-  // Free allocated memory.
-  free(host_A.elements);
-  free(host_B.elements);
-  free(host_C.elements);
-}
-

@@ -15,10 +15,6 @@
 static double start, stop;        /* store the times locally */
 static int start_flag, stop_flag; /* flag timer use */
 
-int check ( void )
-{
-  printf("timer.cu:check\n");
-}
 
 void initialize_timer ( void )
 {

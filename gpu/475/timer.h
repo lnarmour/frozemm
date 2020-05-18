@@ -1,3 +1,11 @@
+/**
+ * timer.h
+ * Function declarations for timer.
+ *
+ * Jason Connor
+ * Sanjay Rajopadhye
+ */
+
 # ifndef TIMER_H
 # define TIMER_H
 
