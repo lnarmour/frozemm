@@ -93,7 +93,8 @@ int main (int argc, char** argv) {
   double nFlops = (double)M*K*N*2;
   double nFlopsPerSec = nFlops/time;
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
-  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
+//  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
+  printf( "%lf, %0.2lf\n", time, nGFlopsPerSec);
 
   stat = cublasGetMatrix(M, N, sizeof(*C), d_C, M, C, M); //d_C -> C
   cudaFree(d_A);
