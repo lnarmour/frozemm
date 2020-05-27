@@ -25,6 +25,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// taken from:
+// https://github.com/NVIDIA-developer-blog/code-samples/blob/master/series/cuda-cpp/transpose/transpose.cu
+
 #include <stdio.h>
 #include <assert.h>
 #include "nvmlPower.hpp"
@@ -45,7 +48,7 @@ cudaError_t checkCuda(cudaError_t result)
 
 const int TILE_DIM = 32;
 const int BLOCK_ROWS = 8;
-const int NUM_REPS = 100;
+const int NUM_REPS = 1000;
 
 // Check errors and print GB/s
 void postprocess(const float *ref, const float *res, int n, float ms)
@@ -142,7 +145,7 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata)
   int width = gridDim.x * TILE_DIM;
 
   for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     tile[threadIdx.y+j][threadIdx.x] += 2*idata[(y+j)*width + x];
+     tile[threadIdx.y+j][threadIdx.x] += j*2*idata[(y+j)*width + x];
 
   __syncthreads();
 
@@ -150,7 +153,7 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata)
   y = blockIdx.x * TILE_DIM + threadIdx.y;
 
   for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     odata[(y+j)*width + x] += 7*tile[threadIdx.x][threadIdx.y + j];
+     odata[(y+j)*width + x] += j*7*tile[threadIdx.x][threadIdx.y + j];
 }
 
 int main(int argc, char **argv)
@@ -218,7 +221,7 @@ int main(int argc, char **argv)
   // ------------
   // time kernels
   // ------------
-  printf("%25s%25s\n", "Routine", "Bandwidth (GB/s)");
+//  printf("%25s%25s\n", "Routine", "Bandwidth (GB/s)");
   
 //  // ----
 //  // copy 
@@ -287,7 +290,7 @@ int main(int argc, char **argv)
   // ------------------------
   // transposeNoBankConflicts
   // ------------------------
-  printf("%25s", "conflict-free transpose");
+//  printf("%25s", "conflict-free transpose");
   checkCuda( cudaMemset(d_tdata, 0, mem_size) );
   // warmup
   transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata);
@@ -302,7 +305,8 @@ int main(int argc, char **argv)
   checkCuda( cudaEventSynchronize(stopEvent) );
   checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
   checkCuda( cudaMemcpy(h_tdata, d_tdata, mem_size, cudaMemcpyDeviceToHost) );
-  postprocess(gold, h_tdata, nx * ny, ms);
+  printf("elapsed: %.0f ms\n", ms);
+//  postprocess(gold, h_tdata, nx * ny, ms);
 
 error_exit:
   // cleanup

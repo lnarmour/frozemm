@@ -1,3 +1,7 @@
+// taken from here:
+// https://github.com/kajalv/nvml-power
+
+#include <chrono>
 #include "nvmlPower.hpp"
 
 /*
@@ -20,13 +24,29 @@ Poll the GPU using nvml APIs.
 */
 void *powerPollingFunc(void *ptr)
 {
-
 	unsigned int powerLevel = 0;
-	FILE *fp = fopen("power_data.txt", "w+");
+
+  std::chrono::milliseconds timestamp;
+  timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+    std::chrono::high_resolution_clock::now().time_since_epoch()
+  );
+  long start_time = timestamp.count();
+  long elapsed_time = 0;
+  long curr_time;
+
 	while (pollThreadStatus)
 	{
-		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, 0);
+    timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::high_resolution_clock::now().time_since_epoch()
+    );
+    curr_time = timestamp.count();
+    if (curr_time - (elapsed_time + start_time) > 4) {
+      elapsed_time = curr_time - start_time;
+    } else {
+      continue;
+    }   
 
+		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, 0);
 		// Get the power management mode of the GPU.
 		nvmlResult = nvmlDeviceGetPowerManagementMode(nvmlDeviceID, &pmmode);
 
@@ -36,16 +56,13 @@ void *powerPollingFunc(void *ptr)
 		// Check if power management mode is enabled.
 		if (pmmode == NVML_FEATURE_ENABLED)
 		{
-			// Get the power usage in milliWatts.
-			nvmlResult = nvmlDeviceGetPowerUsage(nvmlDeviceID, &powerLevel);
+		 	// Get the power usage in milliWatts.
+		 	nvmlResult = nvmlDeviceGetPowerUsage(nvmlDeviceID, &powerLevel);
 		}
 
-		// The output file stores power in Watts.
-		fprintf(fp, "%.3lf\n", (powerLevel)/1000.0);
+    printf("%d,%d\n", elapsed_time, powerLevel);
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 	}
-
-	fclose(fp);
 	pthread_exit(0);
 }
 

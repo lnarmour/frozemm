@@ -1,3 +1,6 @@
+// taken from here:
+// https://github.com/kajalv/nvml-power
+
 /*
 Header file including necessary nvml headers.
 */
