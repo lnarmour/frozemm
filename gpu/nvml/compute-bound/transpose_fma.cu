@@ -49,89 +49,9 @@ cudaError_t checkCuda(cudaError_t result)
 const int TILE_DIM = 32;
 const int BLOCK_ROWS = 8;
 const int NUM_REPS = 1000;
-
-// Check errors and print GB/s
-void postprocess(const float *ref, const float *res, int n, float ms)
-{
-  bool passed = true;
-  //for (int i = 0; i < n; i++)
-  //  if (res[i] != ref[i]) {
-  //    printf("%d %f %f\n", i, res[i], ref[i]);
-  //    printf("%25s\n", "*** FAILED ***");
-  //    passed = false;
-  //    break;
-  //  }
-  if (passed)
-    printf("%20.2f\n", 2 * n * sizeof(float) * 1e-6 * NUM_REPS / ms );
-}
-
-// simple copy kernel
-// Used as reference case representing best effective bandwidth.
-__global__ void copy(float *odata, const float *idata)
-{
-  int x = blockIdx.x * TILE_DIM + threadIdx.x;
-  int y = blockIdx.y * TILE_DIM + threadIdx.y;
-  int width = gridDim.x * TILE_DIM;
-
-  for (int j = 0; j < TILE_DIM; j+= BLOCK_ROWS)
-    odata[(y+j)*width + x] = idata[(y+j)*width + x];
-}
-
-// copy kernel using shared memory
-// Also used as reference case, demonstrating effect of using shared memory.
-__global__ void copySharedMem(float *odata, const float *idata)
-{
-  __shared__ float tile[TILE_DIM * TILE_DIM];
-  
-  int x = blockIdx.x * TILE_DIM + threadIdx.x;
-  int y = blockIdx.y * TILE_DIM + threadIdx.y;
-  int width = gridDim.x * TILE_DIM;
-
-  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     tile[(threadIdx.y+j)*TILE_DIM + threadIdx.x] = idata[(y+j)*width + x];
-
-  __syncthreads();
-
-  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     odata[(y+j)*width + x] = tile[(threadIdx.y+j)*TILE_DIM + threadIdx.x];          
-}
-
-// naive transpose
-// Simplest transpose; doesn't use shared memory.
-// Global memory reads are coalesced but writes are not.
-__global__ void transposeNaive(float *odata, const float *idata)
-{
-  int x = blockIdx.x * TILE_DIM + threadIdx.x;
-  int y = blockIdx.y * TILE_DIM + threadIdx.y;
-  int width = gridDim.x * TILE_DIM;
-
-  for (int j = 0; j < TILE_DIM; j+= BLOCK_ROWS)
-    odata[x*width + (y+j)] = idata[(y+j)*width + x];
-}
-
-// coalesced transpose
-// Uses shared memory to achieve coalesing in both reads and writes
-// Tile width == #banks causes shared memory bank conflicts.
-__global__ void transposeCoalesced(float *odata, const float *idata)
-{
-  __shared__ float tile[TILE_DIM][TILE_DIM];
-    
-  int x = blockIdx.x * TILE_DIM + threadIdx.x;
-  int y = blockIdx.y * TILE_DIM + threadIdx.y;
-  int width = gridDim.x * TILE_DIM;
-
-  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     tile[threadIdx.y+j][threadIdx.x] = idata[(y+j)*width + x];
-
-  __syncthreads();
-
-  x = blockIdx.y * TILE_DIM + threadIdx.x;  // transpose block offset
-  y = blockIdx.x * TILE_DIM + threadIdx.y;
-
-  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     odata[(y+j)*width + x] = tile[threadIdx.x][threadIdx.y + j];
-}
-   
+#ifndef RUNS
+#define RUNS 100
+#endif
 
 // No bank-conflict transpose
 // Same as transposeCoalesced except the first tile dimension is padded 
@@ -145,7 +65,8 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata)
   int width = gridDim.x * TILE_DIM;
 
   for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     tile[threadIdx.y+j][threadIdx.x] += j*2*idata[(y+j)*width + x];
+    for (int r = 0; r < RUNS; r++)
+      tile[threadIdx.y+j][threadIdx.x] += 2*idata[(y+j)*width + x];
 
   __syncthreads();
 
@@ -153,7 +74,8 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata)
   y = blockIdx.x * TILE_DIM + threadIdx.y;
 
   for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-     odata[(y+j)*width + x] += j*7*tile[threadIdx.x][threadIdx.y + j];
+    for (int r = 0; r < RUNS; r++)
+      odata[(y+j)*width + x] += 7*tile[threadIdx.x][threadIdx.y + j];
 }
 
 int main(int argc, char **argv)

@@ -1,6 +1,7 @@
 // taken from here:
 // https://github.com/kajalv/nvml-power
 
+#include <cstdlib>
 #include <chrono>
 #include "nvmlPower.hpp"
 
@@ -33,6 +34,8 @@ void *powerPollingFunc(void *ptr)
   long start_time = timestamp.count();
   long elapsed_time = 0;
   long curr_time;
+  long delta_time;
+  float energy = 0.0;
 
 	while (pollThreadStatus)
 	{
@@ -40,7 +43,8 @@ void *powerPollingFunc(void *ptr)
       std::chrono::high_resolution_clock::now().time_since_epoch()
     );
     curr_time = timestamp.count();
-    if (curr_time - (elapsed_time + start_time) > 4) {
+    delta_time = curr_time - (elapsed_time + start_time);
+    if (delta_time > 4) {
       elapsed_time = curr_time - start_time;
     } else {
       continue;
@@ -60,9 +64,13 @@ void *powerPollingFunc(void *ptr)
 		 	nvmlResult = nvmlDeviceGetPowerUsage(nvmlDeviceID, &powerLevel);
 		}
 
-    printf("%d,%d\n", elapsed_time, powerLevel);
+    if (std::getenv("VERBOSE")) {
+      printf("%d,%d\n", elapsed_time, powerLevel);
+    }
+    energy += (delta_time / 1000.0) * (powerLevel / 1000.0);
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 	}
+  printf("energy: %.2f Joules\n", energy);
 	pthread_exit(0);
 }
 
