@@ -35,8 +35,6 @@ int main (int argc, char** argv) {
     return 1;
   }
 
-  cudaError_t cudaStat;
-  cublasStatus_t stat;
   cublasHandle_t handle;
 
   long i,j; 
@@ -59,15 +57,15 @@ int main (int argc, char** argv) {
   float * d_A;
   float * d_B;
   float * d_C;
-  cudaStat = cudaMalloc((void**)&d_A, M*K*sizeof(*A));
-  cudaStat = cudaMalloc((void**)&d_B, K*sizeof(*B));
-  cudaStat = cudaMalloc((void**)&d_C, M*sizeof(*C));
-  stat = cublasCreate(&handle); // initialize CUBLAS context
+  cudaMalloc((void**)&d_A, M*K*sizeof(*A));
+  cudaMalloc((void**)&d_B, K*sizeof(*B));
+  cudaMalloc((void**)&d_C, M*sizeof(*C));
+  cublasCreate(&handle); // initialize CUBLAS context
 
   // copy matrices from the host to the device
-  stat = cublasSetMatrix(M, K, sizeof(*A), A, M, d_A, M); //A -> d_A
-  stat = cublasSetVector(K, sizeof(*B), B, 1, d_B, 1); //B -> d_B
-  stat = cublasSetVector(M, sizeof(*C), C, 1, d_C, 1); //C -> d_C
+  cublasSetMatrix(M, K, sizeof(*A), A, M, d_A, M); //A -> d_A
+  cublasSetVector(K, sizeof(*B), B, 1, d_B, 1); //B -> d_B
+  cublasSetVector(M, sizeof(*C), C, 1, d_C, 1); //C -> d_C
   float alpha = 1.0;
   float beta = 1.0;
   
@@ -75,7 +73,7 @@ int main (int argc, char** argv) {
 
 #ifndef CHECK
   // Invoke kernel for warm up
-  stat = cublasSgemv(handle, CUBLAS_OP_N, M, K, &alpha, d_A, M, d_B, 1, &beta, d_C, 1);
+  cublasSgemv(handle, CUBLAS_OP_N, M, K, &alpha, d_A, M, d_B, 1, &beta, d_C, 1);
 #endif
 
   // Synchronize to make sure everyone is done in the warmup.
@@ -94,7 +92,7 @@ int main (int argc, char** argv) {
   nvmlAPIRun();
   checkCuda( cudaEventRecord(startEvent, 0) );
   for (int r=0; r<RUNS; r++)
-    stat = cublasSgemv(handle, CUBLAS_OP_N, M, K, &alpha, d_A, M, d_B, 1, &beta, d_C, 1);
+    cublasSgemv(handle, CUBLAS_OP_N, M, K, &alpha, d_A, M, d_B, 1, &beta, d_C, 1);
   checkCuda( cudaEventRecord(stopEvent, 0) );
   cudaDeviceSynchronize();
   nvmlAPIEnd();
@@ -109,7 +107,7 @@ int main (int argc, char** argv) {
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
   printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
 
-  stat = cublasGetVector(M, sizeof(*C), d_C, 1, C, 1); //d_C -> C
+  cublasGetVector(M, sizeof(*C), d_C, 1, C, 1); //d_C -> C
   cudaFree(d_A);
   cudaFree(d_B);
   cudaFree(d_C);
