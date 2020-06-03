@@ -25,12 +25,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// taken from:
+// taken & modified from:
 // https://github.com/NVIDIA-developer-blog/code-samples/blob/master/series/cuda-cpp/transpose/transpose.cu
 
 #include <stdio.h>
 #include <assert.h>
 #include "nvmlPower.hpp"
+#include "cuda_profiler_api.h"
 
 // Convenience function for checking CUDA runtime API results
 // can be wrapped around any runtime API call. No-op in release builds.
@@ -48,18 +49,9 @@ cudaError_t checkCuda(cudaError_t result)
 
 const int TILE_DIM = 32;
 const int BLOCK_ROWS = 8;
-const int NUM_REPS = 1000;
+const int NUM_REPS = 1000; 
 
-void postprocess(const float *ref, const float *res, int n, float ms)
-{
-  bool passed = true;
-  // TODO - implement check logic here ...
-
-  if (passed)
-    printf("%20.2f\n", 2 * n * sizeof(float) * 1e-6 * NUM_REPS / ms );
-}
-
-__global__ void transposeNoBankConflicts(float *odata, const float *idata, int flops_per_xfer)
+__global__ void transposeNoBankConflicts(float *odata, const float *idata, int fmas_per_xfer)
 {
   __shared__ float tile[TILE_DIM][TILE_DIM+1];
     
@@ -67,13 +59,14 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata, int f
   int y = blockIdx.y * TILE_DIM + threadIdx.y;
   int width = gridDim.x * TILE_DIM;
 
-  if (flops_per_xfer == 0) {
-    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-      tile[threadIdx.y+j][threadIdx.x] = idata[(y+j)*width + x];
-  } else {
-    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-      for (int c = 0; c < flops_per_xfer; c++)
-        tile[threadIdx.y+j][threadIdx.x] += c * idata[(y+j)*width + x];
+  float tmp_I, tmp_O;
+
+  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
+    tmp_I = idata[(y+j)*width + x];
+    tmp_O = tmp_I;
+    for (int c = 1; c <= fmas_per_xfer; c++) 
+      tmp_O += c * tmp_I;
+    tile[threadIdx.y+j][threadIdx.x] = tmp_O;
   }
 
   __syncthreads();
@@ -81,29 +74,26 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata, int f
   x = blockIdx.y * TILE_DIM + threadIdx.x;  // transpose block offset
   y = blockIdx.x * TILE_DIM + threadIdx.y;
 
-  if (flops_per_xfer == 0) {
-    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-        odata[(y+j)*width + x] = tile[threadIdx.x][threadIdx.y + j];
-  } else {
-    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)
-      for (int c = 0; c < flops_per_xfer; c++)
-        odata[(y+j)*width + x] += c * tile[threadIdx.x][threadIdx.y + j];
-  }
+  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) 
+    odata[(y+j)*width + x] = tile[threadIdx.x][threadIdx.y + j];
 }
 
 int main(int argc, char **argv)
 {
-  const int nx = 4096;
-  const int ny = 4096;
+  int N = 1024;
+  if (argc > 1) 
+    N = atoi(argv[1]);
+  const int nx = N;
+  const int ny = N;
   const int mem_size = nx*ny*sizeof(float);
 
   dim3 dimGrid(nx/TILE_DIM, ny/TILE_DIM, 1);
   dim3 dimBlock(TILE_DIM, BLOCK_ROWS, 1);
 
   int devId = 0;
-  int flops_per_xfer = 0;
-  if (argc > 1) 
-    flops_per_xfer = atoi(argv[1]);
+  int fmas_per_xfer = 0;
+  if (argc > 2) 
+    fmas_per_xfer = atoi(argv[2]);
 
   printf("Matrix size: %d %d, Block size: %d %d, Tile size: %d %d\n", 
          nx, ny, TILE_DIM, BLOCK_ROWS, TILE_DIM, TILE_DIM);
@@ -124,18 +114,18 @@ int main(int argc, char **argv)
 
   // check parameters and calculate execution configuration
   if (nx % TILE_DIM || ny % TILE_DIM) {
-    printf("nx and ny must be a multiple of TILE_DIM\n");
+    printf("nx and ny must be a multiple of TILE_DIM (%d)\n", TILE_DIM);
     goto error_exit;
   }
 
   if (TILE_DIM % BLOCK_ROWS) {
-    printf("TILE_DIM must be a multiple of BLOCK_ROWS\n");
+    printf("TILE_DIM (%d) must be a multiple of BLOCK_ROWS (%d)\n", TILE_DIM, BLOCK_ROWS);
     goto error_exit;
   }
     
   // host
   for (int j = 0; j < ny; j++)
-    for (int i = 0; i < nx; i++)
+    for (int i = 0; i < nx; i++) 
       h_idata[j*nx + i] = j*nx + i;
 
   // correct result for error checking
@@ -155,15 +145,20 @@ int main(int argc, char **argv)
   // ------------
   // time kernel
   // ------------
-//  printf("%25s%25s\n", "Routine", "Bandwidth (GB/s)");
-//  printf("%25s", "conflict-free transpose");
   checkCuda( cudaMemset(d_tdata, 0, mem_size) );
   // warmup
-  transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, flops_per_xfer);
+  for (int i = 0; i < NUM_REPS; i++)
+    transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
   nvmlAPIRun();
   checkCuda( cudaEventRecord(startEvent, 0) );
+#ifdef NVPROFILE
+  cudaProfilerStart();
+  transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
+  cudaProfilerStop();
+#else
   for (int i = 0; i < NUM_REPS; i++)
-     transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, flops_per_xfer);
+    transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
+#endif
   checkCuda( cudaEventRecord(stopEvent, 0) );
   cudaDeviceSynchronize();
   nvmlAPIEnd();  
@@ -171,8 +166,12 @@ int main(int argc, char **argv)
   checkCuda( cudaEventSynchronize(stopEvent) );
   checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
   checkCuda( cudaMemcpy(h_tdata, d_tdata, mem_size, cudaMemcpyDeviceToHost) );
-  postprocess(gold, h_tdata, nx * ny, ms);
-  printf("elapsed: %.0f ms\n", ms);
+#ifdef NVPROFILE
+  printf("throughput: %.2f GB/s\n", 2 * nx * ny * sizeof(float) * 1e-6 / ms );
+#else
+  printf("throughput: %.2f GB/s\n", 2 * nx * ny * sizeof(float) * 1e-6 * NUM_REPS / ms );
+#endif
+  printf("time: %.0f ms\n", ms);
 
 error_exit:
   // cleanup
