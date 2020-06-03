@@ -9,7 +9,9 @@
 #include "nvmlPower.hpp"
 
 #define IDX(i,j,ld) (((j)*(ld))+(i))
-#define RUNS 1000
+#ifndef RUNS
+#define RUNS 1
+#endif
 
 int checkt(long, long, float*, float*, float*);
 

@@ -9,7 +9,9 @@
 #include "nvmlPower.hpp"
 
 #define IDX(i,j,ld) (((j)*(ld))+(i))
+#ifndef RUNS
 #define RUNS 1
+#endif
 
 int check(long, long, long, float*, float*, float*);
 
@@ -103,7 +105,7 @@ int main (int argc, char** argv) {
 
   double time = ms/1000;
 
-  double nFlops = (double)M*K*N*2;
+  double nFlops = (double)M*K*N*2*RUNS;
   double nFlopsPerSec = nFlops/time;
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
   printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
