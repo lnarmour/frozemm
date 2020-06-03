@@ -49,7 +49,12 @@ cudaError_t checkCuda(cudaError_t result)
 
 const int TILE_DIM = 32;
 const int BLOCK_ROWS = 8;
-const int NUM_REPS = 1000; 
+const int NUM_WARMUP_REPS = 1000;
+#ifdef NVPROFILE
+const int NUM_REPS = 1;
+#else
+const int NUM_REPS = 1000;
+#endif
 
 __global__ void transposeNoBankConflicts(float *odata, const float *idata, int fmas_per_xfer)
 {
@@ -99,7 +104,6 @@ int main(int argc, char **argv)
          nx, ny, TILE_DIM, BLOCK_ROWS, TILE_DIM, TILE_DIM);
   printf("dimGrid: %d %d %d. dimBlock: %d %d %d\n",
          dimGrid.x, dimGrid.y, dimGrid.z, dimBlock.x, dimBlock.y, dimBlock.z);
-  
   checkCuda( cudaSetDevice(devId) );
 
   float *h_idata = (float*)malloc(mem_size);
@@ -147,31 +151,34 @@ int main(int argc, char **argv)
   // ------------
   checkCuda( cudaMemset(d_tdata, 0, mem_size) );
   // warmup
-  for (int i = 0; i < NUM_REPS; i++)
+  for (int i = 0; i < NUM_WARMUP_REPS; i++)
     transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
   nvmlAPIRun();
   checkCuda( cudaEventRecord(startEvent, 0) );
-#ifdef NVPROFILE
   cudaProfilerStart();
-  transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
-  cudaProfilerStop();
-#else
   for (int i = 0; i < NUM_REPS; i++)
     transposeNoBankConflicts<<<dimGrid, dimBlock>>>(d_tdata, d_idata, fmas_per_xfer);
-#endif
+  cudaProfilerStop();
   checkCuda( cudaEventRecord(stopEvent, 0) );
   cudaDeviceSynchronize();
-  nvmlAPIEnd();  
-
+  float energy;
+  energy = nvmlAPIEnd();
   checkCuda( cudaEventSynchronize(stopEvent) );
   checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
   checkCuda( cudaMemcpy(h_tdata, d_tdata, mem_size, cudaMemcpyDeviceToHost) );
-#ifdef NVPROFILE
-  printf("throughput: %.2f GB/s\n", 2 * nx * ny * sizeof(float) * 1e-6 / ms );
-#else
-  printf("throughput: %.2f GB/s\n", 2 * nx * ny * sizeof(float) * 1e-6 * NUM_REPS / ms );
-#endif
-  printf("time: %.0f ms\n", ms);
+
+  float num_bytes;
+  float flops;
+  num_bytes = 2.0 * nx * ny * sizeof(float) * NUM_REPS;
+  flops = 2.0 * fmas_per_xfer * 2 * nx * ny * NUM_REPS;
+  printf("NUM_REPS:   %d\n", NUM_REPS);
+  printf("bytes r/w:  %.2f GB\n", num_bytes * 1e-9); 
+  printf("ops:        %.2f CFLOPs\n", flops * 1e-9);
+  printf("time:       %.5f sec\n", ms * 1e-3);
+  printf("energy:     %.2f Joules\n", energy);
+  printf("compute:    %.2f TFLOPs/sec\n", flops * 1e-12 / ((ms * 1e-3)));
+  printf("throughput: %.2f GB/sec\n", num_bytes * 1e-6 / ms);
+  printf("avg power:  %.2f W\n", energy / (ms * 1e-3)); 
 
 error_exit:
   // cleanup

@@ -1,4 +1,4 @@
-// taken from here:
+// taken and modified from here:
 // https://github.com/kajalv/nvml-power
 
 #include <cstdlib>
@@ -11,6 +11,7 @@ These may be encompassed in a class if desired. Trivial CUDA programs written fo
 bool pollThreadStatus = false;
 unsigned int deviceCount = 0;
 char deviceNameStr[64];
+float total_energy;
 
 nvmlReturn_t nvmlResult;
 nvmlDevice_t nvmlDeviceID;
@@ -70,7 +71,8 @@ void *powerPollingFunc(void *ptr)
     energy += (delta_time / 1000.0) * (powerLevel / 1000.0);
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 	}
-  printf("energy: %.2f Joules\n", energy);
+  total_energy = energy;
+  //printf("energy:     %.2f Joules\n", energy);
 	pthread_exit(0);
 }
 
@@ -156,7 +158,7 @@ void nvmlAPIRun()
 /*
 End power measurement. This ends the polling thread.
 */
-void nvmlAPIEnd()
+float nvmlAPIEnd()
 {
 	pollThreadStatus = false;
 	pthread_join(powerPollThread, NULL);
@@ -167,6 +169,7 @@ void nvmlAPIEnd()
 		printf("Failed to shut down NVML: %s\n", nvmlErrorString(nvmlResult));
 		exit(0);
 	}
+  return total_energy;
 }
 
 /*
