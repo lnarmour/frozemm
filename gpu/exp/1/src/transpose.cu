@@ -33,6 +33,8 @@
 #include "nvmlPower.hpp"
 #include "cuda_profiler_api.h"
 
+using namespace std;
+
 // Convenience function for checking CUDA runtime API results
 // can be wrapped around any runtime API call. No-op in release builds.
 inline
@@ -161,8 +163,11 @@ int main(int argc, char **argv)
   cudaProfilerStop();
   checkCuda( cudaEventRecord(stopEvent, 0) );
   cudaDeviceSynchronize();
+  nvmlAPIEnd();
   float energy;
-  energy = nvmlAPIEnd();
+  long total_ms;
+  energy = nvmlAPI_getEnergy();
+  total_ms = nvmlAPI_getTotalTime();
   checkCuda( cudaEventSynchronize(stopEvent) );
   checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
   checkCuda( cudaMemcpy(h_tdata, d_tdata, mem_size, cudaMemcpyDeviceToHost) );
@@ -173,12 +178,12 @@ int main(int argc, char **argv)
   flops = 2.0 * fmas_per_xfer * 2 * nx * ny * NUM_REPS;
   printf("NUM_REPS:   %d\n", NUM_REPS);
   printf("bytes r/w:  %.2f GB\n", num_bytes * 1e-9); 
-  printf("ops:        %.2f CFLOPs\n", flops * 1e-9);
+  printf("ops:        %.2f GFLOPs\n", flops * 1e-9);
   printf("time:       %.5f sec\n", ms * 1e-3);
   printf("energy:     %.2f Joules\n", energy);
   printf("compute:    %.2f TFLOPs/sec\n", flops * 1e-12 / ((ms * 1e-3)));
   printf("throughput: %.2f GB/sec\n", num_bytes * 1e-6 / ms);
-  printf("avg power:  %.2f W\n", energy / (ms * 1e-3)); 
+  printf("avg power:  %.2f W\n", energy / (total_ms * 1e-3)); 
 
 error_exit:
   // cleanup
