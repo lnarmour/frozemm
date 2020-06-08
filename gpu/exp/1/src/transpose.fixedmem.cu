@@ -66,15 +66,13 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata, int f
   int y = blockIdx.y * TILE_DIM + threadIdx.y;
   int width = gridDim.x * TILE_DIM;
 
-  float tmp_I, tmp_O;
+  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) 
+    tile[threadIdx.y+j][threadIdx.x] = idata[(y+j)*width + x];
 
-  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
-    tmp_I = idata[(y+j)*width + x];
-    tmp_O = tmp_I;
-    for (int c = 1; c <= fmas_per_xfer; c++) 
-      tmp_O += c * tmp_I;
-    tile[threadIdx.y+j][threadIdx.x] = tmp_O;
-  }
+  for (int c = 1; c <= fmas_per_xfer; c++) 
+    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
+      tile[threadIdx.y+j][threadIdx.x] += c * idata[(y+j)*width + x];
+    }
 
   __syncthreads();
 
@@ -175,7 +173,7 @@ int main(int argc, char **argv)
   float num_bytes;
   float flops;
   num_bytes = 2.0 * nx * ny * sizeof(float) * NUM_REPS;
-  flops = 2.0 * fmas_per_xfer * 2 * nx * ny * NUM_REPS;
+  flops = 2.0 * fmas_per_xfer * nx * ny * NUM_REPS;
   printf("NUM_REPS:   %d\n", NUM_REPS);
   printf("bytes r/w:  %.2f GB\n", num_bytes * 1e-9); 
   printf("ops:        %.2f GFLOPs\n", flops * 1e-9);

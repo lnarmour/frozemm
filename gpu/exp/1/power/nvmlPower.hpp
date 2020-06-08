@@ -18,8 +18,10 @@ Header file including necessary nvml headers.
 #include <unistd.h>
 
 void nvmlAPIRun();
-float nvmlAPIEnd();
+void nvmlAPIEnd();
 void *powerPollingFunc(void *ptr);
 int getNVMLError(nvmlReturn_t resultToCheck);
+long nvmlAPI_getTotalTime();
+float nvmlAPI_getEnergy();
 
 #endif

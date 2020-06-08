@@ -12,6 +12,7 @@ bool pollThreadStatus = false;
 unsigned int deviceCount = 0;
 char deviceNameStr[64];
 float total_energy;
+long total_time;
 
 nvmlReturn_t nvmlResult;
 nvmlDevice_t nvmlDeviceID;
@@ -71,6 +72,7 @@ void *powerPollingFunc(void *ptr)
     energy += (delta_time / 1000.0) * (powerLevel / 1000.0);
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 	}
+  total_time = elapsed_time;
   total_energy = energy;
   //printf("energy:     %.2f Joules\n", energy);
 	pthread_exit(0);
@@ -158,7 +160,7 @@ void nvmlAPIRun()
 /*
 End power measurement. This ends the polling thread.
 */
-float nvmlAPIEnd()
+void nvmlAPIEnd()
 {
 	pollThreadStatus = false;
 	pthread_join(powerPollThread, NULL);
@@ -169,6 +171,13 @@ float nvmlAPIEnd()
 		printf("Failed to shut down NVML: %s\n", nvmlErrorString(nvmlResult));
 		exit(0);
 	}
+}
+
+long nvmlAPI_getTotalTime() {
+  return total_time;
+}
+
+float nvmlAPI_getEnergy() {
   return total_energy;
 }
 
