@@ -10,6 +10,7 @@ TRANSPOSE_FLOPS := transpose.fixedflops transpose.fixedflops.nvprof
 TRANSPOSE_NOMEM := transpose.nomem transpose.nomem.nvprof
 CUBLAS := sgemm sgemm.nvprof sgemv sgemv.nvprof
 EXECS := $(TRANSPOSE_MEM) $(TRANSPOSE_FLOPS) $(TRANSPOSE_NOMEM)
+EXECS := $(CUBLAS)
 
 all: $(EXECS)
 debug: OPTIONS := -g -G --ptxas-options -v --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin

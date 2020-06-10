@@ -2,10 +2,10 @@
 data = []
 TS = [11, 12]
 
-with open('scripts/logs/transpose.fixedflops.nvprof.log', 'r') as f:
+with open('scripts/logs/transpose.fixedflops.nvprof.2.log', 'r') as f:
     lines = [l.strip('\n') for l in f.readlines()]
     data.append([' '.join([c for c in s.split(' ') if c]) for s in lines])
-with open('scripts/logs/transpose.fixedflops.joules.log', 'r') as f:
+with open('scripts/logs/transpose.fixedflops.joules.2.log', 'r') as f:
     data.append([l.strip('\n') for l in f.readlines()])
 LINES = [len(data[0]), len(data[1])]
 
@@ -39,8 +39,8 @@ for ts in range(0, LINES[1], TS[1]):
     key = '{}_{}_{}'.format(N,F,S)
     results[key] += [time, energy, compute, avg_pow]
 
-#print('N, F, S, TFLOPS, r/w (GB), time (sec), TFLOPS/sec, GB/sec, Joules, avg Watts')
-print(' \\textbf{N} & \\textbf{F} & \\textbf{S} & \\textbf{TFLOPS} & \\textbf{r/w (GB)} & \\textbf{time (sec)} & \\textbf{TFLOPS/sec} & \\textbf{GB/sec} & \\textbf{Joules} & \\textbf{avg Watts} \\\\')
+#print('N, F, S, TFLOPS, r/w (GB), time (sec), TFLOPS/sec, GB/sec, Joules')
+print(' \\textbf{N} & \\textbf{F} & \\textbf{S} & \\textbf{TF} & \\textbf{r/w (GB)} & \\textbf{time (s)} & \\textbf{TF/s} & \\textbf{GB/s} & \\textbf{Joules} \\\\')
 print(' \\hline')
 for r in results:
     N, F, S = [int(x) for x in r.split('_')]
@@ -52,7 +52,7 @@ for r in results:
     compute = results[r][5]
     avg_pow = results[r][6]
     #print('{}, {}, {}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}, {:.2f}'.format(
-    print(' {} & {} & {} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} \\\\'.format(
+    print(' {} & {} & {} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} \\\\'.format(
             N,
             F,
             S,
@@ -61,5 +61,4 @@ for r in results:
             time,
             compute,
             thruput,
-            energy,
-            avg_pow))
+            energy))

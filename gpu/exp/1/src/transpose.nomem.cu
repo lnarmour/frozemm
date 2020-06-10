@@ -67,10 +67,13 @@ __global__ void transposeNoBankConflicts(float *odata, const float *idata, int F
   int y = blockIdx.y * TILE_DIM + threadIdx.y;
   int width = gridDim.x * TILE_DIM; 
 
-  for (int c = 1; c <= F; c++)
-    for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
-      tile[threadIdx.y+j][threadIdx.x] += c * scratch[threadIdx.x];
-    }
+  bool doCompute = (blockIdx.y * gridDim.x + blockIdx.x) % S == 0;
+
+  if (doCompute)
+    for (int c = 1; c <= F; c++)
+      for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
+        tile[threadIdx.y+j][threadIdx.x] += c * scratch[threadIdx.x];
+      }
 
   if (S == -17)
     for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS)

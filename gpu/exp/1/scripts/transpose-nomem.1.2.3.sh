@@ -24,17 +24,18 @@ eval "Xs=({1..$MAX})"
 # done;
 
 CMD0="./bin/transpose.nomem"
-CMD1="./bin/transpose.fixedmem"
+CMD1="./bin/transpose.fixedflops"
 
-F=1000;
+F=65536;
 for x in ${Xs[@]};
 do
   N=$((1024*$x));
-  echo $CMD0 $N $F;
-  eval "$CMD0 $N $F";
-  echo $CMD1 $N 0;
-  eval "$CMD1 $N 0";
-  echo $CMD1 $N $F;
-  eval "$CMD1 $N $F";
+  S=$(($x**2))
+  #echo $CMD0 $N $F $S;
+  #eval "$CMD0 $N $F $S";
+  #echo $CMD1 $N 0;
+  #eval "$CMD1 $N 0";
+  echo $CMD1 $N $F $S;
+  eval "$CMD1 $N $F $S";
   echo "";
 done;

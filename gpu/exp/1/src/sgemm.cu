@@ -7,6 +7,7 @@
 #include <cuda_runtime.h>
 #include "cublas_v2.h"
 #include "nvmlPower.hpp"
+#include "cuda_profiler_api.h"
 
 #define IDX(i,j,ld) (((j)*(ld))+(i))
 #ifndef RUNS
@@ -94,11 +95,17 @@ int main (int argc, char** argv) {
 
   nvmlAPIRun();
   checkCuda( cudaEventRecord(startEvent, 0) );
+  cudaProfilerStart();
   for (int r=0; r<RUNS; r++)
     cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, M, N, K, &alpha, d_A, M, d_B, K, &beta, d_C, M);
+  cudaProfilerStop();
   checkCuda( cudaEventRecord(stopEvent, 0) );
   cudaDeviceSynchronize();
   nvmlAPIEnd();
+
+  float energy;
+  energy = nvmlAPI_getEnergy();
+
 
   checkCuda( cudaEventSynchronize(stopEvent) );
   checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
@@ -108,8 +115,8 @@ int main (int argc, char** argv) {
   double nFlops = (double)M*K*N*2*RUNS;
   double nFlopsPerSec = nFlops/time;
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
-  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n", time, nFlops, nGFlopsPerSec);
-//  printf( "%lf, %0.2lf\n", time, nGFlopsPerSec);
+  printf("Time:   %lf sec\n", time);
+  printf("energy: %.2f Joules\n", energy);
 
   cublasGetMatrix(M, N, sizeof(*C), d_C, M, C, M); //d_C -> C
   cudaFree(d_A);
