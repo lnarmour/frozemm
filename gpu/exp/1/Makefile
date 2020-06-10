@@ -7,8 +7,9 @@ RUNS := 1
 
 TRANSPOSE_MEM := transpose.fixedmem transpose.fixedmem.nvprof
 TRANSPOSE_FLOPS := transpose.fixedflops transpose.fixedflops.nvprof
+TRANSPOSE_NOMEM := transpose.nomem transpose.nomem.nvprof
 CUBLAS := sgemm sgemm.nvprof sgemv sgemv.nvprof
-EXECS := $(TRANSPOSE_MEM) $(TRANSPOSE_FLOPS)
+EXECS := $(TRANSPOSE_MEM) $(TRANSPOSE_FLOPS) $(TRANSPOSE_NOMEM)
 
 all: $(EXECS)
 debug: OPTIONS := -g -G --ptxas-options -v --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin
@@ -32,6 +33,9 @@ transpose.fixedmem: src/transpose.fixedmem.cu
 transpose.fixedflops: src/transpose.fixedflops.cu
 	nvcc src/transpose.fixedflops.cu $(PWR) -o bin/$@ $(OPTIONS) $(ICUDA) $(INVML) $(IPWR)
 
+transpose.nomem: src/transpose.nomem.cu
+	nvcc src/transpose.nomem.cu $(PWR) -o bin/$@ $(OPTIONS) $(ICUDA) $(INVML) $(IPWR)
+
 
 
 sgemm.nvprof: src/sgemm.cu
@@ -45,6 +49,9 @@ transpose.fixedmem.nvprof: src/transpose.fixedmem.cu
 
 transpose.fixedflops.nvprof: src/transpose.fixedflops.cu
 	nvcc src/transpose.fixedflops.cu $(PWR) -o bin/$@ $(OPTIONS) $(ICUDA) $(INVML) $(IPWR) -DNVPROFILE=1
+
+transpose.nomem.nvprof: src/transpose.nomem.cu
+	nvcc src/transpose.nomem.cu $(PWR) -o bin/$@ $(OPTIONS) $(ICUDA) $(INVML) $(IPWR) -DNVPROFILE=1
 
 
 
