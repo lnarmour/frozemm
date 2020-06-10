@@ -1,0 +1,240 @@
+./bin/transpose.fixedflops 1024 65536 1
+Matrix size: 1024 1024, Block size: 32 8, Tile size: 32 32
+dimGrid: 32 32 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  8.39 GB
+ops:        137438.95 GFLOPs
+time:       19.78676 sec
+energy:     6982.21 Joules
+compute:    6.95 TFLOPs/sec
+throughput: 0.42 GB/sec
+avg power:  180.32 W
+
+./bin/transpose.fixedflops 2048 65536 4
+Matrix size: 2048 2048, Block size: 32 8, Tile size: 32 32
+dimGrid: 64 64 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  33.55 GB
+ops:        137438.95 GFLOPs
+time:       19.86024 sec
+energy:     7043.07 Joules
+compute:    6.92 TFLOPs/sec
+throughput: 1.69 GB/sec
+avg power:  181.41 W
+
+./bin/transpose.fixedflops 3072 65536 9
+Matrix size: 3072 3072, Block size: 32 8, Tile size: 32 32
+dimGrid: 96 96 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  75.50 GB
+ops:        137438.95 GFLOPs
+time:       19.88936 sec
+energy:     7097.49 Joules
+compute:    6.91 TFLOPs/sec
+throughput: 3.80 GB/sec
+avg power:  182.81 W
+
+./bin/transpose.fixedflops 4096 65536 16
+Matrix size: 4096 4096, Block size: 32 8, Tile size: 32 32
+dimGrid: 128 128 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  134.22 GB
+ops:        137438.95 GFLOPs
+time:       20.05630 sec
+energy:     7113.66 Joules
+compute:    6.85 TFLOPs/sec
+throughput: 6.69 GB/sec
+avg power:  182.50 W
+
+./bin/transpose.fixedflops 5120 65536 25
+Matrix size: 5120 5120, Block size: 32 8, Tile size: 32 32
+dimGrid: 160 160 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  209.72 GB
+ops:        137438.95 GFLOPs
+time:       20.26658 sec
+energy:     7150.64 Joules
+compute:    6.78 TFLOPs/sec
+throughput: 10.35 GB/sec
+avg power:  181.90 W
+
+./bin/transpose.fixedflops 6144 65536 36
+Matrix size: 6144 6144, Block size: 32 8, Tile size: 32 32
+dimGrid: 192 192 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  301.99 GB
+ops:        137438.95 GFLOPs
+time:       20.35452 sec
+energy:     7127.53 Joules
+compute:    6.75 TFLOPs/sec
+throughput: 14.84 GB/sec
+avg power:  182.25 W
+
+./bin/transpose.fixedflops 7168 65536 49
+Matrix size: 7168 7168, Block size: 32 8, Tile size: 32 32
+dimGrid: 224 224 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  411.04 GB
+ops:        137438.95 GFLOPs
+time:       20.60676 sec
+energy:     7177.02 Joules
+compute:    6.67 TFLOPs/sec
+throughput: 19.95 GB/sec
+avg power:  182.05 W
+
+./bin/transpose.fixedflops 8192 65536 64
+Matrix size: 8192 8192, Block size: 32 8, Tile size: 32 32
+dimGrid: 256 256 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  536.87 GB
+ops:        137438.95 GFLOPs
+time:       20.64066 sec
+energy:     7240.29 Joules
+compute:    6.66 TFLOPs/sec
+throughput: 26.01 GB/sec
+avg power:  183.80 W
+
+./bin/transpose.fixedflops 9216 65536 81
+Matrix size: 9216 9216, Block size: 32 8, Tile size: 32 32
+dimGrid: 288 288 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  679.48 GB
+ops:        137438.95 GFLOPs
+time:       20.78647 sec
+energy:     7357.65 Joules
+compute:    6.61 TFLOPs/sec
+throughput: 32.69 GB/sec
+avg power:  185.94 W
+
+./bin/transpose.fixedflops 10240 65536 100
+Matrix size: 10240 10240, Block size: 32 8, Tile size: 32 32
+dimGrid: 320 320 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  838.86 GB
+ops:        137438.95 GFLOPs
+time:       20.80936 sec
+energy:     7414.46 Joules
+compute:    6.60 TFLOPs/sec
+throughput: 40.31 GB/sec
+avg power:  186.78 W
+
+./bin/transpose.fixedflops 11264 65536 121
+Matrix size: 11264 11264, Block size: 32 8, Tile size: 32 32
+dimGrid: 352 352 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  1015.02 GB
+ops:        137438.95 GFLOPs
+time:       20.91722 sec
+energy:     7564.64 Joules
+compute:    6.57 TFLOPs/sec
+throughput: 48.53 GB/sec
+avg power:  189.87 W
+
+./bin/transpose.fixedflops 12288 65536 144
+Matrix size: 12288 12288, Block size: 32 8, Tile size: 32 32
+dimGrid: 384 384 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  1207.96 GB
+ops:        137438.95 GFLOPs
+time:       21.06097 sec
+energy:     7619.38 Joules
+compute:    6.53 TFLOPs/sec
+throughput: 57.36 GB/sec
+avg power:  190.41 W
+
+./bin/transpose.fixedflops 13312 65536 169
+Matrix size: 13312 13312, Block size: 32 8, Tile size: 32 32
+dimGrid: 416 416 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  1417.67 GB
+ops:        137438.95 GFLOPs
+time:       21.28231 sec
+energy:     7722.42 Joules
+compute:    6.46 TFLOPs/sec
+throughput: 66.61 GB/sec
+avg power:  191.16 W
+
+./bin/transpose.fixedflops 14336 65536 196
+Matrix size: 14336 14336, Block size: 32 8, Tile size: 32 32
+dimGrid: 448 448 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  1644.17 GB
+ops:        137438.95 GFLOPs
+time:       21.43754 sec
+energy:     7769.23 Joules
+compute:    6.41 TFLOPs/sec
+throughput: 76.70 GB/sec
+avg power:  190.57 W
+
+./bin/transpose.fixedflops 15360 65536 225
+Matrix size: 15360 15360, Block size: 32 8, Tile size: 32 32
+dimGrid: 480 480 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  1887.44 GB
+ops:        137438.95 GFLOPs
+time:       21.59243 sec
+energy:     7879.68 Joules
+compute:    6.37 TFLOPs/sec
+throughput: 87.41 GB/sec
+avg power:  191.21 W
+
+./bin/transpose.fixedflops 16384 65536 256
+Matrix size: 16384 16384, Block size: 32 8, Tile size: 32 32
+dimGrid: 512 512 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  2147.48 GB
+ops:        137438.95 GFLOPs
+time:       21.72719 sec
+energy:     7923.07 Joules
+compute:    6.33 TFLOPs/sec
+throughput: 98.84 GB/sec
+avg power:  190.94 W
+
+./bin/transpose.fixedflops 17408 65536 289
+Matrix size: 17408 17408, Block size: 32 8, Tile size: 32 32
+dimGrid: 544 544 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  2424.31 GB
+ops:        137438.95 GFLOPs
+time:       21.93561 sec
+energy:     8147.62 Joules
+compute:    6.27 TFLOPs/sec
+throughput: 110.52 GB/sec
+avg power:  194.98 W
+
+./bin/transpose.fixedflops 18432 65536 324
+Matrix size: 18432 18432, Block size: 32 8, Tile size: 32 32
+dimGrid: 576 576 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  2717.91 GB
+ops:        137438.95 GFLOPs
+time:       22.11547 sec
+energy:     8277.14 Joules
+compute:    6.21 TFLOPs/sec
+throughput: 122.90 GB/sec
+avg power:  196.34 W
+
+./bin/transpose.fixedflops 19456 65536 361
+Matrix size: 19456 19456, Block size: 32 8, Tile size: 32 32
+dimGrid: 608 608 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  3028.29 GB
+ops:        137438.95 GFLOPs
+time:       22.34448 sec
+energy:     8449.61 Joules
+compute:    6.15 TFLOPs/sec
+throughput: 135.53 GB/sec
+avg power:  198.66 W
+
+./bin/transpose.fixedflops 20480 65536 400
+Matrix size: 20480 20480, Block size: 32 8, Tile size: 32 32
+dimGrid: 640 640 1. dimBlock: 32 8 1
+NUM_REPS:   1000
+bytes r/w:  3355.44 GB
+ops:        137438.95 GFLOPs
+time:       22.55639 sec
+energy:     8597.29 Joules
+compute:    6.09 TFLOPs/sec
+throughput: 148.76 GB/sec
+avg power:  200.64 W
+

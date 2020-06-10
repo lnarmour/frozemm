@@ -1,0 +1,220 @@
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 1024 65536 1
+==567557== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  241.61MB/s  241.61MB/s  241.61MB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  239.33MB/s  239.33MB/s  239.33MB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache     4197504     4197504     4197504
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM     4157824     4157824     4157824
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 2048 65536 4
+==567580== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  948.92MB/s  948.92MB/s  948.92MB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  946.49MB/s  946.49MB/s  946.49MB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache    16780704    16780704    16780704
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    16737760    16737760    16737760
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 3072 65536 9
+==567606== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  2.0751GB/s  2.0751GB/s  2.0751GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  2.0712GB/s  2.0712GB/s  2.0712GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache    37791232    37791232    37791232
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    37720864    37720864    37720864
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 4096 65536 16
+==567630== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  3.3685GB/s  3.3685GB/s  3.3685GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  3.3560GB/s  3.3560GB/s  3.3560GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache    67113152    67113152    67113152
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    66863072    66863072    66863072
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 5120 65536 25
+==567659== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  5.5147GB/s  5.5147GB/s  5.5147GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  5.4994GB/s  5.4994GB/s  5.4994GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   104881248   104881248   104881248
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   104590528   104590528   104590528
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 6144 65536 36
+==567683== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  7.2889GB/s  7.2889GB/s  7.2889GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  7.2757GB/s  7.2757GB/s  7.2757GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   151043712   151043712   151043712
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   150769376   150769376   150769376
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 7168 65536 49
+==567710== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  11.153GB/s  11.153GB/s  11.153GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  11.150GB/s  11.150GB/s  11.150GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   205563392   205563392   205563392
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   205522368   205522368   205522368
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 8192 65536 64
+==567737== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  14.132GB/s  14.132GB/s  14.132GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  14.130GB/s  14.130GB/s  14.130GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   268441344   268441344   268441344
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   268404256   268404256   268404256
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 9216 65536 81
+==567762== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  18.305GB/s  18.305GB/s  18.305GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  18.304GB/s  18.304GB/s  18.304GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   339745280   339745280   339745280
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   339718880   339718880   339718880
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 10240 65536 100
+==567784== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  18.533GB/s  18.533GB/s  18.533GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  18.523GB/s  18.523GB/s  18.523GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   419436576   419436576   419436576
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   419210944   419210944   419210944
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 11264 65536 121
+==567811== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  26.849GB/s  26.849GB/s  26.849GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  26.848GB/s  26.848GB/s  26.848GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   507561216   507561216   507561216
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   507539104   507539104   507539104
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 12288 65536 144
+==567836== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  26.850GB/s  26.850GB/s  26.850GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  26.839GB/s  26.839GB/s  26.839GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   603985888   603985888   603985888
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   603747232   603747232   603747232
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 13312 65536 169
+==567866== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  31.257GB/s  31.257GB/s  31.257GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  31.244GB/s  31.244GB/s  31.244GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   708900768   708900768   708900768
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   708609504   708609504   708609504
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 14336 65536 196
+==567894== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  35.849GB/s  35.849GB/s  35.849GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  35.837GB/s  35.837GB/s  35.837GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   822119904   822119904   822119904
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   821858560   821858560   821858560
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 15360 65536 225
+==567920== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  47.674GB/s  47.674GB/s  47.674GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  47.672GB/s  47.672GB/s  47.672GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   943759584   943759584   943759584
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   943716768   943716768   943716768
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 16384 65536 256
+==568004== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  54.181GB/s  54.181GB/s  54.181GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  54.180GB/s  54.180GB/s  54.180GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1073756448  1073756448  1073756448
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1073723296  1073723296  1073723296
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 17408 65536 289
+==568038== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  56.378GB/s  56.378GB/s  56.378GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  56.367GB/s  56.367GB/s  56.367GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1212180448  1212180448  1212180448
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1211927968  1211927968  1211927968
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 18432 65536 324
+==568063== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  60.347GB/s  60.347GB/s  60.347GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  60.337GB/s  60.337GB/s  60.337GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1358961248  1358961248  1358961248
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1358729600  1358729600  1358729600
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 19456 65536 361
+==568092== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  63.455GB/s  63.455GB/s  63.455GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  63.446GB/s  63.446GB/s  63.446GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1514151424  1514151424  1514151424
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1513930976  1513930976  1513930976
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
+nvprof --profile-from-start off -m dram_read_throughput,dram_write_throughput,dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/transpose.fixedflops.nvprof 20480 65536 400
+==568119== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: transposeNoBankConflicts(float*, float const *, int, int)
+          1                      dram_read_throughput                 Device Memory Read Throughput  67.755GB/s  67.755GB/s  67.755GB/s
+          1                     dram_write_throughput                Device Memory Write Throughput  67.746GB/s  67.746GB/s  67.746GB/s
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1677730336  1677730336  1677730336
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1677509664  1677509664  1677509664
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3744e+11  1.3744e+11  1.3744e+11
+
