@@ -1,0 +1,160 @@
+./bin/sgemm 1024
+Time:   0.002912 sec
+energy: 0.00 Joules
+./bin/sgemm 1024
+Time:   0.002891 sec
+energy: 0.00 Joules
+./bin/sgemm 1024
+Time:   0.002909 sec
+energy: 0.00 Joules
+
+./bin/sgemm 2048
+Time:   0.021833 sec
+energy: 1.18 Joules
+./bin/sgemm 2048
+Time:   0.021896 sec
+energy: 1.17 Joules
+./bin/sgemm 2048
+Time:   0.021831 sec
+energy: 1.22 Joules
+
+./bin/sgemm 3072
+Time:   0.070723 sec
+energy: 4.08 Joules
+./bin/sgemm 3072
+Time:   0.070341 sec
+energy: 3.78 Joules
+./bin/sgemm 3072
+Time:   0.069747 sec
+energy: 3.84 Joules
+
+./bin/sgemm 4096
+Time:   0.165494 sec
+energy: 10.24 Joules
+./bin/sgemm 4096
+Time:   0.165449 sec
+energy: 10.37 Joules
+./bin/sgemm 4096
+Time:   0.165547 sec
+energy: 10.70 Joules
+
+./bin/sgemm 5120
+Time:   0.316833 sec
+energy: 20.17 Joules
+./bin/sgemm 5120
+Time:   0.316938 sec
+energy: 21.18 Joules
+./bin/sgemm 5120
+Time:   0.316947 sec
+energy: 21.43 Joules
+
+./bin/sgemm 6144
+Time:   0.408742 sec
+energy: 29.94 Joules
+./bin/sgemm 6144
+Time:   0.419048 sec
+energy: 29.43 Joules
+./bin/sgemm 6144
+Time:   0.426170 sec
+energy: 30.38 Joules
+
+./bin/sgemm 7168
+Time:   0.442486 sec
+energy: 37.04 Joules
+./bin/sgemm 7168
+Time:   0.436566 sec
+energy: 37.13 Joules
+./bin/sgemm 7168
+Time:   0.436461 sec
+energy: 36.87 Joules
+
+./bin/sgemm 8192
+Time:   0.259358 sec
+energy: 28.39 Joules
+./bin/sgemm 8192
+Time:   0.266246 sec
+energy: 27.91 Joules
+./bin/sgemm 8192
+Time:   0.280721 sec
+energy: 27.41 Joules
+
+./bin/sgemm 9216
+Time:   0.341270 sec
+energy: 43.40 Joules
+./bin/sgemm 9216
+Time:   0.342583 sec
+energy: 43.42 Joules
+./bin/sgemm 9216
+Time:   0.341033 sec
+energy: 43.54 Joules
+
+./bin/sgemm 10240
+Time:   0.359289 sec
+energy: 53.29 Joules
+./bin/sgemm 10240
+Time:   0.356382 sec
+energy: 50.96 Joules
+./bin/sgemm 10240
+Time:   0.352732 sec
+energy: 53.89 Joules
+
+./bin/sgemm 11264
+Time:   0.409363 sec
+energy: 65.17 Joules
+./bin/sgemm 11264
+Time:   0.420034 sec
+energy: 66.41 Joules
+./bin/sgemm 11264
+Time:   0.406122 sec
+energy: 65.52 Joules
+
+./bin/sgemm 12288
+Time:   0.452206 sec
+energy: 84.55 Joules
+./bin/sgemm 12288
+Time:   0.465976 sec
+energy: 83.82 Joules
+./bin/sgemm 12288
+Time:   0.465700 sec
+energy: 85.95 Joules
+
+./bin/sgemm 13312
+Time:   0.541313 sec
+energy: 107.35 Joules
+./bin/sgemm 13312
+Time:   0.539597 sec
+energy: 106.72 Joules
+./bin/sgemm 13312
+Time:   0.544881 sec
+energy: 107.96 Joules
+
+./bin/sgemm 14336
+Time:   0.637929 sec
+energy: 134.49 Joules
+./bin/sgemm 14336
+Time:   0.638202 sec
+energy: 134.80 Joules
+./bin/sgemm 14336
+Time:   0.628025 sec
+energy: 133.25 Joules
+
+./bin/sgemm 15360
+Time:   0.746781 sec
+energy: 166.03 Joules
+./bin/sgemm 15360
+Time:   0.747003 sec
+energy: 172.82 Joules
+./bin/sgemm 15360
+Time:   0.748251 sec
+energy: 171.78 Joules
+
+./bin/sgemm 16384
+Time:   0.863064 sec
+energy: 204.49 Joules
+./bin/sgemm 16384
+Time:   0.862562 sec
+energy: 204.34 Joules
+./bin/sgemm 16384
+Time:   0.866932 sec
+energy: 202.71 Joules
+

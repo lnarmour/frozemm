@@ -1,0 +1,128 @@
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 1024
+==593103== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x64_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache    24010432    24010432    24010432
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM     8536160     8536160     8536160
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  2153775104  2153775104  2153775104
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 2048
+==593120== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   128229184   128229184   128229184
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    17263072    17263072    17263072
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.7193e+10  1.7193e+10  1.7193e+10
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 3072
+==593139== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache   544232672   544232672   544232672
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    38685280    38685280    38685280
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  5.8011e+10  5.8011e+10  5.8011e+10
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 4096
+==593158== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1322818240  1322818240  1322818240
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM    68021088    68021088    68021088
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.3749e+11  1.3749e+11  1.3749e+11
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 5120
+==593178== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  3091330624  3091330624  3091330624
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   105663328   105663328   105663328
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  2.6852e+11  2.6852e+11  2.6852e+11
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 6144
+==593207== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  7295781568  7295781568  7295781568
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   151846144   151846144   151846144
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  4.6397e+11  4.6397e+11  4.6397e+11
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 7168
+==593235== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1.2991e+10  1.2991e+10  1.2991e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   206724000   206724000   206724000
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  7.3674e+11  7.3674e+11  7.3674e+11
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 8192
+==593256== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: sgemm_128x128x8_NN_vec
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  2.3961e+10  2.3961e+10  2.3961e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   269447456   269447456   269447456
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.0997e+12  1.0997e+12  1.0997e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 9216
+==593321== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  3.1409e+10  3.1409e+10  3.1409e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   340835232   340835232   340835232
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  1.5658e+12  1.5658e+12  1.5658e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 10240
+==593353== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  4.4577e+10  4.4577e+10  4.4577e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   420584864   420584864   420584864
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  2.1478e+12  2.1478e+12  2.1478e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 11264
+==596662== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  5.9144e+10  5.9144e+10  5.9144e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   508989728   508989728   508989728
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  2.8587e+12  2.8587e+12  2.8587e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 12288
+==596714== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  7.7311e+10  7.7311e+10  7.7311e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   605404128   605404128   605404128
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  3.7113e+12  3.7113e+12  3.7113e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 13312
+==596764== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  9.7654e+10  9.7654e+10  9.7654e+10
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   710280128   710280128   710280128
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  4.7186e+12  4.7186e+12  4.7186e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 14336
+==596813== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1.2187e+11  1.2187e+11  1.2187e+11
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   823628448   823628448   823628448
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  5.8933e+12  5.8933e+12  5.8933e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 15360
+==596869== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1.5142e+11  1.5142e+11  1.5142e+11
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM   945237632   945237632   945237632
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  7.2485e+12  7.2485e+12  7.2485e+12
+nvprof --profile-from-start off -m dram_read_bytes,dram_write_bytes,flop_count_sp ./bin/sgemm 16384
+==596935== Metric result:
+Invocations                               Metric Name                            Metric Description         Min         Max         Avg
+Device "GeForce GTX 1080 Ti (0)"
+    Kernel: maxwell_sgemm_128x128_nn
+          1                           dram_read_bytes        Total bytes read from DRAM to L2 cache  1.8188e+11  1.8188e+11  1.8188e+11
+          1                          dram_write_bytes     Total bytes written from L2 cache to DRAM  1075454528  1075454528  1075454528
+          1                             flop_count_sp   Floating Point Operations(Single Precision)  8.7969e+12  8.7969e+12  8.7969e+12
