@@ -4,3 +4,6 @@ MM*
 *.log*
 *.optrpt
 *FMA
+gpu/exp/1/readme.txt
+gpu/exp/*/bin/
+gpu/nvml/bin/
