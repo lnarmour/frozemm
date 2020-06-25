@@ -54,7 +54,7 @@ int main (int argc, char** argv) {
   cublasHandle_t *handle;
   cudaStream_t *stream;
 
-  int num_streams = ceild(N,PI) * ceild(M,PJ);
+  int num_streams = ceild(M,PI) * ceild(N,PJ);
   handle = (cublasHandle_t*)malloc(num_streams * sizeof(cublasHandle_t));
   stream = (cudaStream_t*)malloc(num_streams * sizeof(cudaStream_t));
   for (int s=0; s<num_streams; s++) {
