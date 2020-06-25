@@ -123,11 +123,11 @@ int main (int argc, char** argv) {
   checkCuda( cudaEventRecord(startEvent, 0) );
 
   cudaProfilerStart();
-  for (tk=0; tk<K; tk+=TK) 
-    for (pi=0; pi<M; pi+=PI)
-      for (pj=0; pj<N; pj+=PJ) {
-        s = ((int)(pi/PI)) * ceild(N,PJ) + (int)(pj/PJ);
-        d_c = &(d_C[IDX(pi,pj,M)]);
+  for (pi=0; pi<M; pi+=PI)
+    for (pj=0; pj<N; pj+=PJ) {
+      s = ((int)(pi/PI)) * ceild(N,PJ) + (int)(pj/PJ);
+      d_c = &(d_C[IDX(pi,pj,M)]);
+      for (tk=0; tk<K; tk+=TK) {
         d_a = &(d_A[IDX(pi,tk,M)]);
         d_b = &(d_B[IDX(tk,pj,K)]);
         m = pi+PI<N ? PI : N-pi;
@@ -135,6 +135,7 @@ int main (int argc, char** argv) {
         k = tk+TK<N ? TK : N-tk;
         stat = cublasSgemm(handle[s], CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha, d_a, M, d_b, K, &beta, d_c, M);
       }
+    }
   cudaProfilerStop();
 
   checkCuda( cudaEventRecord(stopEvent, 0) );
