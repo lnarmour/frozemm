@@ -21,13 +21,15 @@
 // Defines
 #define epsilon (float)1e-4
 #define max(x, y)   ((x)>(y) ? (x) : (y))
-#define verbose 0
 #define CUDA_CHECK_RETURN(value){         \
 cudaError_t _m_cudaStat = value;            \
 if (_m_cudaStat != cudaSuccess){           \
 fprintf(stderr, "Error: %s at line %d in file %s \n", cudaGetErrorString(_m_cudaStat), __LINE__, __FILE__);  \
 exit(1); \
 }}
+
+int verbose = std::getenv("VERBOSE")!=NULL ? atoi(std::getenv("VERBOSE")) : 0;
+
 Matrix MakeDeviceMatrix(Matrix M, bool copy){
   // Create a new matrix in device memory.
   Matrix newDeviceMatrix;
@@ -126,9 +128,9 @@ void initMatrix(Matrix M, bool horizontal) {
   for(int i=0; i<M.height; i++) {
     for(int j=0; j<M.width; j++) {
       if (horizontal)
-        M.elements[i*M.width+j] = (float)(i*M.width+j);
+        M.elements[i*M.width+j] = (float)(i+j);
       else
-        M.elements[j*M.height+i] = (float)(i*M.width+j);
+        M.elements[j*M.height+i] = (float)(i+j);
     }
   }
 }

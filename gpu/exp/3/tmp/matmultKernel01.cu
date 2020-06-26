@@ -39,9 +39,9 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int t
               float _b = shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
               Cvalues[c] += _a * _b;
 
-              //if (blockIdx.x==bx && blockIdx.y==by && threadIdx.x==tx && threadIdx.y==ty && c==cv) {
-              //  printf("_a=%.2f _b=%.2f  Cvalues[%d]=%.2f\n", _a, _b, c, Cvalues[c]);
-              //}
+//              if (blockIdx.x==bx && blockIdx.y==by && threadIdx.x==tx && threadIdx.y==ty && c==cv) {
+//                printf("_a=%.2f _b=%.2f  Cvalues[%d]=%.2f\n", _a, _b, c, Cvalues[c]);
+//              }
 
             }
             __syncthreads();
