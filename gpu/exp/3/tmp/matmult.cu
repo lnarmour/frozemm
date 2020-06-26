@@ -21,7 +21,7 @@
 // Defines
 #define epsilon (float)1e-4
 #define max(x, y)   ((x)>(y) ? (x) : (y))
-#define verbose 1
+#define verbose 0
 #define CUDA_CHECK_RETURN(value){         \
 cudaError_t _m_cudaStat = value;            \
 if (_m_cudaStat != cudaSuccess){           \
@@ -53,7 +53,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
 
   // Define grid topology
  dim3 dimBlock(BLOCK_SIZE_X,BLOCK_SIZE_Y);
- dim3 dimGrid(B.width/FOOTPRINT_SIZE_X, A.height/STRIP_SIZE);
+ dim3 dimGrid(B.width/FOOTPRINT_SIZE_X, A.height/FOOTPRINT_SIZE_Y);
 
   // Invoke kernel for warm up
   //MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
