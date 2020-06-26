@@ -1,12 +1,16 @@
 #include "matmultKernel.h"
 #include <stdio.h>
 
-__global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
+__global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int tx, int ty, int cv){
+  const int num_threads = BLOCK_SIZE_X * BLOCK_SIZE_Y;
+  const int num_Cvalues = SCALING_FACTOR_X * SCALING_FACTOR_Y; 
+
   float *Asub, *Bsub, *Csub;
-  int num_threads=BLOCK_SIZE_X*BLOCK_SIZE_Y;
+  float Cvalues[num_Cvalues];
+
   Csub = &C.elements[C.stride * STRIP_SIZE * blockIdx.y + FOOTPRINT_SIZE_X * blockIdx.x];
-  
-  float Cvalues[SCALING_FACTOR] = {[0 ... SCALING_FACTOR-1]=0};
+  for (int c=0; c<num_Cvalues; c++)
+    Cvalues[c] = 0;
   
   // Read each strip of A and B from global DRAM into shared memory
   // perform matrix product of strips and accumate into Cvalues
@@ -30,9 +34,16 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
       for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
         for (int l=0; l<SCALING_FACTOR_X; ++l)
           for (int k=0; k<SCALING_FACTOR_Y; ++k, c++)
-            for (int e=0; e <STRIP_SIZE; ++e)
-              Cvalues[c] += shared_A[e][threadIdx.y*SCALING_FACTOR_Y + i + l] * shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
+            for (int e=0; e <STRIP_SIZE; ++e) {
+              float _a = shared_A[e][threadIdx.y*SCALING_FACTOR_Y + i + l];
+              float _b = shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
+              Cvalues[c] += _a * _b;
 
+              if (blockIdx.x==bx && blockIdx.y==by && threadIdx.x==tx && threadIdx.y==ty && c==cv) {
+                printf("_a=%.2f _b=%.2f  Cvalues[%d]=%.2f\n", _a, _b, c, Cvalues[c]);
+              }
+
+            }
     __syncthreads();
   }
 

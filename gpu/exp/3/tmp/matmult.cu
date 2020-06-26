@@ -20,7 +20,8 @@
 
 // Defines
 #define epsilon (float)1e-4
-#define verbose 0
+#define max(x, y)   ((x)>(y) ? (x) : (y))
+#define verbose 1
 #define CUDA_CHECK_RETURN(value){         \
 cudaError_t _m_cudaStat = value;            \
 if (_m_cudaStat != cudaSuccess){           \
@@ -43,7 +44,7 @@ Matrix MakeDeviceMatrix(Matrix M, bool copy){
 // Host code for matrix multiplication.
 // Matrix dimensions must be multiples of size 
 // This code assumes that the matrix is square.
-void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimension2){
+void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimension2, int bx, int by, int tx, int ty, int cv){
 
   // Create device data structures.
   Matrix device_A = MakeDeviceMatrix(A, true);
@@ -67,7 +68,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
 
 
   // Invoke kernel for real
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
+  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C, bx, by, tx, ty, cv);
  
   // Synchronize to make sure everyone is done.
   cudaThreadSynchronize() ;
@@ -111,7 +112,6 @@ Matrix MakeHostMatrix(int width, int height){
   return newHostMatrix;
 }
 
-// Print a matrix stored in host memory.
 void printMatrix(Matrix M, const char* name) {
   printf("\n%s \n",name);
   for(int y=0; y<M.height; y++){
@@ -122,7 +122,6 @@ void printMatrix(Matrix M, const char* name) {
   }
 }
 
-// Initialize dummy data in a matrix stored in host memory.
 void initMatrix(Matrix M, bool horizontal) {
   for(int y=0; y<M.height; y++) {
     for(int x=0; x<M.width; x++) {
@@ -131,49 +130,38 @@ void initMatrix(Matrix M, bool horizontal) {
   }
 }
 
-// Check the specified matrix to be sure it is correct.
-// That is, make sure it is the result of multiplying the
-// dummy data we created earlier.
-void checkResult(Matrix M) {
+void checkResult(Matrix A, Matrix B, Matrix C) {
 
-  Matrix correct = MakeHostMatrix(M.width, M.height);
+  Matrix O = MakeHostMatrix(B.width, A.height);
 
-  for(int y=0; y<M.height; y++) {
-    for(int x=0; x<M.width; x++) {
-       //correct.elements[y*correct.width+x] = (float)M.width*(float)x*y;
-	for (int k=0; k<M.width; k++){
-		correct.elements[y*correct.width+x] += (float)(x*k);
-	}
+  for (int i=0; i<A.height; i++)
+    for (int j=0; j<B.width; j++) {
+      O.elements[i*O.width+j] = 0.0;
+      for (int k=0; k<A.width; k++)
+        O.elements[i*O.width+j] += A.elements[k*A.width+i] * B.elements[k*B.width+j];
     }
-  }
 
   if(verbose){
-   // print correct
-   printMatrix(correct, "correct");
-
-   // print host_C
-   printMatrix(M, "result");
+   printMatrix(C, "host_C");
+   printMatrix(O, "oracle");
   }
-
 
   double maxerror = 0.0;
   int errCnt = 0;
-  for(int y=0; y<correct.height; y++) {
-    for(int x=0; x<correct.width; x++) {
-      float it = correct.elements[y*correct.width+x];
-      if(fabs(it - M.elements[y*M.width+x])> epsilon*it) {
+  for (int i=0; i<O.height; i++)
+    for (int j=0; j<O.width; j++) {
+      float diff = O.elements[i*O.width+j] - C.elements[i*C.width+j];
+      if (fabs(diff) > epsilon) {
         errCnt++;
-        double error = fabs(it - M.elements[y*M.width+x])/it;
-        if (error > maxerror) maxerror = error;
-      }      
-    }
-  }
+        maxerror = max(maxerror, diff);
+      }
+    }  
 
   if(errCnt>0){
     printf("\n\nTEST FAILED: number of errors:  %d, max rel error: %f\n", errCnt, maxerror);
   }
   
-  free(correct.elements);
+  free(O.elements);
 }
 
 //
@@ -190,14 +178,24 @@ int main(int argc, char** argv) {
   //int mode;
   //int FOOTPRINT_SIZE;
 
+  int bx = 0;
+  int by = 0;
+  int tx = 0;
+  int ty = 0;
+  int cv = 0;
+
   // Read command line argument
-  if(argc == 2){
+  if(1 < argc){
     sscanf(argv[1], "%d", &num_blocks);
-    //sscanf(argv[2], "%d", &mode);
-    //sscanf(argv[3], "%d", &FOOTPRINT_SIZE);
     data_size1 = num_blocks * FOOTPRINT_SIZE_X;
     data_size2 = num_blocks * FOOTPRINT_SIZE_Y;
-    //printf("Mode: %d", mode);
+    if (6 < argc) {
+      bx = atoi(argv[2]); 
+      by = atoi(argv[3]); 
+      tx = atoi(argv[4]); 
+      ty = atoi(argv[5]); 
+      cv = atoi(argv[6]); 
+    }
   } else {
      printf("Usage: %s NumBlocks\n", argv[0]);
      exit(0);
@@ -213,7 +211,7 @@ int main(int argc, char** argv) {
   initMatrix(host_B,true);
 
   // debugging
-  if(1){
+  if(verbose){
     printMatrix(host_A, "host_A");
     printMatrix(host_B, "host_B");
   }
@@ -222,10 +220,10 @@ int main(int argc, char** argv) {
   // MatMul is a host function that calls
   // the device kernel MatMulKernel and
   // times its performance.
-  MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y);
+  MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y, bx, by, tx, ty, cv);
 
   // Verify that the result is correct.
-  checkResult(host_C);
+  checkResult(host_A, host_B, host_C);
   
   // Free allocated memory.
   free(host_A.elements);
