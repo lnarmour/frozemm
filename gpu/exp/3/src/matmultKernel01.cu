@@ -1,9 +1,17 @@
 #include "matmultKernel.h"
 #include <stdio.h>
 
+// BLOCK_SIZE_X 16
+// BLOCK_SIZE_Y 16
+// FOOTPRINT_SIZE_X 32
+// FOOTPRINT_SIZE_Y 32
+// SCALING_FACTOR_X 2
+// SCALING_FACTOR_Y 2
+// STRIP_SIZE 4
+
 __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C) {
   const int num_threads = blockDim.x * blockDim.y;
-  const int num_Cvalues = SCALING_FACTOR_X * SCALING_FACTOR_Y; 
+  const int num_Cvalues = SCALING_FACTOR_X * SCALING_FACTOR_Y; // 4
 
   float *Asub, *Bsub, *Csub;
   float Cvalues[num_Cvalues];

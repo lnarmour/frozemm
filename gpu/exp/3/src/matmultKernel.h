@@ -7,10 +7,12 @@
 #define FOOTPRINT_SIZE_X 32
 #define FOOTPRINT_SIZE_Y 32
 
+// SCALING_FACTOR_* must be FOOTPRINT_SIZE_* / BLOCK_SIZE_*
 #define SCALING_FACTOR_X 2
 #define SCALING_FACTOR_Y 2
 
-#define STRIP_SIZE 16
+// STRIP_SIZE must divide FOOTPRINT_SIZE_X and FOOTPRINT_SIZE_Y
+#define STRIP_SIZE 4
 
 typedef struct {
   int width;
