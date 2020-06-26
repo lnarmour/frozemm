@@ -33,7 +33,7 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int t
     for (int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
       for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
         for (int l=0; l<SCALING_FACTOR_X; ++l)
-          for (int k=0; k<SCALING_FACTOR_Y; ++k, c++)
+          for (int k=0; k<SCALING_FACTOR_Y; ++k, c++) {
             for (int e=0; e <STRIP_SIZE; ++e) {
               float _a = shared_A[e][threadIdx.y*SCALING_FACTOR_Y + i + l];
               float _b = shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
@@ -44,7 +44,8 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int t
               }
 
             }
-    __syncthreads();
+            __syncthreads();
+          }
   }
 
 

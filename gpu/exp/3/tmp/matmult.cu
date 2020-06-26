@@ -116,16 +116,19 @@ void printMatrix(Matrix M, const char* name) {
   printf("\n%s \n",name);
   for(int y=0; y<M.height; y++){
    for(int x=0; x<M.width; x++) {
-      printf("%5.2f ", M.elements[y * M.width + x]);
+      printf("%8.2f ", M.elements[y * M.width + x]);
    }
    printf("\n");
   }
 }
 
 void initMatrix(Matrix M, bool horizontal) {
-  for(int y=0; y<M.height; y++) {
-    for(int x=0; x<M.width; x++) {
-      M.elements[y*M.width+x] = (float)(horizontal?x:y);
+  for(int i=0; i<M.height; i++) {
+    for(int j=0; j<M.width; j++) {
+      if (horizontal)
+        M.elements[i*M.width+j] = (float)(i*M.width+j);
+      else
+        M.elements[j*M.height+i] = (float)(i*M.width+j);
     }
   }
 }
