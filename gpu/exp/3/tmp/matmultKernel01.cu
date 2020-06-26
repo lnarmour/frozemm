@@ -18,10 +18,13 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
     __shared__ float shared_B[STRIP_SIZE][FOOTPRINT_SIZE_X];
    
     // transpose the TT strip of Asub into SS strip in shared_A
-    for (int i=0; i<STRIP_SIZE; i=i+BLOCK_SIZE_Y)
-      for (int j=0; j<FOOTPRINT_SIZE_X; j+=BLOCK_SIZE_X){
-        shared_A[threadIdx.y + i][threadIdx.x + j]=Asub[(threadIdx.y + i)*A.stride + (threadIdx.x + j)];
-        shared_B[threadIdx.y + i][threadIdx.x + j]=Bsub[(threadIdx.y + i)*B.stride + (threadIdx.x + j)];
+    for (int i=threadIdx.y; i<STRIP_SIZE; i+=BLOCK_SIZE_Y)
+      for (int j=threadIdx.x; j<FOOTPRINT_SIZE_X; j+=BLOCK_SIZE_X){
+        shared_A[i][j] = Asub[i*A.stride + j];
+        shared_B[i][j] = Bsub[i*B.stride + j];
+        if (blockIdx.x == 0 && blockIdx.y == 0 && threadIdx.x == 0 && threadIdx.y == 0 && m == 0) {
+          printf("m=%d   shared_A[%d][%d] = %f\n", m, i, j, shared_A[i][j]);
+        }
     }
     __syncthreads();
     

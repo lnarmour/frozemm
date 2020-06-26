@@ -55,7 +55,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
  dim3 dimGrid(B.width/FOOTPRINT_SIZE_X, A.height/STRIP_SIZE);
 
   // Invoke kernel for warm up
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
+  //MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
 
   // Synchronize to make sure everyone is done in the warmup.
   cudaThreadSynchronize();
