@@ -46,7 +46,7 @@ Matrix MakeDeviceMatrix(Matrix M, bool copy){
 // Host code for matrix multiplication.
 // Matrix dimensions must be multiples of size 
 // This code assumes that the matrix is square.
-void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimension2, int bx, int by, int tx, int ty, int cv){
+void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimension2) {
 
   // Create device data structures.
   Matrix device_A = MakeDeviceMatrix(A, true);
@@ -58,7 +58,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
  dim3 dimGrid(B.width/FOOTPRINT_SIZE_Y, A.height/FOOTPRINT_SIZE_X);
 
   // Invoke kernel for warm up
-  //MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
+  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
 
   // Synchronize to make sure everyone is done in the warmup.
   cudaThreadSynchronize();
@@ -70,7 +70,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
 
 
   // Invoke kernel for real
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C, bx, by, tx, ty, cv);
+  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
  
   // Synchronize to make sure everyone is done.
   cudaThreadSynchronize() ;
@@ -183,27 +183,12 @@ int main(int argc, char** argv) {
   // Matrices will be of size data_size * data_size
   int data_size1;
   int data_size2;
-  //int mode;
-  //int FOOTPRINT_SIZE;
-
-  int bx = 0;
-  int by = 0;
-  int tx = 0;
-  int ty = 0;
-  int cv = 0;
 
   // Read command line argument
   if(1 < argc){
     sscanf(argv[1], "%d", &num_blocks);
     data_size1 = num_blocks * FOOTPRINT_SIZE_X;
     data_size2 = num_blocks * FOOTPRINT_SIZE_Y;
-    if (6 < argc) {
-      bx = atoi(argv[2]); 
-      by = atoi(argv[3]); 
-      tx = atoi(argv[4]); 
-      ty = atoi(argv[5]); 
-      cv = atoi(argv[6]); 
-    }
   } else {
      printf("Usage: %s NumBlocks\n", argv[0]);
      exit(0);
@@ -228,7 +213,7 @@ int main(int argc, char** argv) {
   // MatMul is a host function that calls
   // the device kernel MatMulKernel and
   // times its performance.
-  MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y, bx, by, tx, ty, cv);
+  MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y);
 
   // Verify that the result is correct.
 #ifdef CHECK

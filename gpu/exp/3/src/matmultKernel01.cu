@@ -1,8 +1,8 @@
 #include "matmultKernel.h"
 #include <stdio.h>
 
-__global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int tx, int ty, int cv){
-  const int num_threads = BLOCK_SIZE_X * BLOCK_SIZE_Y;
+__global__ void MatMulKernel(Matrix A, Matrix B, Matrix C) {
+  const int num_threads = blockDim.x * blockDim.y;
   const int num_Cvalues = SCALING_FACTOR_X * SCALING_FACTOR_Y; 
 
   float *Asub, *Bsub, *Csub;
@@ -38,16 +38,10 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C, int bx, int by, int t
               float _a = shared_A[e][threadIdx.y*SCALING_FACTOR_Y + i + l];
               float _b = shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
               Cvalues[c] += _a * _b;
-
-//              if (blockIdx.x==bx && blockIdx.y==by && threadIdx.x==tx && threadIdx.y==ty && c==cv) {
-//                printf("_a=%.2f _b=%.2f  Cvalues[%d]=%.2f\n", _a, _b, c, Cvalues[c]);
-//              }
-
             }
-            __syncthreads();
           }
+    __syncthreads();
   }
-
 
   // Write Cvalues back to global DRAM
   int d=0;

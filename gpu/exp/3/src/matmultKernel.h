@@ -10,7 +10,7 @@
 #define SCALING_FACTOR_X 2
 #define SCALING_FACTOR_Y 2
 
-#define STRIP_SIZE 8
+#define STRIP_SIZE 64
 
 typedef struct {
   int width;
@@ -19,7 +19,7 @@ typedef struct {
   float* elements;
 } Matrix;
 
-__global__ void MatMulKernel(const Matrix, const Matrix, Matrix, int, int, int, int, int);
+__global__ void MatMulKernel(const Matrix, const Matrix, Matrix);
 
 #endif
 

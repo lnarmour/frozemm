@@ -19,7 +19,7 @@ MM : matmult.cu  matmultKernel.h kernel.o timer.o
 
 
 MM.check : matmult.cu  matmultKernel.h kernel.o timer.o
-	nvcc $< kernel.o -o $@ $(LIB) timer.o $(OPTIONS) -DCHECK=1
+	nvcc $< kernel.o -o $@ $(LIB) timer.o $(OPTIONS) -DCHECK=1 -Xcompiler -fopenmp
 
 clean.o:
 	rm -rf *.o
