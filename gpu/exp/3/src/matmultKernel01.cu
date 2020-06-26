@@ -48,6 +48,8 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C) {
   for(int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
     for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
       for (int l=0; l<SCALING_FACTOR_X;++l)
-        for (int k=0; k<SCALING_FACTOR_Y;++k)
-          Csub[(threadIdx.y*SCALING_FACTOR_Y + i + l)*C.stride+(threadIdx.x*SCALING_FACTOR_X+j)+k]=Cvalues[d++];
+        for (int k=0; k<SCALING_FACTOR_Y;++k) {
+          int idx = (threadIdx.y*SCALING_FACTOR_Y+i+l)*C.stride + (threadIdx.x*SCALING_FACTOR_X+j) + k;
+          Csub[idx] = Cvalues[d++];
+        }
 }

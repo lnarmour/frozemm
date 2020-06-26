@@ -72,21 +72,21 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
   Matrix device_C = MakeDeviceMatrix(C, false);
 
   // Define grid topology
- dim3 dimBlock(BLOCK_SIZE_X,BLOCK_SIZE_Y);
- dim3 dimGrid(B.width/FOOTPRINT_SIZE_Y, A.height/FOOTPRINT_SIZE_X);
-
-  // Invoke kernel for warm up
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
-
-  // Synchronize to make sure everyone is done in the warmup.
-  cudaThreadSynchronize();
-  CUDA_CHECK_RETURN(cudaGetLastError());
+  dim3 dimBlock(BLOCK_SIZE_X,BLOCK_SIZE_Y);
+  dim3 dimGrid(B.width/FOOTPRINT_SIZE_Y, A.height/FOOTPRINT_SIZE_X);
 
   printf( "Data dimensions: %dx%d \n", C.height, C.width);
   printf( "Grid Dimensions: %dx%d \n",dimGrid.x,dimGrid.y);
   printf( "Block Dimensions: %dx%d \n",dimBlock.x,dimBlock.y);
   printf( "Footprint Dimensions: %dx%d \n",FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y);
   
+  // Invoke kernel for warm up
+  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
+
+  // Synchronize to make sure everyone is done in the warmup.
+  cudaDeviceSynchronize();
+  CUDA_CHECK_RETURN(cudaGetLastError());
+
   // events for timing
   cudaEvent_t startEvent, stopEvent;
   checkCuda( cudaEventCreate(&startEvent) );
@@ -117,10 +117,10 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
   double nFlops = (double)A.width*A.height*B.width*2;
   double nFlopsPerSec = nFlops/time;
   double nGFlopsPerSec = nFlopsPerSec*1e-9;
-  printf("GFLOPS:    %0.0lf\n", nFlops*1e-9);
+  printf("GFLOPS:    %.5lf\n", nFlops*1e-9);
   printf("time:      %lf (sec)\n", time);
-  printf("GFLOPS/s:  %.5f\n", nGFlopsPerSec);
-  printf("energy:    %.5f (joules)\n", energy);
+  printf("perf:      %.5f (GFLOPS/sec)\n", nGFlopsPerSec);
+  printf("energy:    %.5f (Joules)\n", energy);
 
   // Copy the result to the host memory from device memory
   size_t size = C.width * C.height * sizeof(float);
@@ -189,6 +189,9 @@ bool result_is_good(Matrix A, Matrix B, Matrix C) {
     for (int j=0; j<O.width; j++) {
       float diff = O.elements[i*O.width+j] - C.elements[i*C.width+j];
       if (fabs(diff) > epsilon) {
+        if (errCnt == 0) {
+          printf("C[%d][%d]=%.3f,  Oracle[%d][%d]=%.3f\n", i, j, C.elements[i*C.width+j], i, j, O.elements[i*O.width+j]);
+        }
         errCnt++;
         maxerror = max(maxerror, diff);
       }

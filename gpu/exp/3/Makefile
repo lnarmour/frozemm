@@ -1,15 +1,15 @@
-CUDA_VERSION=cuda9_1
+CUDA_VERSION=cuda
 ICUDA := -I /usr/local/$(CUDA_VERSION)/include
 INVML := -I /usr/local/$(CUDA_VERSION)/nvml/include -lnvidia-ml -L /lib64 -L /usr/local/$(CUDA_VERSION)/nvml/lib/
 PWR := power/nvmlPower.cpp
 IPWR := -I power
 ARCH := sm_61
 
-OPTIONS := -O3 --ptxas-options -v --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin  -std=c++11
+OPTIONS := -O3 --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin
 EXECS := MM MM.check
 all: $(EXECS)
 
-debug: OPTIONS := -g -G --ptxas-options -v --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin  -std=c++11
+debug: OPTIONS := -g -G --ptxas-options -v --gpu-architecture=sm_61 --compiler-bindir /usr/local/gcc-6.4.0/bin
 debug: all
 
 timer.o: src/timer.cu src/timer.h
