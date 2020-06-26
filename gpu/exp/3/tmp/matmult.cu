@@ -116,7 +116,7 @@ void printMatrix(Matrix M, const char* name) {
   printf("\n%s \n",name);
   for(int y=0; y<M.height; y++){
    for(int x=0; x<M.width; x++) {
-      printf("%f ", M.elements[y * M.width + x]);
+      printf("%5.2f ", M.elements[y * M.width + x]);
    }
    printf("\n");
   }
@@ -211,9 +211,9 @@ int main(int argc, char** argv) {
   // Initialize values in host A and B
   initMatrix(host_A,false);
   initMatrix(host_B,true);
- 
+
   // debugging
-  if(verbose){
+  if(1){
     printMatrix(host_A, "host_A");
     printMatrix(host_B, "host_B");
   }

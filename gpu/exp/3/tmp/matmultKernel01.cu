@@ -22,9 +22,6 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
       for (int j=threadIdx.x; j<FOOTPRINT_SIZE_X; j+=BLOCK_SIZE_X){
         shared_A[i][j] = Asub[i*A.stride + j];
         shared_B[i][j] = Bsub[i*B.stride + j];
-        if (blockIdx.x == 0 && blockIdx.y == 0 && threadIdx.x == 0 && threadIdx.y == 0 && m == 0) {
-          printf("m=%d   shared_A[%d][%d] = %f\n", m, i, j, shared_A[i][j]);
-        }
     }
     __syncthreads();
     
