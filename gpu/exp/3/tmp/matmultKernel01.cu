@@ -14,12 +14,13 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
     Asub = &A.elements[A.stride * STRIP_SIZE * m + FOOTPRINT_SIZE_Y * blockIdx.y];
     Bsub = &B.elements[B.stride * STRIP_SIZE * m + FOOTPRINT_SIZE_X * blockIdx.x];
     
-    __shared__ float shared_A[FOOTPRINT_SIZE_Y][STRIP_SIZE];
+    __shared__ float shared_A[STRIP_SIZE][FOOTPRINT_SIZE_Y];
     __shared__ float shared_B[STRIP_SIZE][FOOTPRINT_SIZE_X];
-    
+   
+    // transpose the TT strip of Asub into SS strip in shared_A
     for (int i=0; i<STRIP_SIZE; i=i+BLOCK_SIZE_Y)
-      for (int j=0; j<FOOTPRINT_SIZE_X; j = j + BLOCK_SIZE_X){
-        shared_A[threadIdx.x + j][threadIdx.y + i]=Asub[(threadIdx.y + i)*A.stride + (threadIdx.x + j)];
+      for (int j=0; j<FOOTPRINT_SIZE_X; j+=BLOCK_SIZE_X){
+        shared_A[threadIdx.y + i][threadIdx.x + j]=Asub[(threadIdx.y + i)*A.stride + (threadIdx.x + j)];
         shared_B[threadIdx.y + i][threadIdx.x + j]=Bsub[(threadIdx.y + i)*B.stride + (threadIdx.x + j)];
     }
     __syncthreads();
@@ -30,7 +31,7 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
         for (int l=0; l<SCALING_FACTOR_X; ++l)
           for (int k=0; k<SCALING_FACTOR_Y; ++k, c++)
             for (int e=0; e <STRIP_SIZE; ++e)
-              Cvalues[c] += shared_A[threadIdx.y*SCALING_FACTOR_Y + i + l][e] * shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
+              Cvalues[c] += shared_A[e][threadIdx.y*SCALING_FACTOR_Y + i + l] * shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
 
     __syncthreads();
   }
