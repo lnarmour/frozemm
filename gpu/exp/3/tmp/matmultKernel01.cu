@@ -8,8 +8,9 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
   
   float Cvalues[SCALING_FACTOR] = {[0 ... SCALING_FACTOR-1]=0};
   
-  for (int m = 0;  m < (A.width / STRIP_SIZE); ++m){
-  
+  // Read each strip of A and B from global DRAM into shared memory
+  // perform matrix product of strips and accumate into Cvalues
+  for (int m = 0;  m < (A.width / STRIP_SIZE); ++m){ 
     Asub = &A.elements[A.stride * STRIP_SIZE * m + FOOTPRINT_SIZE_Y * blockIdx.y];
     Bsub = &B.elements[B.stride * STRIP_SIZE * m + FOOTPRINT_SIZE_X * blockIdx.x];
     
@@ -24,51 +25,22 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C){
     __syncthreads();
     
     int c=0;
-    if (MODE == 0)
-      #pragma unroll
-      for (int i=0; i<STRIP_SIZE; i=i+(BLOCK_SIZE_Y*num_threads))
-        for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(BLOCK_SIZE_X*num_threads))
-          for (int l=0; l<BLOCK_SIZE_Y; ++l)
-            for (int k=0; k<BLOCK_SIZE_X; ++k, c++)
-              for (int e=0; e<STRIP_SIZE; ++e)
-                Cvalues[c] += shared_A[(threadIdx.y * BLOCK_SIZE_Y)+i+l][e] * shared_B[e][(threadIdx.x * BLOCK_SIZE_X)+j+k];
-
-    if (MODE == 1)
-      #pragma unroll
-        for (int i=0; i<STRIP_SIZE; i=i+(BLOCK_SIZE_X))
-          for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(BLOCK_SIZE_X), c++)
-            for (int e=0; e<STRIP_SIZE; ++e)
-              Cvalues[c] += shared_A[threadIdx.y + i][e] * shared_B[e][threadIdx.x + j];
-
-    if (MODE == 2)
-      #pragma unroll
-      for (int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
-        for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
-          for (int l=0; l<SCALING_FACTOR_X; ++l)
-            for (int k=0; k<SCALING_FACTOR_Y; ++k, c++)
-              for (int e=0; e <STRIP_SIZE; ++e)
-                Cvalues[c] += shared_A[threadIdx.y*SCALING_FACTOR_Y + i + l][e] * shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
+    for (int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
+      for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
+        for (int l=0; l<SCALING_FACTOR_X; ++l)
+          for (int k=0; k<SCALING_FACTOR_Y; ++k, c++)
+            for (int e=0; e <STRIP_SIZE; ++e)
+              Cvalues[c] += shared_A[threadIdx.y*SCALING_FACTOR_Y + i + l][e] * shared_B[e][threadIdx.x*SCALING_FACTOR_X + j + k];
 
     __syncthreads();
   }
 
+
+  // Write Cvalues back to global DRAM
   int d=0;
-  if (MODE == 0)
-    for (int i=0; i<STRIP_SIZE; i=i+(BLOCK_SIZE_Y*num_threads))
-      for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(BLOCK_SIZE_X*num_threads))
-        for (int l=0; l<BLOCK_SIZE_Y; ++l)
-          for (int k=0; k<BLOCK_SIZE_X; ++k)
-            Csub[((threadIdx.y*BLOCK_SIZE_Y)+i+l)*C.stride + (threadIdx.x*BLOCK_SIZE_X)+j+k] = Cvalues[d++];
-
-  if (MODE == 1) 
-    for (int i=0; i<STRIP_SIZE; i=i+(BLOCK_SIZE_X))
-      for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(BLOCK_SIZE_X))
-        Csub[(threadIdx.y + i) * C.stride + (threadIdx.x+j)] = Cvalues[d++];
-
-  if (MODE == 2)
-    for(int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
-      for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
-        for (int l=0; l<SCALING_FACTOR_X;++l)
-          for (int k=0; k<SCALING_FACTOR_Y;++k)
-            Csub[(threadIdx.y*SCALING_FACTOR_Y + i + l)*C.stride+(threadIdx.x*SCALING_FACTOR_X+j)+k]=Cvalues[d++];
+  for(int i=0; i<STRIP_SIZE; i=i+(SCALING_FACTOR_Y*num_threads))
+    for (int j=0; j<FOOTPRINT_SIZE_X; j=j+(SCALING_FACTOR_X*num_threads))
+      for (int l=0; l<SCALING_FACTOR_X;++l)
+        for (int k=0; k<SCALING_FACTOR_Y;++k)
+          Csub[(threadIdx.y*SCALING_FACTOR_Y + i + l)*C.stride+(threadIdx.x*SCALING_FACTOR_X+j)+k]=Cvalues[d++];
 }
