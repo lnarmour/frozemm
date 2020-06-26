@@ -55,7 +55,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
 
   // Define grid topology
  dim3 dimBlock(BLOCK_SIZE_X,BLOCK_SIZE_Y);
- dim3 dimGrid(B.width/FOOTPRINT_SIZE_X, A.height/FOOTPRINT_SIZE_Y);
+ dim3 dimGrid(B.width/FOOTPRINT_SIZE_Y, A.height/FOOTPRINT_SIZE_X);
 
   // Invoke kernel for warm up
   //MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
@@ -135,16 +135,18 @@ void initMatrix(Matrix M, bool horizontal) {
   }
 }
 
-void checkResult(Matrix A, Matrix B, Matrix C) {
+bool result_is_good(Matrix A, Matrix B, Matrix C) {
 
   Matrix O = MakeHostMatrix(B.width, A.height);
 
   for (int i=0; i<A.height; i++)
-    for (int j=0; j<B.width; j++) {
+    for (int j=0; j<B.width; j++) 
       O.elements[i*O.width+j] = 0.0;
-      for (int k=0; k<A.width; k++)
+  #pragma omp parallel for
+  for (int i=0; i<A.height; i++)
+    for (int k=0; k<A.width; k++)
+      for (int j=0; j<B.width; j++) 
         O.elements[i*O.width+j] += A.elements[k*A.width+i] * B.elements[k*B.width+j];
-    }
 
   if(verbose){
    printMatrix(C, "host_C");
@@ -167,6 +169,7 @@ void checkResult(Matrix A, Matrix B, Matrix C) {
   }
   
   free(O.elements);
+  return (errCnt==0);
 }
 
 //
@@ -228,7 +231,10 @@ int main(int argc, char** argv) {
   MatMul(host_A,host_B,host_C,FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y, bx, by, tx, ty, cv);
 
   // Verify that the result is correct.
-  checkResult(host_A, host_B, host_C);
+#ifdef CHECK
+  if (result_is_good(host_A, host_B, host_C))
+    printf("[PASSED]\n");
+#endif
   
   // Free allocated memory.
   free(host_A.elements);
