@@ -17,6 +17,9 @@
 #include <stdio.h>
 #include "timer.h"
 #include "matmultKernel.h"
+#include "nvmlPower.hpp"
+#include "cuda_profiler_api.h"
+
 
 // Defines
 #define epsilon (float)1e-4
@@ -27,6 +30,21 @@ if (_m_cudaStat != cudaSuccess){           \
 fprintf(stderr, "Error: %s at line %d in file %s \n", cudaGetErrorString(_m_cudaStat), __LINE__, __FILE__);  \
 exit(1); \
 }}
+
+// Convenience function for checking CUDA runtime API results
+// can be wrapped around any runtime API call. No-op in release builds.
+inline
+cudaError_t checkCuda(cudaError_t result)
+{
+#if defined(DEBUG) || defined(_DEBUG)
+  if (result != cudaSuccess) {
+    fprintf(stderr, "CUDA Runtime Error: %s\n", cudaGetErrorString(result));
+    assert(result == cudaSuccess);
+  }
+#endif
+  return result;
+}
+
 
 int verbose = std::getenv("VERBOSE")!=NULL ? atoi(std::getenv("VERBOSE")) : 0;
 
@@ -64,33 +82,45 @@ void MatMul(const Matrix A, const Matrix B, Matrix C, int dimension1, int dimens
   cudaThreadSynchronize();
   CUDA_CHECK_RETURN(cudaGetLastError());
 
-  // Set up timer
-  initialize_timer();
-  start_timer();
-
-
-  // Invoke kernel for real
-  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);
- 
-  // Synchronize to make sure everyone is done.
-  cudaThreadSynchronize() ;
-  CUDA_CHECK_RETURN(cudaGetLastError());
-
-  // Compute and report the timing results
-
-  stop_timer();
-  double time = elapsed_time();
-
-  double nFlops = (double)A.width*A.height*B.width*2;
-  double nFlopsPerSec = nFlops/time;
-  double nGFlopsPerSec = nFlopsPerSec*1e-9;
   printf( "Data dimensions: %dx%d \n", C.height, C.width);
   printf( "Grid Dimensions: %dx%d \n",dimGrid.x,dimGrid.y);
   printf( "Block Dimensions: %dx%d \n",dimBlock.x,dimBlock.y);
   printf( "Footprint Dimensions: %dx%d \n",FOOTPRINT_SIZE_X,FOOTPRINT_SIZE_Y);
   
-  printf( "Time: %lf (sec), nFlops: %0.0lf, GFlopsS: %lf\n",
-            time, nFlops, nGFlopsPerSec);
+  // events for timing
+  cudaEvent_t startEvent, stopEvent;
+  checkCuda( cudaEventCreate(&startEvent) );
+  checkCuda( cudaEventCreate(&stopEvent) );
+  float ms;
+
+  // Invoke kernel for real
+  nvmlAPIRun();
+  checkCuda( cudaEventRecord(startEvent, 0) );
+
+  cudaProfilerStart();
+  MatMulKernel<<<dimGrid, dimBlock>>>(device_A, device_B, device_C);  // <-- run kernel
+  cudaProfilerStop();
+
+  checkCuda( cudaEventRecord(stopEvent, 0) );
+  cudaDeviceSynchronize();
+  nvmlAPIEnd();
+  float energy;
+  energy = nvmlAPI_getEnergy();
+  checkCuda( cudaEventSynchronize(stopEvent) );
+  checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
+
+  // Compute and report the timing results
+
+
+  double time = ms/1000;
+
+  double nFlops = (double)A.width*A.height*B.width*2;
+  double nFlopsPerSec = nFlops/time;
+  double nGFlopsPerSec = nFlopsPerSec*1e-9;
+  printf("GFLOPS:    %0.0lf\n", nFlops*1e-9);
+  printf("time:      %lf (sec)\n", time);
+  printf("GFLOPS/s:  %.5f\n", nGFlopsPerSec);
+  printf("energy:    %.5f (joules)\n", energy);
 
   // Copy the result to the host memory from device memory
   size_t size = C.width * C.height * sizeof(float);
