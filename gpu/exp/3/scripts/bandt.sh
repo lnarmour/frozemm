@@ -10,12 +10,24 @@ else
   exit 1;
 fi;
 
-Ns=(1 5 11 15 50);
+FX="$(cat src/matmultKernel.h | grep '^#define FOOT.*X' | cut -d ' ' -f 3)"
+FY="$(cat src/matmultKernel.h | grep '^#define FOOT.*Y' | cut -d ' ' -f 3)"
 
-for N in ${Ns[@]}; 
+if [ -n "$SMALL" ]; then
+  Is=({1..1} {2..10..2} {20..100..10});
+elif [ -n "$MEDIUM" ]; then
+  Is=({125..250..25});
+else
+  Is=({1..1} {250..1000..250});
+fi;
+
+for i in ${Is[@]}; 
 do
-  printf "./bin/MM.check $N ";
-  err="$(./bin/MM.check $N | grep FAILED)";
+  if [[ $((i*FX)) -gt 10000 ]]; then
+    break;
+  fi;
+  printf "./bin/MM.check $i ";
+  err="$(./bin/MM.check $i | grep FAILED)";
   if [ -n "$err" ]; then
     echo "[FAILED]";
   else
