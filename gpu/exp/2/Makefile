@@ -15,13 +15,14 @@ debug: $(EXECS)
 check.o: src/check.cu
 	nvcc $+ -c -o bin/$@ $(OPTIONS) -Xcompiler -fopenmp
 
-sgemm-ttss: src/matmult-ttss.cu
-	nvcc src/matmult-ttss.cu $(PWR) -o bin/$@ $(OPTIONS) -lcublas -lgomp $(ICUDA) $(INVML) $(IPWR) -DRUNS=$(RUNS)
-
-
 sgemm-ttss.check: src/matmult-ttss.cu check.o
-	nvcc src/matmult-ttss.cu $(PWR) bin/check.o -o bin/$@ $(OPTIONS) -lcublas -lgomp -DCHECK $(ICUDA) $(INVML) $(IPWR) -DRUNS=$(RUNS)
+	mkdir -p bin/$(HOSTNAME)
+	nvcc src/matmult-ttss.cu $(PWR) bin/check.o -o bin/$(HOSTNAME)/$@ $(OPTIONS) -lcublas -lgomp -DCHECK $(ICUDA) $(INVML) $(IPWR) -DRUNS=$(RUNS)
 
+
+sgemm-ttss: src/matmult-ttss.cu
+	mkdir -p bin/$(HOSTNAME)
+	nvcc src/matmult-ttss.cu $(PWR) -o bin/$(HOSTNAME)/$@.cuda.$(CV_NUM) $(OPTIONS) -lcublas -lgomp $(ICUDA) $(INVML) $(IPWR) -DRUNS=$(RUNS)
 
 clean:
-	rm -rf bin/*
+	rm -rf bin/$(HOSTNAME)
