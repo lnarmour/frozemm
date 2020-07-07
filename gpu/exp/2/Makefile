@@ -1,10 +1,9 @@
-CUDA_VERSION=cuda9_1
 ICUDA := -I /usr/local/$(CUDA_VERSION)/include 
 INVML := -I /usr/local/$(CUDA_VERSION)/nvml/include -lnvidia-ml -L /lib64 -L /usr/local/$(CUDA_VERSION)/nvml/lib/
 PWR := power/nvmlPower.cpp
 IPWR := -I power
 ARCH := sm_61
-OPTIONS :=  -O3 --ptxas-options -v --gpu-architecture=$(ARCH) --compiler-bindir /usr/local/gcc-6.4.0/bin 
+OPTIONS :=  -O3 --ptxas-options -v --gpu-architecture=$(ARCH) --compiler-bindir /usr/local/gcc-6.4.0/bin
 RUNS := 1
 
 EXECS := sgemm-ttss
