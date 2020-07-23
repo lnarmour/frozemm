@@ -2,8 +2,8 @@
 
 # given a C stencil, and AN5D configuration parameters (bs1, bt, sl)
 # generate the cuda source files
-if [[ -z "$(which an5d)" ]]; then
-  echo "error: an5d tool not installed";
+if [[ -z "$(which an5d 2>/dev/null)" ]]; then
+  echo "evironment error: an5d tool not installed";
   exit 1;
 fi
 
