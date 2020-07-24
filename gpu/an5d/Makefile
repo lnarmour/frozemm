@@ -3,13 +3,19 @@ INVML := -I /usr/local/cuda/nvml/include -lnvidia-ml -L /lib64 -L /usr/local/cud
 PWR := power/nvmlPower.cpp
 IPWR := -I power
 
-OPTIONS := -I ./src/ --use_fast_math -gencode=arch=compute_60,code=sm_60 -gencode=arch=compute_70,code=sm_70 -Xptxas -v -Xcompiler -fopenmp -O3
-bT := 1
+SM_TYPES := -gencode=arch=compute_61,code=sm_61
 
-all: star2d3r-512-$(bT)-512
+SB_TYPE := float
 
-star2d3r-512-$(bT)-512: src/star2d3r-512-$(bT)-512_kernel.cu src/star2d3r-512-$(bT)-512_host.cu
-	nvcc $(OPTIONS) $^ $(PWR) -o bin/$@ $(ICUDA) $(INVML) $(IPWR)
+OPTIONS := -DSB_TYPE=$(SB_TYPE) -I ./src/ -I ./src/$(SB_TYPE)/ --use_fast_math $(SM_TYPES) -Xptxas -v -Xcompiler -fopenmp -O3
+
+stencil := 
+regs := 
+
+all: $(stencil)
+
+$(stencil): src/$(SB_TYPE)/$(stencil)_host.cu src/$(SB_TYPE)/$(stencil)_kernel.cu
+	nvcc $(OPTIONS) $^ $(PWR) -o bin/$(SB_TYPE)/$@ $(ICUDA) $(INVML) $(IPWR) $(regs)
 
 clean:
-	rm -rf bin/*
+	rm -rf bin/float/* bin/double/*

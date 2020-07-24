@@ -1,10 +1,14 @@
 #!/bin/bash
 
-if [[ -z "$1" ]]; then
-  echo usage: $0 GPU_NAME;
+if [[ -z "$1" || -z "$2" ]]; then
+  echo usage: $0 GPU_NAME STENCIL;
   exit 1;
 fi
 gpu=$1;
+stencil=$2;
+
+bs=512;
+sl=512;
 
 if [[ -z "$T" ]]; then
   T=1000;
@@ -15,7 +19,7 @@ fi
 
 for bt in {1..16}; 
 do
-  filename="star2d3r-512-$bt-512.s$S.t$T.log";
+  filename="${stencil}-${bs}-${bt}-${sl}.s$S.t$T.log";
   if [[ ! -f "./$gpu/$filename" ]]; then
     continue;
   fi

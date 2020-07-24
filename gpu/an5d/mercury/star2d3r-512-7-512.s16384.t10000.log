@@ -1,6 +1,0 @@
-[Device warm-up]
-10359.4041 ms
-
-[Device execution]
-      0:  6291.7735 GFLOPS, 10666.1283 ms
-Average:  6291.7735 GFLOPS, 10666.1283 ms,  1978.4351 Joules
