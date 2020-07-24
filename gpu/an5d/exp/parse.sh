@@ -1,12 +1,13 @@
 #!/bin/bash
 
 TYPES=(float double);
+TYPES=(double);
 s_2D=({1024..20480..1024});
 s_3D=({128..1024..128});
 
 METRICS="dram_read_bytes,dram_write_bytes"
 
-calc(){ awk "BEGIN { print "$*" }"; }
+calc() { awk "BEGIN { print "$*" }"; }
 
 function parse_nvprof_log {
   log_file=$1;
@@ -61,31 +62,63 @@ function run {
   fi
 }
 
-function parse {
-  rm -rf /tmp/.tmp-an5d-joules.txt /tmp/.tmp-an5d-nvprof.txt
-  touch /tmp/.tmp-an5d-joules.txt /tmp/.tmp-an5d-nvprof.txt
-  run $1 $2 $3 > /tmp/.tmp-an5d-joules.txt
-  run $1 $2 $3 "nvprof" > /tmp/.tmp-an5d-nvprof.txt
-  paste -d ',' /tmp/.tmp-an5d-joules.txt /tmp/.tmp-an5d-nvprof.txt
+function get_dram_energy_percentage {
+  bin=$1;
+  s=$2;
+  SB_TYPE=$3;
+
+  # get total joules
+  # get bytes xfered
+  # printf "(bytes xfered)*(J/byte)/(total joules)
+  total_joules=`run $bin $s $SB_TYPE | cut -d ',' -f 6`;
+  gbs_xfered=`run $bin $s $SB_TYPE "nvprof"`;
+  calc 100*$gbs_xfered*0.284/$total_joules;
 }
 
+if [[ -z $CONCISE ]]; then
 
-for SB_TYPE in ${TYPES[@]};
-do
-  for bin in ./bin/${SB_TYPE}/*2d*;
+  for SB_TYPE in ${TYPES[@]};
   do
-    for s in ${s_2D[@]};
+    for bin in ./bin/${SB_TYPE}/*2d*;
     do
-      parse $bin $s $SB_TYPE;
+      for s in ${s_2D[@]};
+      do
+        paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
+      done;
+    done;
+  
+    for bin in ./bin/${SB_TYPE}/*3d*;
+    do
+      for s in ${s_3D[@]};
+      do
+        paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
+      done;
     done;
   done;
 
-  for bin in ./bin/${SB_TYPE}/*3d*;
+else
+
+  for SB_TYPE in ${TYPES[@]};
   do
-    for s in ${s_3D[@]};
+    #for bin in ./bin/${SB_TYPE}/*2d*;
+    #do
+    #  printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
+    #  for s in ${s_2D[@]};
+    #  do
+    #    printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+    #  done;
+    #  printf "\n";
+    #done;
+  
+    for bin in ./bin/${SB_TYPE}/*3d*;
     do
-      parse $bin $s $SB_TYPE;
+      printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*x.*~\1~'),";
+      for s in ${s_3D[@]};
+      do
+        printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+      done;
+      printf "\n";
     done;
   done;
 
-done;
+fi
