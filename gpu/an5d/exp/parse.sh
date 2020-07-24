@@ -1,7 +1,6 @@
 #!/bin/bash
 
 TYPES=(float double);
-TYPES=(double);
 s_2D=({1024..20480..1024});
 s_3D=({128..1024..128});
 
@@ -21,6 +20,7 @@ function parse_nvprof_log {
   do
     eval $l;
   done < /tmp/.tmp-an5d-parse.txt
+  
   giga='1000000000';
   total_GBs=`calc $total_bytes/$giga`;
   echo $total_GBs;
@@ -67,12 +67,34 @@ function get_dram_energy_percentage {
   s=$2;
   SB_TYPE=$3;
 
-  # get total joules
-  # get bytes xfered
-  # printf "(bytes xfered)*(J/byte)/(total joules)
   total_joules=`run $bin $s $SB_TYPE | cut -d ',' -f 6`;
   gbs_xfered=`run $bin $s $SB_TYPE "nvprof"`;
-  calc 100*$gbs_xfered*0.284/$total_joules;
+  if [[ -n "$gbs_xfered" && -n "$total_joules" ]]; then
+    calc 100*$gbs_xfered*0.284/$total_joules;
+  fi
+}
+
+function check_log {
+  F=$1
+
+  if [[ ! -f $F ]]; then echo no-exist; return; fi;
+  if [[ "$(cat $F | wc -l)" == 0 ]]; then echo empty; return; fi
+  if [[ -n "$(cat $F | grep -i error)" ]]; then echo has-err; return; fi
+  
+}
+
+function validate {
+  bin=$1;
+  s=$2;
+  SB_TYPE=$3;
+  
+  stencil=`echo $bin | sed "s~./bin/${SB_TYPE}/\(.*\)~\1~"`;
+
+  F1="./exp/${SB_TYPE}/${stencil}.s${s}.log";
+  F2="./exp/${SB_TYPE}/nvprof/${stencil}.s${s}.log";
+  err="$(check_log $F1)"; if [[ -n "$err" ]]; then printf "1-$err,"; fi;
+  err="$(check_log $F2)"; if [[ -n "$err" ]]; then printf "2-$err,"; fi;
+
 }
 
 if [[ -z $CONCISE ]]; then
@@ -83,6 +105,7 @@ if [[ -z $CONCISE ]]; then
     do
       for s in ${s_2D[@]};
       do
+        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
         paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
       done;
     done;
@@ -91,6 +114,7 @@ if [[ -z $CONCISE ]]; then
     do
       for s in ${s_3D[@]};
       do
+        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
         paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
       done;
     done;
@@ -100,21 +124,23 @@ else
 
   for SB_TYPE in ${TYPES[@]};
   do
-    #for bin in ./bin/${SB_TYPE}/*2d*;
-    #do
-    #  printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
-    #  for s in ${s_2D[@]};
-    #  do
-    #    printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
-    #  done;
-    #  printf "\n";
-    #done;
+    for bin in ./bin/${SB_TYPE}/*2d*;
+    do
+      printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
+      for s in ${s_2D[@]};
+      do
+        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
+        printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+      done;
+      printf "\n";
+    done;
   
     for bin in ./bin/${SB_TYPE}/*3d*;
     do
       printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*x.*~\1~'),";
       for s in ${s_3D[@]};
       do
+        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
         printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
       done;
       printf "\n";
