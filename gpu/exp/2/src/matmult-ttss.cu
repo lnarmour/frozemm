@@ -44,8 +44,10 @@ int main (int argc, char** argv) {
     PI = atol(argv[2]);
     PJ = atol(argv[3]);
     TK = atol(argv[4]);
+  } else if (argc>1) {
+    M = N = K = PI = PJ = TK = atol(argv[1]);
   } else {
-    printf("Usage: ./MM N PI PJ TK\n");
+    printf("Usage: ./MM N [PI PJ TK]\n");
     return 1;
   }
 

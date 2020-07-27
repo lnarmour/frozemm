@@ -2,12 +2,15 @@
 data = []
 TS = [11, 12]
 
-with open('scripts/logs/transpose.fixedflops.nvprof.2.log', 'r') as f:
+with open('scripts/logs/raw-fixedflops-cuda10-nvprof.log', 'r') as f:
     lines = [l.strip('\n') for l in f.readlines()]
     data.append([' '.join([c for c in s.split(' ') if c]) for s in lines])
-with open('scripts/logs/transpose.fixedflops.joules.2.log', 'r') as f:
+with open('scripts/logs/raw-fixedflops-cuda10-joules.2.log', 'r') as f:
     data.append([l.strip('\n') for l in f.readlines()])
 LINES = [len(data[0]), len(data[1])]
+
+for i,l in enumerate(data):
+    print(i,l)
 
 results = {}
 for ts in range(0, LINES[0], TS[0]):
