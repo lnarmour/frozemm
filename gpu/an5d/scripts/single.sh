@@ -89,7 +89,7 @@ if [[ -z "$1" || -z "$2" ]]; then
   exit 1;
 fi
 
-bin=$1
+bin=`realpath $1 | sed 's~/s/chopin/l/grad/lnarmour/git/frozemm/gpu/an5d~.~'`; 
 s=$2
 SB_TYPE="$(if [[ "$bin" == *"float"* ]]; then echo "float"; else echo "double"; fi)"
 

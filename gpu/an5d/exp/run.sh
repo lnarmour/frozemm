@@ -70,7 +70,7 @@ else
   s_3D=({512..512});
   for line in `cat $2 | grep -v "^#"`;
   do
-    SB_TYPE=`if [[ "float" == *"$2"* ]]; then echo "float"; else echo "double"; fi;`
+    SB_TYPE=`if [[ "$2" == *"float"* ]]; then echo "float"; else echo "double"; fi;`
     process_line $SB_TYPE $line;
   done;
 fi

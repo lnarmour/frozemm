@@ -3,8 +3,9 @@
 j_gb='0.205';
 
 TYPES=(float double);
-s_2D=({1024..20480..1024});
-s_3D=({128..1024..128});
+DIM=("2d" "3d");
+s_2d=({1024..20480..1024});
+s_3d=({128..1024..128});
 
 METRICS="dram_read_bytes,dram_write_bytes"
 
@@ -64,6 +65,10 @@ function run {
   fi
 }
 
+function get_glops {
+  echo `run $1 $2 $3 | cut -d ',' -f 4`;
+}
+
 function get_dram_energy_percentage {
   bin=$1;
   s=$2;
@@ -102,28 +107,20 @@ function validate {
 
 for SB_TYPE in ${TYPES[@]};
 do
-  for bin in ./bin/${SB_TYPE}/*2d*;
+  for dim in ${DIM[@]};
   do
-    if [[ ! -f "$bin" ]]; then continue; fi;
-    printf "${SB_TYPE},$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
-    for s in ${s_2D[@]};
+    S=();
+    eval "for s in \${s_${dim}[@]}; do S+=(\$s); done;"
+    for bin in ./bin/${SB_TYPE}/*${dim}*;
     do
-      if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-      printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+      if [[ ! -f "$bin" ]]; then continue; fi;
+      printf "${SB_TYPE},$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)~\1~'),";
+      for s in ${S[@]};
+      do
+        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
+        printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+      done;
+      printf "\n";
     done;
-    printf "\n";
-  done;
-
-  for bin in ./bin/${SB_TYPE}/*3d*;
-  do
-    if [[ ! -f "$bin" ]]; then continue; fi;
-    printf "${SB_TYPE},$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*x.*~\1~'),";
-    for s in ${s_3D[@]};
-    do
-      if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-      printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
-    done;
-    printf "\n";
-  done;
+  done
 done;
-
