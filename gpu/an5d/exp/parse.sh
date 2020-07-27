@@ -1,5 +1,7 @@
 #!/bin/bash
 
+j_gb='0.205';
+
 TYPES=(float double);
 s_2D=({1024..20480..1024});
 s_3D=({128..1024..128});
@@ -70,7 +72,7 @@ function get_dram_energy_percentage {
   total_joules=`run $bin $s $SB_TYPE | cut -d ',' -f 6`;
   gbs_xfered=`run $bin $s $SB_TYPE "nvprof"`;
   if [[ -n "$gbs_xfered" && -n "$total_joules" ]]; then
-    calc 100*$gbs_xfered*0.284/$total_joules;
+    calc 100*$gbs_xfered*$j_gb/$total_joules;
   fi
 }
 
@@ -97,54 +99,31 @@ function validate {
 
 }
 
-if [[ -z $CONCISE ]]; then
 
-  for SB_TYPE in ${TYPES[@]};
+for SB_TYPE in ${TYPES[@]};
+do
+  for bin in ./bin/${SB_TYPE}/*2d*;
   do
-    for bin in ./bin/${SB_TYPE}/*2d*;
+    if [[ ! -f "$bin" ]]; then continue; fi;
+    printf "${SB_TYPE},$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
+    for s in ${s_2D[@]};
     do
-      for s in ${s_2D[@]};
-      do
-        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-        paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
-      done;
+      if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
+      printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
     done;
-  
-    for bin in ./bin/${SB_TYPE}/*3d*;
-    do
-      for s in ${s_3D[@]};
-      do
-        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-        paste -d ',' <(run $bin $s $SB_TYPE) <(run $bin $s $SB_TYPE "nvprof")
-      done;
-    done;
+    printf "\n";
   done;
 
-else
-
-  for SB_TYPE in ${TYPES[@]};
+  for bin in ./bin/${SB_TYPE}/*3d*;
   do
-    for bin in ./bin/${SB_TYPE}/*2d*;
+    if [[ ! -f "$bin" ]]; then continue; fi;
+    printf "${SB_TYPE},$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*x.*~\1~'),";
+    for s in ${s_3D[@]};
     do
-      printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*-[0-9]*-[0-9]*~\1~'),";
-      for s in ${s_2D[@]};
-      do
-        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-        printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
-      done;
-      printf "\n";
+      if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
+      printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
     done;
-  
-    for bin in ./bin/${SB_TYPE}/*3d*;
-    do
-      printf "$(echo $bin | cut -d '/' -f 4 | sed 's~\(.*\)-[0-9]*x.*~\1~'),";
-      for s in ${s_3D[@]};
-      do
-        if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
-        printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
-      done;
-      printf "\n";
-    done;
+    printf "\n";
   done;
+done;
 
-fi

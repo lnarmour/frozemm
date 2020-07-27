@@ -6,42 +6,36 @@ s_3D=({128..1024..128});
 
 METRICS="dram_read_bytes,dram_write_bytes"
 
-function run {
-  bin=$1;
-  s=$2;
-  sb_type=$3;
-  cmd="$bin -n 1 -s $s -t 1000";
-  nvprof_cmd="nvprof --profile-from-start off -m $METRICS $cmd";
-
-  stencil=`echo $cmd | sed "s~./bin/${sb_type}/\(.*\) -n.*~\1~"`;
-  
-  C1="$cmd > ./exp/${sb_type}/${stencil}.s${s}.log";
-  C2="$nvprof_cmd > ./exp/${sb_type}/nvprof/${stencil}.s${s}.log 2>&1";
-
-  echo $C1;
-  eval $C1;
-  echo $C2;
-  eval $C2;
-}
-
-
 for SB_TYPE in ${TYPES[@]};
 do
-  mkdir -p ./exp/${SB_TYPE}/nvprof;
-  for bin in ./bin/${SB_TYPE}/*2d*;
+  for line in `cat config/pascal_${SB_TYPE}_configs`;
   do
-    for s in ${s_2D[@]};
-    do
-      run $bin $s $SB_TYPE;
-    done;
-  done;
+    stencil=`echo $line | cut -d ',' -f 1`;
+    R=`echo $line | cut -d ',' -f 2`;
+    MAXRREGCOUNT=`if [[ "$R" != "U" ]]; then echo "regs=-maxrregcount=$R"; else echo ""; fi;`;
+    make_cmd="make stencil=$stencil SB_TYPE=$SB_TYPE REGCOUNT=$R $MAXRREGCOUNT";
+    binary_name="./bin/${SB_TYPE}/$(echo $line | sed 's~,~.r~')";
 
-  for bin in ./bin/${SB_TYPE}/*3d*;
-  do
-    for s in ${s_3D[@]};
-    do
-      run $bin $s $SB_TYPE;
-    done;
-  done;
+    # make the binary if it doesn't exist
+    if [[ ! -f $binary_name || -n "$FORCE_MAKE" ]]; then
+      rm -rf $binary_name;
+      echo "$make_cmd";
+      eval "$make_cmd > /dev/null 2>&1";
+    fi
+    if [[ "$?" != 0 || ! -f $binary_name ]]; then continue; fi; 
 
+    if [[ "$stencil" == *"2d"* ]]; then 
+      S=({1024..20480..1024});
+    else
+      S=({128..1024..128});
+    fi;
+
+    for s in ${S[@]};
+    do
+      cmd="./scripts/single.sh $binary_name $s";
+      if [[ -n ${COLLECT} ]]; then 
+        eval $cmd; 
+      fi;
+    done
+  done;
 done;
