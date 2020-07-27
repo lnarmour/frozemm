@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
-#include "star3d1r-32,32-3-128_kernel.hu"
+#include "star3d1r-32x32-3-128_kernel.hu"
 #define BENCH_DIM 3
 #define BENCH_FPP 13
 #define BENCH_RAD 1

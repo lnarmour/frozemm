@@ -1,4 +1,4 @@
-#include "star3d1r-32,32-3-128_kernel.hu"
+#include "star3d1r-32x32-3-128_kernel.hu"
 __device__ float __sbref_wrap(float *sb, size_t index) { return sb[index]; }
 
 __global__ void kernel0_3(float *A, int dimsize, int timestep, int c0)

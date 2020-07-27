@@ -52,7 +52,7 @@ function run {
   cmd="$bin -n 1 -s $s -t 1000";
   nvprof_cmd="nvprof --profile-from-start off -m $METRICS $cmd";
 
-  stencil=`echo $cmd | sed "s~./bin/${sb_type}/\(.*\) -n.*~\1~"`;
+  stencil=`echo $cmd | sed "s~./bin.*/${sb_type}/\(.*\) -n.*~\1~"`;
   mkdir -p "./${EXP_DIR}/${sb_type}/nvprof";
   if [[ -z $NVPROF ]]; then
     F="./${EXP_DIR}/${sb_type}/${stencil}.s${s}.log";
