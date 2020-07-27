@@ -65,7 +65,7 @@ function run {
   fi
 }
 
-function get_glops {
+function get_gflops {
   echo `run $1 $2 $3 | cut -d ',' -f 4`;
 }
 
@@ -119,6 +119,7 @@ do
       do
         if [[ -n "$(validate $bin $s $SB_TYPE)" ]]; then printf ","; continue; fi;
         printf "$(get_dram_energy_percentage $bin $s $SB_TYPE),"       
+        #printf "$(get_gflops $bin $s $SB_TYPE),"
       done;
       printf "\n";
     done;
