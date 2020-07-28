@@ -7,7 +7,7 @@ if [[ -z "$(which an5d 2>/dev/null)" ]]; then
   exit 1;
 fi
 
-if [[ -z "$1" || -z "$2" || -z "$3" || -z "$4" ]]; then
+if [[ -z "$1" || ! -f "$1" || -z "$2" || -z "$3" || -z "$4" ]]; then
   echo "usage: $0 STENCIL_C BS1 BT SL";
   exit 1;
 fi
@@ -16,19 +16,27 @@ bs1=$2
 bt=$3
 sl=$4
 
-an5d --bs1=$bs1 --bt=$bt --sl=$sl $1
+dir_name=`realpath $1 | sed 's~\(.*\)/[^/]*~\1~'`;
+file_name=`realpath $1 | sed 's~.*/\([^/]*\)$~\1~'`;
 
-stencil=`echo $1 | sed 's~\(.*\)\..*~\1~'`
+pushd $dir_name > /dev/null;
+an5d --bs1=$bs1 --bt=$bt --sl=$sl $file_name
+popd > /dev/null;
 
-if [[ ! -f "${stencil}_kernel.cu" ]]; then
+stencil=`echo $file_name | sed 's~\(.*\)\..*~\1~'`
+
+if [[ ! -f "${dir_name}/${stencil}_kernel.cu" ]]; then
   echo "an5d code generation failed";
   exit 1;
 fi
 
-sed -i '' "s~\(#include \"${stencil}\)\(_kernel.hu\"\)~\1-${bs1}-${bt}-${sl}\2~" ${stencil}_host.cu
-sed -i '' "s~\(#include \"${stencil}\)\(_kernel.hu\"\)~\1-${bs1}-${bt}-${sl}\2~" ${stencil}_kernel.cu
+sed -i '' "s~\(#include \"${stencil}\)\(_kernel.hu\"\)~\1-${bs1}-${bt}-${sl}\2~" ${dir_name}/${stencil}_host.cu
+sed -i '' "s~\(#include \"${stencil}\)\(_kernel.hu\"\)~\1-${bs1}-${bt}-${sl}\2~" ${dir_name}/${stencil}_kernel.cu
 
-mv ${stencil}_host.cu ${stencil}-${bs1}-${bt}-${sl}_host.cu
-mv ${stencil}_kernel.cu ${stencil}-${bs1}-${bt}-${sl}_kernel.cu
-mv ${stencil}_kernel.hu ${stencil}-${bs1}-${bt}-${sl}_kernel.hu
+configuration_name="${dir_name}/${stencil}-${bs1}-${bt}-${sl}";
 
+mv ${dir_name}/${stencil}_host.cu ${configuration_name}_host.cu
+mv ${dir_name}/${stencil}_kernel.cu ${configuration_name}_kernel.cu
+mv ${dir_name}/${stencil}_kernel.hu ${configuration_name}_kernel.hu
+
+scp ${configuration_name}* maxline:~/git/frozemm/gpu/an5d/src-f3d/float/
