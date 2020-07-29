@@ -33,9 +33,11 @@ if [[ -z $bs2 ]]; then
 else
   cmd="an5d --bs1=$bs1 --bs2=$bs2 --bt=$bt --sl=$sl $file_name";
 fi
-#echo $cmd;
+echo $cmd;
 if [[ -z "$VERBOSE" ]]; then cmd="$cmd > /dev/null 2>&1"; fi;
+pushd ${dir_name} > /dev/null;
 eval $cmd;
+popd > /dev/null;
 
 if [[ "$?" != "0" ]]; then
   echo "${dir_name}/${stencil}-${bs}-${bt}-${sl} an5d code generation failed";
