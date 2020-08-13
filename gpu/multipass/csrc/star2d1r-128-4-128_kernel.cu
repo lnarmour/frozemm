@@ -1,4 +1,4 @@
-#include "star2d1r_kernel.hu"
+#include "star2d1r-128-4-128_kernel.hu"
 __global__ void kernel0(float *A, int dimsize, int timestep)
 {
 
