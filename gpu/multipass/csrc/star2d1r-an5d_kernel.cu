@@ -1,7 +1,7 @@
-#include "star1d1r_kernel.hu"
+#include "star2d1r-an5d_kernel.hu"
 __device__ float __sbref_wrap(float *sb, size_t index) { return sb[index]; }
 
-__global__ void kernel0_4(float *A, int dimsize, int timestep, int pi, int c0)
+__global__ void kernel0_4(float *A, int dimsize, int timestep, int c0)
 {
 #ifndef AN5D_TYPE
 #define AN5D_TYPE unsigned
@@ -9,18 +9,28 @@ __global__ void kernel0_4(float *A, int dimsize, int timestep, int pi, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, pi + 510) - pi + 1 + 1);
-    const AN5D_TYPE __c1Pad = (pi + 1);
+    const AN5D_TYPE __c1Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c1Pad = (1);
     #define __c1 c1
+    const AN5D_TYPE __c2Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c2Pad = (1);
+    #define __c2 c2
     const AN5D_TYPE __halo1 = 1;
+    const AN5D_TYPE __halo2 = 1;
     const AN5D_TYPE __side0Len = 4;
-    const AN5D_TYPE __side1Len = 0;
+    const AN5D_TYPE __side1Len = 128;
+    const AN5D_TYPE __side2Len = 24;
     const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+    const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
     const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
-    const AN5D_TYPE __blockSize = 1;
+    const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+    const AN5D_TYPE __blockSize = 1 * __side2LenOl;
     const AN5D_TYPE __side1Num = (__c1Len + __side1Len - 1) / __side1Len;
+    const AN5D_TYPE __side2Num = (__c2Len + __side2Len - 1) / __side2Len;
     const AN5D_TYPE __tid = threadIdx.y * blockDim.x + threadIdx.x;
-    const AN5D_TYPE __c1Id = blockIdx.x;
+    const AN5D_TYPE __local_c2 = __tid;
+    const AN5D_TYPE __c1Id = blockIdx.x / __side2Num;
+    const AN5D_TYPE __c2 = (blockIdx.x % __side2Num) * __side2Len + __local_c2 + __c2Pad - __OlLen2;
     float __reg_0_0;
     float __reg_0_1;
     float __reg_0_2;
@@ -35,21 +45,21 @@ __global__ void kernel0_4(float *A, int dimsize, int timestep, int pi, int c0)
     float __reg_3_2;
     __shared__ float __b_sb_double[__blockSize * 2];
     float *__b_sb = __b_sb_double;
-    const AN5D_TYPE __loadValid = 1;
-    const AN5D_TYPE __updateValid = 1;
-    const AN5D_TYPE __writeValid1 = __updateValid;
-    const AN5D_TYPE __writeValid2 = __updateValid;
-    const AN5D_TYPE __writeValid3 = __updateValid;
-    const AN5D_TYPE __writeValid4 = __updateValid;
+    const AN5D_TYPE __loadValid = 1 && __c2 >= __c2Pad - __halo2 && __c2 < __c2Pad + __c2Len + __halo2;
+    const AN5D_TYPE __updateValid = 1 && __c2 >= __c2Pad && __c2 < __c2Pad + __c2Len;
+    const AN5D_TYPE __writeValid1 = __updateValid && __local_c2 >= (__halo2 * 1) && __local_c2 < __side2LenOl - (__halo2 * 1);
+    const AN5D_TYPE __writeValid2 = __updateValid && __local_c2 >= (__halo2 * 2) && __local_c2 < __side2LenOl - (__halo2 * 2);
+    const AN5D_TYPE __writeValid3 = __updateValid && __local_c2 >= (__halo2 * 3) && __local_c2 < __side2LenOl - (__halo2 * 3);
+    const AN5D_TYPE __writeValid4 = __updateValid && __local_c2 >= (__halo2 * 4) && __local_c2 < __side2LenOl - (__halo2 * 4);
     const AN5D_TYPE __storeValid = __writeValid4;
     AN5D_TYPE __c1;
     AN5D_TYPE __h;
     const AN5D_TYPE __c1Pad2 = __c1Pad + __side1Len * __c1Id;
-    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[(__c0 % 2) * dimsize + __c1]; }} while (0)
-    #define __DEST (A[((c0 + 1) % 2) * dimsize + c1])
-    #define __REGREF(reg) reg
-    #define __SBREF(sb) __sbref_wrap(sb, (int)__tid)
-    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((0.09374f * (__REGREF(__a))) + (0.09376f * (__REGREF(__b)))) + (0.09375f * (__REGREF(__c)))); } while (0)
+    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[((__c0 % 2) * dimsize + __c1) * dimsize + __c2]; }} while (0)
+    #define __DEST (A[(((c0 + 1) % 2) * dimsize + c1) * dimsize + c2])
+    #define __REGREF(reg, i2) reg
+    #define __SBREF(sb, i2) __sbref_wrap(sb, (int)__tid + i2)
+    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((((0.1873f * (__REGREF(__a, 0))) + (0.1876f * (__SBREF(__b_sb, -1)))) + (0.2500f * (__REGREF(__b, 0)))) + (0.1877f * (__SBREF(__b_sb, 1)))) + (0.1874f * (__REGREF(__c, 0)))); } while (0)
     #define __DB_SWITCH() do { __b_sb = &__b_sb_double[(__b_sb == __b_sb_double) ? __blockSize : 0]; } while (0)
     #define __CALCSETUP(a, b, c) do { __DB_SWITCH(); __b_sb[__tid] = b; __syncthreads(); } while (0)
     #define __CALC1(out, reg0, reg1, reg2) do { __CALCSETUP(reg0, reg1, reg2); if (__writeValid1) __CALCEXPR(out, reg0, reg1, reg2); else out = reg1; } while (0)
@@ -232,7 +242,7 @@ __global__ void kernel0_4(float *A, int dimsize, int timestep, int pi, int c0)
       __h++;
     }
 }
-__global__ void kernel0_3(float *A, int dimsize, int timestep, int pi, int c0)
+__global__ void kernel0_3(float *A, int dimsize, int timestep, int c0)
 {
 #ifndef AN5D_TYPE
 #define AN5D_TYPE unsigned
@@ -240,18 +250,28 @@ __global__ void kernel0_3(float *A, int dimsize, int timestep, int pi, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, pi + 510) - pi + 1 + 1);
-    const AN5D_TYPE __c1Pad = (pi + 1);
+    const AN5D_TYPE __c1Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c1Pad = (1);
     #define __c1 c1
+    const AN5D_TYPE __c2Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c2Pad = (1);
+    #define __c2 c2
     const AN5D_TYPE __halo1 = 1;
+    const AN5D_TYPE __halo2 = 1;
     const AN5D_TYPE __side0Len = 3;
-    const AN5D_TYPE __side1Len = 0;
+    const AN5D_TYPE __side1Len = 128;
+    const AN5D_TYPE __side2Len = 26;
     const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+    const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
     const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
-    const AN5D_TYPE __blockSize = 1;
+    const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+    const AN5D_TYPE __blockSize = 1 * __side2LenOl;
     const AN5D_TYPE __side1Num = (__c1Len + __side1Len - 1) / __side1Len;
+    const AN5D_TYPE __side2Num = (__c2Len + __side2Len - 1) / __side2Len;
     const AN5D_TYPE __tid = threadIdx.y * blockDim.x + threadIdx.x;
-    const AN5D_TYPE __c1Id = blockIdx.x;
+    const AN5D_TYPE __local_c2 = __tid;
+    const AN5D_TYPE __c1Id = blockIdx.x / __side2Num;
+    const AN5D_TYPE __c2 = (blockIdx.x % __side2Num) * __side2Len + __local_c2 + __c2Pad - __OlLen2;
     float __reg_0_0;
     float __reg_0_1;
     float __reg_0_2;
@@ -263,20 +283,20 @@ __global__ void kernel0_3(float *A, int dimsize, int timestep, int pi, int c0)
     float __reg_2_2;
     __shared__ float __b_sb_double[__blockSize * 2];
     float *__b_sb = __b_sb_double;
-    const AN5D_TYPE __loadValid = 1;
-    const AN5D_TYPE __updateValid = 1;
-    const AN5D_TYPE __writeValid1 = __updateValid;
-    const AN5D_TYPE __writeValid2 = __updateValid;
-    const AN5D_TYPE __writeValid3 = __updateValid;
+    const AN5D_TYPE __loadValid = 1 && __c2 >= __c2Pad - __halo2 && __c2 < __c2Pad + __c2Len + __halo2;
+    const AN5D_TYPE __updateValid = 1 && __c2 >= __c2Pad && __c2 < __c2Pad + __c2Len;
+    const AN5D_TYPE __writeValid1 = __updateValid && __local_c2 >= (__halo2 * 1) && __local_c2 < __side2LenOl - (__halo2 * 1);
+    const AN5D_TYPE __writeValid2 = __updateValid && __local_c2 >= (__halo2 * 2) && __local_c2 < __side2LenOl - (__halo2 * 2);
+    const AN5D_TYPE __writeValid3 = __updateValid && __local_c2 >= (__halo2 * 3) && __local_c2 < __side2LenOl - (__halo2 * 3);
     const AN5D_TYPE __storeValid = __writeValid3;
     AN5D_TYPE __c1;
     AN5D_TYPE __h;
     const AN5D_TYPE __c1Pad2 = __c1Pad + __side1Len * __c1Id;
-    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[(__c0 % 2) * dimsize + __c1]; }} while (0)
-    #define __DEST (A[((c0 + 1) % 2) * dimsize + c1])
-    #define __REGREF(reg) reg
-    #define __SBREF(sb) __sbref_wrap(sb, (int)__tid)
-    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((0.09374f * (__REGREF(__a))) + (0.09376f * (__REGREF(__b)))) + (0.09375f * (__REGREF(__c)))); } while (0)
+    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[((__c0 % 2) * dimsize + __c1) * dimsize + __c2]; }} while (0)
+    #define __DEST (A[(((c0 + 1) % 2) * dimsize + c1) * dimsize + c2])
+    #define __REGREF(reg, i2) reg
+    #define __SBREF(sb, i2) __sbref_wrap(sb, (int)__tid + i2)
+    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((((0.1873f * (__REGREF(__a, 0))) + (0.1876f * (__SBREF(__b_sb, -1)))) + (0.2500f * (__REGREF(__b, 0)))) + (0.1877f * (__SBREF(__b_sb, 1)))) + (0.1874f * (__REGREF(__c, 0)))); } while (0)
     #define __DB_SWITCH() do { __b_sb = &__b_sb_double[(__b_sb == __b_sb_double) ? __blockSize : 0]; } while (0)
     #define __CALCSETUP(a, b, c) do { __DB_SWITCH(); __b_sb[__tid] = b; __syncthreads(); } while (0)
     #define __CALC1(out, reg0, reg1, reg2) do { __CALCSETUP(reg0, reg1, reg2); if (__writeValid1) __CALCEXPR(out, reg0, reg1, reg2); else out = reg1; } while (0)
@@ -419,7 +439,7 @@ __global__ void kernel0_3(float *A, int dimsize, int timestep, int pi, int c0)
       __h++;
     }
 }
-__global__ void kernel0_2(float *A, int dimsize, int timestep, int pi, int c0)
+__global__ void kernel0_2(float *A, int dimsize, int timestep, int c0)
 {
 #ifndef AN5D_TYPE
 #define AN5D_TYPE unsigned
@@ -427,18 +447,28 @@ __global__ void kernel0_2(float *A, int dimsize, int timestep, int pi, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, pi + 510) - pi + 1 + 1);
-    const AN5D_TYPE __c1Pad = (pi + 1);
+    const AN5D_TYPE __c1Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c1Pad = (1);
     #define __c1 c1
+    const AN5D_TYPE __c2Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c2Pad = (1);
+    #define __c2 c2
     const AN5D_TYPE __halo1 = 1;
+    const AN5D_TYPE __halo2 = 1;
     const AN5D_TYPE __side0Len = 2;
-    const AN5D_TYPE __side1Len = 0;
+    const AN5D_TYPE __side1Len = 128;
+    const AN5D_TYPE __side2Len = 28;
     const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+    const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
     const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
-    const AN5D_TYPE __blockSize = 1;
+    const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+    const AN5D_TYPE __blockSize = 1 * __side2LenOl;
     const AN5D_TYPE __side1Num = (__c1Len + __side1Len - 1) / __side1Len;
+    const AN5D_TYPE __side2Num = (__c2Len + __side2Len - 1) / __side2Len;
     const AN5D_TYPE __tid = threadIdx.y * blockDim.x + threadIdx.x;
-    const AN5D_TYPE __c1Id = blockIdx.x;
+    const AN5D_TYPE __local_c2 = __tid;
+    const AN5D_TYPE __c1Id = blockIdx.x / __side2Num;
+    const AN5D_TYPE __c2 = (blockIdx.x % __side2Num) * __side2Len + __local_c2 + __c2Pad - __OlLen2;
     float __reg_0_0;
     float __reg_0_1;
     float __reg_0_2;
@@ -447,19 +477,19 @@ __global__ void kernel0_2(float *A, int dimsize, int timestep, int pi, int c0)
     float __reg_1_2;
     __shared__ float __b_sb_double[__blockSize * 2];
     float *__b_sb = __b_sb_double;
-    const AN5D_TYPE __loadValid = 1;
-    const AN5D_TYPE __updateValid = 1;
-    const AN5D_TYPE __writeValid1 = __updateValid;
-    const AN5D_TYPE __writeValid2 = __updateValid;
+    const AN5D_TYPE __loadValid = 1 && __c2 >= __c2Pad - __halo2 && __c2 < __c2Pad + __c2Len + __halo2;
+    const AN5D_TYPE __updateValid = 1 && __c2 >= __c2Pad && __c2 < __c2Pad + __c2Len;
+    const AN5D_TYPE __writeValid1 = __updateValid && __local_c2 >= (__halo2 * 1) && __local_c2 < __side2LenOl - (__halo2 * 1);
+    const AN5D_TYPE __writeValid2 = __updateValid && __local_c2 >= (__halo2 * 2) && __local_c2 < __side2LenOl - (__halo2 * 2);
     const AN5D_TYPE __storeValid = __writeValid2;
     AN5D_TYPE __c1;
     AN5D_TYPE __h;
     const AN5D_TYPE __c1Pad2 = __c1Pad + __side1Len * __c1Id;
-    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[(__c0 % 2) * dimsize + __c1]; }} while (0)
-    #define __DEST (A[((c0 + 1) % 2) * dimsize + c1])
-    #define __REGREF(reg) reg
-    #define __SBREF(sb) __sbref_wrap(sb, (int)__tid)
-    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((0.09374f * (__REGREF(__a))) + (0.09376f * (__REGREF(__b)))) + (0.09375f * (__REGREF(__c)))); } while (0)
+    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[((__c0 % 2) * dimsize + __c1) * dimsize + __c2]; }} while (0)
+    #define __DEST (A[(((c0 + 1) % 2) * dimsize + c1) * dimsize + c2])
+    #define __REGREF(reg, i2) reg
+    #define __SBREF(sb, i2) __sbref_wrap(sb, (int)__tid + i2)
+    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((((0.1873f * (__REGREF(__a, 0))) + (0.1876f * (__SBREF(__b_sb, -1)))) + (0.2500f * (__REGREF(__b, 0)))) + (0.1877f * (__SBREF(__b_sb, 1)))) + (0.1874f * (__REGREF(__c, 0)))); } while (0)
     #define __DB_SWITCH() do { __b_sb = &__b_sb_double[(__b_sb == __b_sb_double) ? __blockSize : 0]; } while (0)
     #define __CALCSETUP(a, b, c) do { __DB_SWITCH(); __b_sb[__tid] = b; __syncthreads(); } while (0)
     #define __CALC1(out, reg0, reg1, reg2) do { __CALCSETUP(reg0, reg1, reg2); if (__writeValid1) __CALCEXPR(out, reg0, reg1, reg2); else out = reg1; } while (0)
@@ -565,7 +595,7 @@ __global__ void kernel0_2(float *A, int dimsize, int timestep, int pi, int c0)
       __h++;
     }
 }
-__global__ void kernel0_1(float *A, int dimsize, int timestep, int pi, int c0)
+__global__ void kernel0_1(float *A, int dimsize, int timestep, int c0)
 {
 #ifndef AN5D_TYPE
 #define AN5D_TYPE unsigned
@@ -573,35 +603,45 @@ __global__ void kernel0_1(float *A, int dimsize, int timestep, int pi, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, pi + 510) - pi + 1 + 1);
-    const AN5D_TYPE __c1Pad = (pi + 1);
+    const AN5D_TYPE __c1Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c1Pad = (1);
     #define __c1 c1
+    const AN5D_TYPE __c2Len = (dimsize - 1 - 1);
+    const AN5D_TYPE __c2Pad = (1);
+    #define __c2 c2
     const AN5D_TYPE __halo1 = 1;
+    const AN5D_TYPE __halo2 = 1;
     const AN5D_TYPE __side0Len = 1;
-    const AN5D_TYPE __side1Len = 0;
+    const AN5D_TYPE __side1Len = 128;
+    const AN5D_TYPE __side2Len = 30;
     const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+    const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
     const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
-    const AN5D_TYPE __blockSize = 1;
+    const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+    const AN5D_TYPE __blockSize = 1 * __side2LenOl;
     const AN5D_TYPE __side1Num = (__c1Len + __side1Len - 1) / __side1Len;
+    const AN5D_TYPE __side2Num = (__c2Len + __side2Len - 1) / __side2Len;
     const AN5D_TYPE __tid = threadIdx.y * blockDim.x + threadIdx.x;
-    const AN5D_TYPE __c1Id = blockIdx.x;
+    const AN5D_TYPE __local_c2 = __tid;
+    const AN5D_TYPE __c1Id = blockIdx.x / __side2Num;
+    const AN5D_TYPE __c2 = (blockIdx.x % __side2Num) * __side2Len + __local_c2 + __c2Pad - __OlLen2;
     float __reg_0_0;
     float __reg_0_1;
     float __reg_0_2;
     __shared__ float __b_sb_double[__blockSize * 2];
     float *__b_sb = __b_sb_double;
-    const AN5D_TYPE __loadValid = 1;
-    const AN5D_TYPE __updateValid = 1;
-    const AN5D_TYPE __writeValid1 = __updateValid;
+    const AN5D_TYPE __loadValid = 1 && __c2 >= __c2Pad - __halo2 && __c2 < __c2Pad + __c2Len + __halo2;
+    const AN5D_TYPE __updateValid = 1 && __c2 >= __c2Pad && __c2 < __c2Pad + __c2Len;
+    const AN5D_TYPE __writeValid1 = __updateValid && __local_c2 >= (__halo2 * 1) && __local_c2 < __side2LenOl - (__halo2 * 1);
     const AN5D_TYPE __storeValid = __writeValid1;
     AN5D_TYPE __c1;
     AN5D_TYPE __h;
     const AN5D_TYPE __c1Pad2 = __c1Pad + __side1Len * __c1Id;
-    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[(__c0 % 2) * dimsize + __c1]; }} while (0)
-    #define __DEST (A[((c0 + 1) % 2) * dimsize + c1])
-    #define __REGREF(reg) reg
-    #define __SBREF(sb) __sbref_wrap(sb, (int)__tid)
-    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((0.09374f * (__REGREF(__a))) + (0.09376f * (__REGREF(__b)))) + (0.09375f * (__REGREF(__c)))); } while (0)
+    #define __LOAD(reg, h) do { if (__loadValid) { __c1 = __c1Pad2 - __halo1 + h; reg = A[((__c0 % 2) * dimsize + __c1) * dimsize + __c2]; }} while (0)
+    #define __DEST (A[(((c0 + 1) % 2) * dimsize + c1) * dimsize + c2])
+    #define __REGREF(reg, i2) reg
+    #define __SBREF(sb, i2) __sbref_wrap(sb, (int)__tid + i2)
+    #define __CALCEXPR(__rn0, __a, __b, __c) do { __rn0 = (((((0.1873f * (__REGREF(__a, 0))) + (0.1876f * (__SBREF(__b_sb, -1)))) + (0.2500f * (__REGREF(__b, 0)))) + (0.1877f * (__SBREF(__b_sb, 1)))) + (0.1874f * (__REGREF(__c, 0)))); } while (0)
     #define __DB_SWITCH() do { __b_sb = &__b_sb_double[(__b_sb == __b_sb_double) ? __blockSize : 0]; } while (0)
     #define __CALCSETUP(a, b, c) do { __DB_SWITCH(); __b_sb[__tid] = b; __syncthreads(); } while (0)
     #define __STORE(h, reg0, reg1, reg2) do { __CALCSETUP(reg0, reg1, reg2); if (__storeValid) { __c1 = __c1Pad2 - __halo1 + h; __CALCEXPR(__DEST, reg0, reg1, reg2); } } while (0)
