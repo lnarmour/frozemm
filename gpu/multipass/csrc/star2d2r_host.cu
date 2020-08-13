@@ -7,6 +7,8 @@
 
 #include "common.h"
 
+#define P 512
+
 double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
 {
   double start_time = sb_time(), end_time = 0.0;
@@ -14,7 +16,7 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   SB_TYPE (*A)[dimsize][dimsize] = (SB_TYPE (*)[dimsize][dimsize])A1;
 
   if (scop) {
-    if (dimsize >= 5 && timestep >= 1) {
+    if (dimsize >= 3 && timestep >= 1) {
 #define cudaCheckReturn(ret) \
   do { \
     cudaError_t cudaCheckReturn_e = (ret); \
@@ -47,10 +49,10 @@ SB_START_INSTRUMENTS;
       const AN5D_TYPE __c0Len = (timestep - 0);
       const AN5D_TYPE __c0Pad = (0);
       #define __c0 c0
-      const AN5D_TYPE __c1Len = (dimsize - 2 - 2);
+      const AN5D_TYPE __c1Len = (min(509, dimsize - 1) - 2 + 1);
       const AN5D_TYPE __c1Pad = (2);
       #define __c1 c1
-      const AN5D_TYPE __c2Len = (dimsize - 2 - 2);
+      const AN5D_TYPE __c2Len = (min(509, dimsize - 1) - 2 + 1);
       const AN5D_TYPE __c2Pad = (2);
       #define __c2 c2
       const AN5D_TYPE __halo1 = 2;
@@ -285,8 +287,8 @@ SB_STOP_INSTRUMENTS;
   else {
     for (int t = 0; t < timestep; t++)
 #pragma omp parallel for
-      for (int i = BENCH_RAD; i < dimsize - BENCH_RAD; i++)
-        for (int j = BENCH_RAD; j < dimsize - BENCH_RAD; j++)
+      for (int i = BENCH_RAD; i < P - BENCH_RAD; i++)
+        for (int j = BENCH_RAD; j < P - BENCH_RAD; j++)
           A[(t+1)%2][i][j] =
             0.09371f * A[t%2][i-2][j] + 0.09374f * A[t%2][i-1][j] + 0.09376f * A[t%2][i][j-2] +
             0.09372f * A[t%2][i][j-1] + 0.25001f * A[t%2][i][j]   + 0.09377f * A[t%2][i][j+1] +
