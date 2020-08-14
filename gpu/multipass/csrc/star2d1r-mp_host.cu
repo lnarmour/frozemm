@@ -10,8 +10,6 @@
 
 #include "common.h"
 
-void step_pass(int dimsize, SB_TYPE (*X)[dimsize][dimsize], int pi, int pj, int bt, int T);
-
 double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
 {
   double start_time = sb_time(), end_time = 0.0;
@@ -300,8 +298,4 @@ SB_STOP_INSTRUMENTS;
   }
 
   return (((end_time != 0.0) ? end_time : sb_time()) - start_time);
-}
-
-void step_pass(int dimsize, SB_TYPE (*A)[dimsize][dimsize], int pi, int pj, int bt, int T)
-{
 }
