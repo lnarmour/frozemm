@@ -20,9 +20,6 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   int pj = 2*PJ;
 
   if (scop) {
-      int pi = 0;
-      int pj = 0;
-  
       if (dimsize >= 1 && timestep >= 1 && dimsize + timestep >= pi + 3 && pi >= -894 && pi <= 2147482751 && dimsize + timestep >= pj + 3 && dimsize + pj + 892 >= pi && dimsize + pi + 892 >= pj && pj >= -894 && pj <= 2147482751) {
 #define cudaCheckReturn(ret) \
   do { \
@@ -292,8 +289,16 @@ SB_STOP_INSTRUMENTS;
       }
   }
   else {
-//    for (int t = 0; t < timestep; t++)
-//#pragma omp parallel for
+    for (int t = 0; t < timestep; t++)
+#pragma omp parallel for
+        for (int i = pi + BENCH_RAD*(1-t); i < pi + PI + BENCH_RAD*(1-t); i++)
+          for (int j = pj + BENCH_RAD*(1-t); j < pj + PJ + BENCH_RAD*(1-t); j++)
+            A[(t+1)%2][i][j] =
+              0.1873f * A[t%2][i-1][j]
+              + 0.1876f * A[t%2][i][j-1]
+              + 0.2500f * A[t%2][i][j]
+              + 0.1877f * A[t%2][i][j+1]
+              + 0.1874f * A[t%2][i+1][j];
   }
 
   return (((end_time != 0.0) ? end_time : sb_time()) - start_time);
