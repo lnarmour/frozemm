@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "star2d1r-an5d_kernel.hu"
 #define BENCH_DIM 2
-#define BENCH_FPP 5
+#define BENCH_FPP 9
 #define BENCH_RAD 1
 
 #include "common.h"
