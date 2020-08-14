@@ -23,6 +23,7 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
 
   if (scop) {
     int BT = 4;
+    for (int bt=0; bt<timestep; bt+=BT) {
 
       if (dimsize >= 1 && BT >= 1 && dimsize >= pi + 1 && pi >= -895 && pi <= 2147482751 && dimsize >= pj + 1 && pj >= -895 && pj <= 2147482751) {
 #define cudaCheckReturn(ret) \
@@ -40,21 +41,16 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   } while(0)
 
         float *dev_A;
-        float *dev_A_root;
         
-        cudaCheckReturn(cudaMalloc((void **) &dev_A_root, (size_t)(2) * (size_t)(dimsize) * (size_t)(dimsize) * sizeof(float)));
+        cudaCheckReturn(cudaMalloc((void **) &dev_A, (size_t)(2) * (size_t)(dimsize) * (size_t)(dimsize) * sizeof(float)));
         
 {
-        cudaCheckReturn(cudaMemcpy(dev_A_root, A, (size_t)(2) * (size_t)(dimsize) * (size_t)(dimsize) * sizeof(float), cudaMemcpyHostToDevice));
+        cudaCheckReturn(cudaMemcpy(dev_A, A, (size_t)(2) * (size_t)(dimsize) * (size_t)(dimsize) * sizeof(float), cudaMemcpyHostToDevice));
 #ifdef STENCILBENCH
 cudaDeviceSynchronize();
 SB_START_INSTRUMENTS;
 #endif
 }
-    for (int bt=0; bt<timestep; bt+=BT) {
-
-      dev_A = &(dev_A_root[dimsize*dimsize + (pi-BENCH_RAD*bt)*dimsize + pj-BENCH_RAD*bt]);
-
     {
 #ifndef AN5D_TYPE
 #define AN5D_TYPE unsigned
