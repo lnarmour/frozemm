@@ -13,34 +13,36 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   int dimsize = compsize + BENCH_RAD * 2;
   SB_TYPE (*A)[dimsize][dimsize] = (SB_TYPE (*)[dimsize][dimsize])A1;
 
+  
+  int t, i, j;
+  int I = PI; 
+  int J = PJ; 
+
   if (scop) {
-    for (int pi=BENCH_RAD; pi<dimsize + (timestep-1)*BENCH_RAD; pi+=PI)
-      for (int pj=BENCH_RAD; pj<dimsize + (timestep-1)*BENCH_RAD; pj+=PJ) {
-        #pragma scop
-        for (int t = 0; t < timestep; t++) 
-          for (int i = max(BENCH_RAD, pi + BENCH_RAD*(-t)); i < min(pi + PI + BENCH_RAD*(-t), dimsize-BENCH_RAD); i++)
-            for (int j = max(BENCH_RAD, pj + BENCH_RAD*(-t)); j < min(pj + PJ + BENCH_RAD*(-t), dimsize-BENCH_RAD); j++)
-              A[(t+1)%2][i][j] =
-                A[t%2][i-1][j]
-                + A[t%2][i][j-1]
-                + A[t%2][i][j]
-                + A[t%2][i][j+1]
-                + A[t%2][i+1][j];
-        #pragma endscop
-      }
+    #pragma scop
+    for (t = 0; t < timestep; t++) 
+      for (i = BENCH_RAD; i < I - BENCH_RAD; i++)
+        for (j = BENCH_RAD; j < J - BENCH_RAD; j++)
+          A[(t+1)%2][i][j] =
+            A[t%2][i-1][j]
+            + A[t%2][i][j-1]
+            + A[t%2][i][j]
+            + A[t%2][i][j+1]
+            + A[t%2][i+1][j];
+    #pragma endscop
+    // end pragma
+
   }
   else {
-    for (int pi=BENCH_RAD; pi<dimsize + (timestep-1)*BENCH_RAD; pi+=PI)
-      for (int pj=BENCH_RAD; pj<dimsize + (timestep-1)*BENCH_RAD; pj+=PJ)
-        for (int t = 0; t < timestep; t++) 
-          for (int i = max(BENCH_RAD, pi + BENCH_RAD*(-t)); i < min(pi + PI + BENCH_RAD*(-t), dimsize-BENCH_RAD); i++)
-            for (int j = max(BENCH_RAD, pj + BENCH_RAD*(-t)); j < min(pj + PJ + BENCH_RAD*(-t), dimsize-BENCH_RAD); j++)
-              A[(t+1)%2][i][j] =
-                A[t%2][i-1][j]
-                + A[t%2][i][j-1]
-                + A[t%2][i][j]
-                + A[t%2][i][j+1]
-                + A[t%2][i+1][j];
+    for (int t = 0; t < timestep; t++) 
+      for (int i = BENCH_RAD; i < dimsize-BENCH_RAD; i++)
+        for (int j = BENCH_RAD; j < dimsize-BENCH_RAD; j++)
+          A[(t+1)%2][i][j] =
+            A[t%2][i-1][j]
+            + A[t%2][i][j-1]
+            + A[t%2][i][j]
+            + A[t%2][i][j+1]
+            + A[t%2][i+1][j];
   }
   return (((end_time != 0.0) ? end_time : sb_time()) - start_time);
 }
