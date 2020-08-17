@@ -4,23 +4,17 @@
 
 #include "common.h"
 
-#define PI 896
-#define PJ 896
-
 double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
 {
   double start_time = sb_time(), end_time = 0.0;
   int dimsize = compsize + BENCH_RAD * 2;
   SB_TYPE (*A)[dimsize][dimsize] = (SB_TYPE (*)[dimsize][dimsize])A1;
 
-  #define pi 10
-  #define pj 10
-
   if (scop) {
 #pragma scop
     for (int t = 0; t < timestep; t++)
-      for (int i = pi*PI - BENCH_RAD*t; i < (pi+1)*PI - BENCH_RAD*t; i++)
-        for (int j = pj*PJ - BENCH_RAD*t; j < (pj+1)*PJ - BENCH_RAD*t; j++)
+      for (int i = 1024 - 3*t; i < 16384 - 3*t; i++)
+        for (int j = 1024 - 3*t; j < 16384 - 3*t; j++)
           A[(t+1)%2][i][j] =
             0.01530f * A[t%2][i-3][j-3] +
             0.01531f * A[t%2][i-3][j-2] +
@@ -82,8 +76,8 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   else {
     for (int t = 0; t < timestep; t++)
 #pragma omp parallel for
-      for (int i = pi*PI - BENCH_RAD*t; i < (pi+1)*PI - BENCH_RAD*t; i++)
-        for (int j = pj*PJ - BENCH_RAD*t; j < (pj+1)*PJ - BENCH_RAD*t; j++)
+      for (int i = 1024 - 3*t; i < 16384 - 3*t; i++)
+        for (int j = 1024 - 3*t; j < 16384 - 3*t; j++)
           A[(t+1)%2][i][j] =
             0.01530f * A[t%2][i-3][j-3] +
             0.01531f * A[t%2][i-3][j-2] +
