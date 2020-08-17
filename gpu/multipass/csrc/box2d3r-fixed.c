@@ -13,8 +13,8 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   if (scop) {
 #pragma scop
     for (int t = 0; t < timestep; t++)
-      for (int i = 1024 - 3*t; i < 16384 - 3*t; i++)
-        for (int j = 1024 - 3*t; j < 16384 - 3*t; j++)
+      for (int i = 1024 - 3*t; i < 1920 - 3*t; i++)
+        for (int j = 1024 - 3*t; j < 1920 - 3*t; j++)
           A[(t+1)%2][i][j] =
             0.01530f * A[t%2][i-3][j-3] +
             0.01531f * A[t%2][i-3][j-2] +
@@ -76,8 +76,8 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   else {
     for (int t = 0; t < timestep; t++)
 #pragma omp parallel for
-      for (int i = 1024 - 3*t; i < 16384 - 3*t; i++)
-        for (int j = 1024 - 3*t; j < 16384 - 3*t; j++)
+      for (int i = 1024 - 3*t; i < 1920 - 3*t; i++)
+        for (int j = 1024 - 3*t; j < 1920 - 3*t; j++)
           A[(t+1)%2][i][j] =
             0.01530f * A[t%2][i-3][j-3] +
             0.01531f * A[t%2][i-3][j-2] +

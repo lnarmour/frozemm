@@ -47,10 +47,10 @@ SB_START_INSTRUMENTS;
       const AN5D_TYPE __c0Len = (timestep - max(0, -((dimsize + 1) / 3) + 342));
       const AN5D_TYPE __c0Pad = (max(0, -((dimsize + 1) / 3) + 342));
       #define __c0 c0
-      const AN5D_TYPE __c1Len = (min(dimsize - 1, -3 * c0 + 16383) - -3 * c0 + 1024 + 1);
+      const AN5D_TYPE __c1Len = (min(dimsize - 1, -3 * c0 + 1919) - -3 * c0 + 1024 + 1);
       const AN5D_TYPE __c1Pad = (-3 * c0 + 1024);
       #define __c1 c1
-      const AN5D_TYPE __c2Len = (min(dimsize - 1, -3 * c0 + 16383) - -3 * c0 + 1024 + 1);
+      const AN5D_TYPE __c2Len = (min(dimsize - 1, -3 * c0 + 1919) - -3 * c0 + 1024 + 1);
       const AN5D_TYPE __c2Pad = (-3 * c0 + 1024);
       #define __c2 c2
       const AN5D_TYPE __halo1 = 3;
@@ -285,8 +285,8 @@ SB_STOP_INSTRUMENTS;
   else {
     for (int t = 0; t < timestep; t++)
 #pragma omp parallel for
-      for (int i = 1024 - 3*t; i < 16384 - 3*t; i++)
-        for (int j = 1024 - 3*t; j < 16384 - 3*t; j++)
+      for (int i = 1024 - 3*t; i < 1920 - 3*t; i++)
+        for (int j = 1024 - 3*t; j < 1920 - 3*t; j++)
           A[(t+1)%2][i][j] =
             0.01530f * A[t%2][i-3][j-3] +
             0.01531f * A[t%2][i-3][j-2] +
