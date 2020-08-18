@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
-#include "box2d3r-mp-64-4-32.P4096_kernel.hu"
+#include "box2d3r-mp-64-5-48.P4096_kernel.hu"
 #define BENCH_DIM 2
 #define BENCH_FPP 97
 #define BENCH_RAD 3
@@ -62,9 +62,9 @@ SB_START_INSTRUMENTS;
       AN5D_TYPE c0;
       AN5D_TYPE __side0LenMax;
       {
-        const AN5D_TYPE __side0Len = 4;
-        const AN5D_TYPE __side1Len = 32;
-        const AN5D_TYPE __side2Len = 40;
+        const AN5D_TYPE __side0Len = 5;
+        const AN5D_TYPE __side1Len = 48;
+        const AN5D_TYPE __side2Len = 34;
         const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
         const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
         const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
@@ -77,7 +77,7 @@ SB_START_INSTRUMENTS;
         __side0LenMax = __side0Len;
         for (c0 = __c0Pad; c0 < __c0Pad + __c0Len / __side0Len - __c0Padr; c0 += 1)
         {
-          kernel0_4<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+          kernel0_5<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
         }
       }
       if ((__c0Len % 2) != (((__c0Len + __side0LenMax - 1) / __side0LenMax) % 2))
@@ -85,9 +85,9 @@ SB_START_INSTRUMENTS;
         if (__c0Len % __side0LenMax == 0)
         {
           {
-            const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
-            const AN5D_TYPE __side2Len = 52;
+            const AN5D_TYPE __side0Len = 3;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 46;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
             const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
@@ -96,12 +96,12 @@ SB_START_INSTRUMENTS;
             assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
             dim3 k0_dimBlock(__blockSize, 1, 1);
             dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
-            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+            kernel0_3<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
           }
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -117,9 +117,9 @@ SB_START_INSTRUMENTS;
         else if (__c0Len % __side0LenMax == 1)
         {
           {
-            const AN5D_TYPE __side0Len = 3;
-            const AN5D_TYPE __side1Len = 32;
-            const AN5D_TYPE __side2Len = 46;
+            const AN5D_TYPE __side0Len = 2;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
             const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
@@ -128,13 +128,13 @@ SB_START_INSTRUMENTS;
             assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
             dim3 k0_dimBlock(__blockSize, 1, 1);
             dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
-            kernel0_3<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
           }
           c0 += 1;
           {
-            const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
-            const AN5D_TYPE __side2Len = 58;
+            const AN5D_TYPE __side0Len = 2;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
             const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
@@ -143,13 +143,13 @@ SB_START_INSTRUMENTS;
             assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
             dim3 k0_dimBlock(__blockSize, 1, 1);
             dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
-            kernel0_1<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
           }
           c0 += 1;
           {
-            const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
-            const AN5D_TYPE __side2Len = 58;
+            const AN5D_TYPE __side0Len = 2;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
             const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
@@ -158,14 +158,14 @@ SB_START_INSTRUMENTS;
             assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
             dim3 k0_dimBlock(__blockSize, 1, 1);
             dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
-            kernel0_1<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
           }
         }
         else if (__c0Len % __side0LenMax == 2)
         {
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -180,7 +180,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -197,7 +197,7 @@ SB_START_INSTRUMENTS;
         {
           {
             const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -212,7 +212,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -225,13 +225,45 @@ SB_START_INSTRUMENTS;
             kernel0_1<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
           }
         }
+        else if (__c0Len % __side0LenMax == 4)
+        {
+          {
+            const AN5D_TYPE __side0Len = 2;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 52;
+            const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+            const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
+            const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
+            const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+            const AN5D_TYPE __blockSize = 1 * __side2LenOl;
+            assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
+            dim3 k0_dimBlock(__blockSize, 1, 1);
+            dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
+            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+          }
+          c0 += 1;
+          {
+            const AN5D_TYPE __side0Len = 2;
+            const AN5D_TYPE __side1Len = 48;
+            const AN5D_TYPE __side2Len = 52;
+            const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+            const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
+            const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
+            const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+            const AN5D_TYPE __blockSize = 1 * __side2LenOl;
+            assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
+            dim3 k0_dimBlock(__blockSize, 1, 1);
+            dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
+            kernel0_2<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+          }
+        }
       }
       else if (__c0Len % __side0LenMax)
       {
         if (__c0Len % __side0LenMax == 1)
         {
           const AN5D_TYPE __side0Len = 1;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 58;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -246,7 +278,7 @@ SB_START_INSTRUMENTS;
         else if (__c0Len % __side0LenMax == 2)
         {
           const AN5D_TYPE __side0Len = 2;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 52;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -261,7 +293,7 @@ SB_START_INSTRUMENTS;
         else if (__c0Len % __side0LenMax == 3)
         {
           const AN5D_TYPE __side0Len = 3;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 46;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -272,6 +304,21 @@ SB_START_INSTRUMENTS;
           dim3 k0_dimBlock(__blockSize, 1, 1);
           dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
           kernel0_3<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
+        }
+        else if (__c0Len % __side0LenMax == 4)
+        {
+          const AN5D_TYPE __side0Len = 4;
+          const AN5D_TYPE __side1Len = 48;
+          const AN5D_TYPE __side2Len = 40;
+          const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
+          const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
+          const AN5D_TYPE __side1LenOl = (__side1Len + 2 * __OlLen1);
+          const AN5D_TYPE __side2LenOl = (__side2Len + 2 * __OlLen2);
+          const AN5D_TYPE __blockSize = 1 * __side2LenOl;
+          assert((__side1Len >= 2 * __side0Len * __halo1) && (__c1Len % __side1Len == 0 || __c1Len % __side1Len >= 2 * __side0Len * __halo1) && "[AN5D ERROR] Too short stream");
+          dim3 k0_dimBlock(__blockSize, 1, 1);
+          dim3 k0_dimGrid(1 * ((__c1Len + __side1Len - 1) / __side1Len) * ((__c2Len + __side2Len - 1) / __side2Len), 1, 1);
+          kernel0_4<<<k0_dimGrid, k0_dimBlock>>> (dev_A, dimsize, timestep, p, c0);
         }
       }
     }
