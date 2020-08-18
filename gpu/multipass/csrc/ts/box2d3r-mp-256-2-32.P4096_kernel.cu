@@ -9,11 +9,11 @@ __global__ void kernel0_2(float *A, int dimsize, int timestep, int p, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
-    const AN5D_TYPE __c1Pad = (4096 * p);
+    const AN5D_TYPE __c1Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
+    const AN5D_TYPE __c1Pad = (1024 * p);
     #define __c1 c1
-    const AN5D_TYPE __c2Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
-    const AN5D_TYPE __c2Pad = (4096 * p);
+    const AN5D_TYPE __c2Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
+    const AN5D_TYPE __c2Pad = (1024 * p);
     #define __c2 c2
     const AN5D_TYPE __halo1 = 3;
     const AN5D_TYPE __halo2 = 3;
@@ -578,11 +578,11 @@ __global__ void kernel0_1(float *A, int dimsize, int timestep, int p, int c0)
     const AN5D_TYPE __c0Len = (timestep - 0);
     const AN5D_TYPE __c0Pad = (0);
     #define __c0 c0
-    const AN5D_TYPE __c1Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
-    const AN5D_TYPE __c1Pad = (4096 * p);
+    const AN5D_TYPE __c1Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
+    const AN5D_TYPE __c1Pad = (1024 * p);
     #define __c1 c1
-    const AN5D_TYPE __c2Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
-    const AN5D_TYPE __c2Pad = (4096 * p);
+    const AN5D_TYPE __c2Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
+    const AN5D_TYPE __c2Pad = (1024 * p);
     #define __c2 c2
     const AN5D_TYPE __halo1 = 3;
     const AN5D_TYPE __halo2 = 3;
