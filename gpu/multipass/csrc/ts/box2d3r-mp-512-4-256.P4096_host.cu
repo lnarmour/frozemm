@@ -5,7 +5,7 @@
 #define BENCH_FPP 97
 #define BENCH_RAD 3
 
-#define P 1024
+#define P 4096
 
 #include "common.h"
 
@@ -15,10 +15,10 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   int dimsize = compsize + BENCH_RAD * 2;
   SB_TYPE (*A)[dimsize][dimsize] = (SB_TYPE (*)[dimsize][dimsize])A1;
 
-  int p = 2;
+  int p = 1;
 
   if (scop) {
-    if (timestep >= 1 && p >= 0 && p <= 2097150 && dimsize >= 1024 * p + 1) {
+    if (timestep >= 1 && p >= 0 && p <= 524286 && dimsize >= 4096 * p + 1) {
 #define cudaCheckReturn(ret) \
   do { \
     cudaError_t cudaCheckReturn_e = (ret); \
@@ -51,11 +51,11 @@ SB_START_INSTRUMENTS;
       const AN5D_TYPE __c0Len = (timestep - 0);
       const AN5D_TYPE __c0Pad = (0);
       #define __c0 c0
-      const AN5D_TYPE __c1Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
-      const AN5D_TYPE __c1Pad = (1024 * p);
+      const AN5D_TYPE __c1Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
+      const AN5D_TYPE __c1Pad = (4096 * p);
       #define __c1 c1
-      const AN5D_TYPE __c2Len = (min(dimsize - 1, 1024 * p + 1023) - 1024 * p + 1);
-      const AN5D_TYPE __c2Pad = (1024 * p);
+      const AN5D_TYPE __c2Len = (min(dimsize - 1, 4096 * p + 4095) - 4096 * p + 1);
+      const AN5D_TYPE __c2Pad = (4096 * p);
       #define __c2 c2
       const AN5D_TYPE __halo1 = 3;
       const AN5D_TYPE __halo2 = 3;

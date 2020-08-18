@@ -2,7 +2,7 @@
 #define BENCH_FPP 97
 #define BENCH_RAD 3
 
-#define P 1024
+#define P 4096
 
 #include "common.h"
 
@@ -12,7 +12,7 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   int dimsize = compsize + BENCH_RAD * 2;
   SB_TYPE (*A)[dimsize][dimsize] = (SB_TYPE (*)[dimsize][dimsize])A1;
 
-  int p = 2;
+  int p = 1;
 
   if (scop) {
 #pragma scop
