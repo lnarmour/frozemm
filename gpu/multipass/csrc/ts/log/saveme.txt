@@ -1,0 +1,216 @@
+show box2d3r-an5d.c
+show box2d3r-mp.c  (P=1024)
+
+show using the same config
+
+show box2d3r-mp-BIG-PASS.c  (P=4096)
+
+show ts exploration for box2d3r-mp.c (P=1024)
+
+
+
+The pass size needs to be both: (1) small enough that the data reused between kernel calls within a pass fits in L2, and (2) large enough that each kernel call can still use enough SMs concurrently to avoid a loss in speed. 
+
+
+
+
+
+
+# hazaa
+function try {
+if [ -z "$P" ]; then P=2048; fi;
+cp ../box2d3r-mp.c box2d3r-mp-${1}-${2}-${3}.P${P}.c;
+sed -i '' "s~define P 1024~define P ${P}~" box2d3r-mp-${1}-${2}-${3}.P${P}.c
+if [ $P == 4096 ]; then sed -i '' "s~int p = 2~int p = 1~" box2d3r-mp-${1}-${2}-${3}.P${P}.c; fi;
+cmd="an5d --bs1=$1 --bt=$2 --sl=$3 box2d3r-mp-${1}-${2}-${3}.P${P}.c";
+echo $cmd;
+eval $cmd;
+git add box2d3r-mp-${1}-${2}-${3}.P${P}*;
+git commit -m "${1}-${2}-${3}.P${P}";
+git push;
+}
+
+# mercury
+function try {
+if [ -z "$P" ]; then P=2048; fi;
+git pull;
+cp csrc/ts/box2d3r-mp-${1}-${2}-${3}.P${P}_* src/float/;
+if [ -n "$4" ]; then
+make stencil=box2d3r-mp-${1}-${2}-${3}.P${P} regs=-maxrregcount=$4 REGCOUNT=$4;
+cmd="./bin/float/box2d3r-mp-${1}-${2}-${3}.P${P}.r${4}  -n 1 -t 1000 -s 10000";
+else
+make stencil=box2d3r-mp-${1}-${2}-${3}.P${P};
+cmd="./bin/float/box2d3r-mp-${1}-${2}-${3}.P${P}.r  -n 1 -t 1000 -s 10000";
+fi;
+echo $cmd;
+eval $cmd;
+}
+
+
+
+
+# mercury
+for f in bin/float/*; do cmd="$f -n 1 -t 1000 -s 10000"; ret=`eval "$cmd | grep Average" 2>/dev/null`; if [ -n "$ret" ]; then echo "$(echo $ret | sed 's~\(.*Average: \)\(.*\)\( GFLOPS.*\)~\2, \1\2\3~'), $cmd"; fi; done;
+
+
+# hazaa
+for f in *.P2048.c; do 
+bs1=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 3`; 
+bt=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 4`;
+sl=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 5`;  
+cmd="an5d --bs1=${bs1} --bt=${bt} --sl=${sl} $f";
+echo $cmd; 
+eval $cmd;
+done;
+
+
+# mercury
+for f in csrc/ts/*.P*.c; do 
+s=`echo $f | cut -d '.' -f 1 | cut -d '/' -f 3`;
+cp csrc/ts/${s}.P2048_* src/float/;
+cmd="make stencil=${s}.P2048";
+echo $cmd; 
+eval $cmd;
+done;
+
+# mercury
+for f in bin/float/*P*; do cmd="$f -n 1 -t 1000 -s 10000"; ret=`eval "$cmd | grep Average" 2>/dev/null`; if [ -n "$ret" ]; then echo "$(echo $ret | sed 's~\(.*Average: \)\(.*\)\( GFLOPS.*\)~\2, \1\2\3~'), $cmd"; fi; done;
+
+
+# hazaa
+for f in *.P2048.c; do s=`echo $f | cut -d '.' -f 1`; echo $s; cat $f | sed 's~define P 1024~define P 2048~' > "${s}.P4096.c"; done;
+for f in *.P4096.c; do sed -i '' 's~int p = 2~int p = 1~' $f; done;
+
+# hazaa
+for f in *.P4096.c; do  
+bs1=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 3`;  bt=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 4`; sl=`echo $f | cut -d '.' -f 1 | cut -d '-' -f 5`;   cmd="an5d --bs1=${bs1} --bt=${bt} --sl=${sl} $f"; echo $cmd; eval $cmd; done;
+
+# mercury
+for f in csrc/ts/*.P4096_host.cu; do 
+s=`echo $f | cut -d '.' -f 1 | cut -d '/' -f 3`;
+cp csrc/ts/${s}.P4096_* src/float/;
+cmd="make stencil=${s}.P4096";
+echo $cmd; 
+eval $cmd;
+done;
+
+# mercury
+for f in bin/float/*P4096*; do cmd="$f -n 1 -t 1000 -s 10000"; ret=`eval "$cmd | grep Average" 2>/dev/null`; if [ -n "$ret" ]; then echo "$(echo $ret | sed 's~\(.*Average: \)\(.*\)\( GFLOPS.*\)~\2, \1\2\3~'), $cmd"; fi; done;
+
+
+
+for bs1 in {
+
+
+
+export P=100
+
+# hazaa
+function try3 {
+if [ -z "$P" ]; then P=200; fi;
+cp ../star3d2r-mp.c star3d2r-mp-${1}-${2}-${3}.P${P}.c;
+sed -i '' "s~define P 100~define P ${P}~" star3d2r-mp-${1}-${2}-${3}.P${P}.c
+bs1=`echo $1 | cut -d 'x' -f 1`;
+bs2=`echo $1 | cut -d 'x' -f 2`;
+cmd="an5d --bs1=$bs1 --bs2=$bs2 --bt=$2 --sl=$3 star3d2r-mp-${1}-${2}-${3}.P${P}.c";
+echo $cmd;
+eval $cmd;
+if [[ "$?" != 0 ]]; then
+  rm -rf star3d2r-mp-${1}-${2}-${3}.P${P}*;
+  return 1;
+fi;
+if [ -z "$NO_GIT" ]; then
+git add star3d2r-mp-${1}-${2}-${3}.P${P}*;
+git commit -m "star3d2r-mp-${1}-${2}-${3}.P${P}";
+git push;
+fi
+}
+
+# mercury
+function try3 {
+if [ -z "$P" ]; then P=200; fi;
+if [ -z "$NO_GIT" ]; then
+git pull;
+fi;
+cp csrc/ts/star3d2r-mp-${1}-${2}-${3}.P${P}_* src/float/ 2>/dev/null;
+if [[ "$?" != 0 ]]; then
+return 1;
+fi;
+if [ -n "$4" ]; then
+make stencil=star3d2r-mp-${1}-${2}-${3}.P${P} regs=-maxrregcount=$4 REGCOUNT=$4;
+cmd="./bin/float/star3d2r-mp-${1}-${2}-${3}.P${P}.r${4} -n 1 -t 1000 -s 512";
+else
+make stencil=star3d2r-mp-${1}-${2}-${3}.P${P};
+cmd="./bin/float/star3d2r-mp-${1}-${2}-${3}.P${P}.r -n 1 -t 1000 -s 512";
+fi;
+echo $cmd;
+
+}
+
+
+
+BS1=(32);
+BS2=(9 12 16);
+BT=({1..2});
+
+BS1=(12 16 32);
+BS2=(9 12 16 32);
+BT=({1..4});
+
+# hazaa generate a bunch
+Ps=(100 200)
+BS1=(32);
+BS2=(9 12 16);
+BT=({1..2});
+SL=(16 {32..64..32} 20 33);
+export NO_GIT=1;
+for P in ${Ps[@]}; do
+export P=$P;
+for bs1 in ${BS1[@]}; do
+for bs2 in ${BS2[@]}; do
+for bt in  ${BT[@]}; do
+for sl in  ${SL[@]}; do
+  cmd="try3 ${bs1}x${bs2} $bt $sl 32";
+  echo $cmd;
+  eval $cmd;
+done;
+done;
+done;
+done;
+done;
+git add star3d2r-mp-*;
+git commit -m "star3d2r alls";
+git push;
+
+
+
+
+# mercury
+Ps=(100 200)
+for P in ${Ps[@]}; do
+for f in bin/float/star3d2r*P${P}*r32; do cmd="$f -n 1 -t 1000 -s 512"; ret=`eval "$cmd | grep Average" 2>/dev/null`; if [ -n "$ret" ]; then echo "$(echo $ret | sed 's~\(.*Average: \)\(.*\)\( GFLOPS.*\)~\2, \1\2\3~'), $cmd"; fi; done;
+echo "";
+done;
+
+
+
+
+try 512 4 256
+try 256 3 32
+try 256 2 32
+
+
+
+prog="./bin/float/star3d2r-mp-32x16-2-20.P100.r32"; for T in ${Ts[@]}; do echo "$prog, $T, $($prog -n 5 -t $T -s 512 | grep Aver | sed 's~[ ][ ]*~ ~g')"; done;
+
+prog="./bin/float/star3d2r-mp-32x16-2-32.P200.r32"; for T in ${Ts[@]}; do echo "$prog, $T, $($prog -n 5 -t $T -s 512 | grep Aver | sed 's~[ ][ ]*~ ~g')"; done;
+
+prog="./bin/float/star3d2r-an5d.r32"; for T in ${Ts[@]}; do echo "$prog, $T, $($prog -n 5 -t $T -s 512 | grep Aver | sed 's~[ ][ ]*~ ~g')"; done;
+
+
+
+
+
+
+
+
