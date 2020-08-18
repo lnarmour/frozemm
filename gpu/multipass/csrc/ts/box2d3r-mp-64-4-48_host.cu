@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
-#include "box2d3r-mp-64-4-32_kernel.hu"
+#include "box2d3r-mp-64-4-48_kernel.hu"
 #define BENCH_DIM 2
 #define BENCH_FPP 97
 #define BENCH_RAD 3
@@ -63,7 +63,7 @@ SB_START_INSTRUMENTS;
       AN5D_TYPE __side0LenMax;
       {
         const AN5D_TYPE __side0Len = 4;
-        const AN5D_TYPE __side1Len = 32;
+        const AN5D_TYPE __side1Len = 48;
         const AN5D_TYPE __side2Len = 40;
         const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
         const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -86,7 +86,7 @@ SB_START_INSTRUMENTS;
         {
           {
             const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -101,7 +101,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -118,7 +118,7 @@ SB_START_INSTRUMENTS;
         {
           {
             const AN5D_TYPE __side0Len = 3;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 46;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -133,7 +133,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -148,7 +148,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -165,7 +165,7 @@ SB_START_INSTRUMENTS;
         {
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -180,7 +180,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -197,7 +197,7 @@ SB_START_INSTRUMENTS;
         {
           {
             const AN5D_TYPE __side0Len = 2;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 52;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -212,7 +212,7 @@ SB_START_INSTRUMENTS;
           c0 += 1;
           {
             const AN5D_TYPE __side0Len = 1;
-            const AN5D_TYPE __side1Len = 32;
+            const AN5D_TYPE __side1Len = 48;
             const AN5D_TYPE __side2Len = 58;
             const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
             const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -231,7 +231,7 @@ SB_START_INSTRUMENTS;
         if (__c0Len % __side0LenMax == 1)
         {
           const AN5D_TYPE __side0Len = 1;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 58;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -246,7 +246,7 @@ SB_START_INSTRUMENTS;
         else if (__c0Len % __side0LenMax == 2)
         {
           const AN5D_TYPE __side0Len = 2;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 52;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
@@ -261,7 +261,7 @@ SB_START_INSTRUMENTS;
         else if (__c0Len % __side0LenMax == 3)
         {
           const AN5D_TYPE __side0Len = 3;
-          const AN5D_TYPE __side1Len = 32;
+          const AN5D_TYPE __side1Len = 48;
           const AN5D_TYPE __side2Len = 46;
           const AN5D_TYPE __OlLen1 = (__halo1 * __side0Len);
           const AN5D_TYPE __OlLen2 = (__halo2 * __side0Len);
